@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Glossary | EXCELlent Intermediate Accounting</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f8;
+      color: #2c3e50;
+    }
+    header {
+      background: #34495e;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    nav {
+      background: #2c3e50;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 30px 20px;
+      background: white;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    dl {
+      margin: 0;
+    }
+    dt {
+      font-weight: bold;
+      margin-top: 20px;
+      color: #2980b9;
+    }
+    dd {
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #7f8c8d;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Glossary</h1>
+    <p>Quick definitions for key accounting terms</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="quizzes.html">Quizzes</a>
+    <a href="ifrs.html">IFRS</a>
+    <a href="visuals.html">Visual Aids</a>
+    <a href="tools.html">Tools</a>
+  </nav>
+
+  <main>
+    <input type="text" placeholder="Search terms..." onkeyup="filterGlossary(this.value)" />
+
+    <dl id="glossary">
+      <dt>Accrual Basis</dt>
+      <dd>Accounting method that records revenues and expenses when they are incurred, not when cash is exchanged. [Topic 2.7.2]</dd>
+
+      <dt>Asset</dt>
+      <dd>Present economic resources, over which the entity has a present right, a potential benefit, and an exclusive control, as a result of past events. [Topic 6.1]</dd>
+
+      <dt>Liability</dt>
+      <dd>Present obligation of the entity arising from past events, settlement of which is expected to result in an outflow of resources. [Topic 6.2]</dd>
+
+      <dt>Equity</dt>
+      <dd>Residual interest in the assets of the entity after deducting liabilities. [Topic 6.3]</dd>
+
+      <dt>Revenue</dt>
+      <dd>Income arising in the course of ordinary activities of an entity. [Topic 6.4]</dd>
+
+      <!-- Add more terms here -->
+    </dl>
+  </main>
+
+  <footer>
+    &copy; 2025 Robert H. Gascon | Built with GitHub Pages
+  </footer>
+
+  <script>
+    function filterGlossary(query) {
+      const terms = document.querySelectorAll("#glossary dt, #glossary dd");
+      query = query.toLowerCase();
+      let show = false;
+      for (let i = 0; i < terms.length; i += 2) {
+        const term = terms[i].textContent.toLowerCase();
+        const def = terms[i + 1].textContent.toLowerCase();
+        show = term.includes(query) || def.includes(query);
+        terms[i].style.display = show ? "block" : "none";
+        terms[i + 1].style.display = show ? "block" : "none";
+      }
+    }
+  </script>
+
+</body>
+</html>
