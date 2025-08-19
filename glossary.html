@@ -863,13 +863,24 @@
     function filterGlossary() {
       const input = document.getElementById('searchBox').value.toLowerCase();
       const entries = document.querySelectorAll('#glossaryList dt');
+      let firstMatch = null;
       entries.forEach(dt => {
         const dd = dt.nextElementSibling;
         const text = dt.textContent + ' ' + dd.textContent;
         const match = text.toLowerCase().includes(input);
         dt.style.display = match ? '' : 'none';
         dd.style.display = match ? '' : 'none';
+        if (match && !firstMatch) firstMatch = dt;
       });
+      if (firstMatch) {
+        setTimeout(() => {
+          const offset = document.getElementById('topControls').offsetHeight + 10;
+          window.scrollTo({
+            top: firstMatch.getBoundingClientRect().top + window.scrollY - offset,
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
     }
 
     function resetView() {
@@ -886,6 +897,13 @@
       });
       clickedDT.style.display = '';
       clickedDD.style.display = '';
+      setTimeout(() => {
+        const offset = document.getElementById('topControls').offsetHeight + 10;
+        window.scrollTo({
+          top: clickedDT.getBoundingClientRect().top + window.scrollY - offset,
+          behavior: 'smooth'
+        });
+      }, 100);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
