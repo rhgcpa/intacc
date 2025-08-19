@@ -1,16 +1,5 @@
 <!-- Search Box -->
-<input type="text" id="searchBox" placeholder="Search glossary terms..." style="width:100%;padding:0.5em;font-size:1em;margin-bottom:1em;border:1px solid #ccc;border-radius:4px;" />
-
-<!-- Alphabetical Navigation -->
-<div style="margin-bottom:1em;">
-  <a href="#A">A</a> <a href="#B">B</a> <a href="#C">C</a> <a href="#D">D</a>
-  <a href="#E">E</a> <a href="#F">F</a> <a href="#G">G</a> <a href="#H">H</a>
-  <a href="#I">I</a> <a href="#J">J</a> <a href="#K">K</a> <a href="#L">L</a>
-  <a href="#M">M</a> <a href="#N">N</a> <a href="#O">O</a> <a href="#P">P</a>
-  <a href="#Q">Q</a> <a href="#R">R</a> <a href="#S">S</a> <a href="#T">T</a>
-  <a href="#U">U</a> <a href="#V">V</a> <a href="#W">W</a> <a href="#X">X</a>
-  <a href="#Y">Y</a> <a href="#Z">Z</a>
-</div>
+<input type="text" id="searchBox" placeholder="Search glossary..." style="width:100%; padding:8px; margin-bottom:12px; font-size:16px;">
 
 <!-- A -->
 <dt id="A">12-month expected credit losses</dt>
@@ -752,38 +741,24 @@
 <!-- End of Glossary List -->
 </dl>
 
-<!-- Search Box -->
+<!-- Search Script -->
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const searchBox = document.getElementById('searchBox');
-    const glossaryItems = document.querySelectorAll('dl > dt, dl > dd');
+document.getElementById('searchBox').addEventListener('input', function () {
+  const query = this.value.toLowerCase();
+  const terms = document.querySelectorAll('dt');
+  const definitions = document.querySelectorAll('dd');
 
-    searchBox.addEventListener('input', function () {
-      const query = this.value.trim().toLowerCase();
+  for (let i = 0; i < terms.length; i++) {
+    const termText = terms[i].textContent.toLowerCase();
+    const defText = definitions[i]?.textContent.toLowerCase() || '';
+    const match = termText.includes(query) || defText.includes(query);
 
-      glossaryItems.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        const match = text.includes(query);
-
-        // Show/hide based on match
-        item.style.display = match || query === '' ? '' : 'none';
-
-        // Highlight matches in <dt> only
-        if (item.tagName === 'DT') {
-          const original = item.textContent;
-          if (query && match) {
-            const highlighted = original.replace(
-              new RegExp(`(${query})`, 'gi'),
-              '<mark>$1</mark>'
-            );
-            item.innerHTML = highlighted;
-          } else {
-            item.textContent = original; // Reset highlight
-          }
-        }
-      });
-    });
-  });
+    terms[i].style.display = match ? '' : 'none';
+    if (definitions[i]) {
+      definitions[i].style.display = match ? '' : 'none';
+    }
+  }
+});
 </script>
 
 </body>
