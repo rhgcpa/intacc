@@ -801,11 +801,7 @@ function filterByLetter(letter) {
   }
 }
 
-// Click-to-isolate
-for (let i = 0; i < definitions.length; i++) {
-  definitions[i].style.cursor = 'pointer';
-  definitions[i].addEventListener('click', () => isolateEntry(i));
-}
+// Click-to-isolate (only glossary entries)
 for (let i = 0; i < terms.length; i++) {
   terms[i].style.cursor = 'pointer';
   terms[i].addEventListener('click', () => isolateEntry(i));
