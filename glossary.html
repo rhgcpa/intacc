@@ -42,6 +42,15 @@
       border: none;
       cursor: pointer;
     }
+    #alphaNav {
+      margin: 10px 20px;
+    }
+    #alphaNav a {
+      margin-right: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #333;
+    }
     dt {
       font-weight: bold;
       margin-top: 10px;
@@ -62,7 +71,12 @@
     <a href="references.html">References</a>
     <a href="visuals.html">Visuals</a>
     <a href="tools.html">Tools</a>
-    |
+  </div>
+
+  <input type="text" id="searchBox" onkeyup="filterGlossary()" placeholder="Search glossary terms...">
+  <button id="resetButton" onclick="resetView()">Reset View</button>
+
+  <div id="alphaNav">
     <a href="#A">A</a>
     <a href="#B">B</a>
     <a href="#C">C</a>
@@ -90,9 +104,6 @@
     <a href="#Y">Y</a>
     <a href="#Z">Z</a>
   </div>
-
-  <input type="text" id="searchBox" onkeyup="filterGlossary()" placeholder="Search glossary terms...">
-  <button id="resetButton" onclick="resetView()">Reset View</button>
 
 <dl id="glossaryList">
 <!-- A -->
@@ -874,4 +885,3 @@
 
 </body>
 </html>
-
