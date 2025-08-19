@@ -9,53 +9,64 @@
       margin: 0;
       padding: 0;
     }
-    #menuBar {
+
+    #topControls {
       position: sticky;
       top: 0;
-      left: 0;
-      background: #f0f0f0;
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
+      background: #f9f9f9;
       z-index: 1000;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+
+    #menuBar {
+      padding: 10px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
     }
+
     #menuBar a {
       margin: 0 8px 5px 0;
       text-decoration: none;
       font-weight: bold;
       color: #333;
     }
+
     #searchBox {
-      margin: 20px;
+      margin: 10px 20px 5px 20px;
       width: calc(100% - 40px);
       padding: 10px;
       font-size: 16px;
     }
+
     #resetButton {
       display: block;
-      margin: 10px 20px;
+      margin: 5px 20px;
       padding: 8px 12px;
       font-size: 14px;
       background-color: #ddd;
       border: none;
       cursor: pointer;
     }
+
     #alphaNav {
-      margin: 10px 20px;
+      margin: 5px 20px 10px 20px;
     }
+
     #alphaNav a {
       margin-right: 8px;
       text-decoration: none;
       font-weight: bold;
       color: #333;
     }
+
     dt {
       font-weight: bold;
       margin-top: 10px;
       cursor: pointer;
     }
+
     dd {
       margin-left: 20px;
       margin-bottom: 10px;
@@ -64,45 +75,47 @@
 </head>
 <body>
 
-  <div id="menuBar">
-    <a href="index.html">Home</a>
-    <a href="glossary.html">Glossary</a>
-    <a href="quizzes.html">Quizzes</a>
-    <a href="references.html">References</a>
-    <a href="visuals.html">Visuals</a>
-    <a href="tools.html">Tools</a>
-  </div>
+  <div id="topControls">
+    <div id="menuBar">
+      <a href="index.html">Home</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="quizzes.html">Quizzes</a>
+      <a href="references.html">References</a>
+      <a href="visuals.html">Visuals</a>
+      <a href="tools.html">Tools</a>
+    </div>
 
-  <input type="text" id="searchBox" onkeyup="filterGlossary()" placeholder="Search glossary terms...">
-  <button id="resetButton" onclick="resetView()">Reset View</button>
+    <input type="text" id="searchBox" onkeyup="filterGlossary()" placeholder="Search glossary terms...">
+    <button id="resetButton" onclick="resetView()">Reset View</button>
 
-  <div id="alphaNav">
-    <a href="#A">A</a>
-    <a href="#B">B</a>
-    <a href="#C">C</a>
-    <a href="#D">D</a>
-    <a href="#E">E</a>
-    <a href="#F">F</a>
-    <a href="#G">G</a>
-    <a href="#H">H</a>
-    <a href="#I">I</a>
-    <a href="#J">J</a>
-    <a href="#K">K</a>
-    <a href="#L">L</a>
-    <a href="#M">M</a>
-    <a href="#N">N</a>
-    <a href="#O">O</a>
-    <a href="#P">P</a>
-    <a href="#Q">Q</a>
-    <a href="#R">R</a>
-    <a href="#S">S</a>
-    <a href="#T">T</a>
-    <a href="#U">U</a>
-    <a href="#V">V</a>
-    <a href="#W">W</a>
-    <a href="#X">X</a>
-    <a href="#Y">Y</a>
-    <a href="#Z">Z</a>
+    <div id="alphaNav">
+      <a href="#A">A</a>
+      <a href="#B">B</a>
+      <a href="#C">C</a>
+      <a href="#D">D</a>
+      <a href="#E">E</a>
+      <a href="#F">F</a>
+      <a href="#G">G</a>
+      <a href="#H">H</a>
+      <a href="#I">I</a>
+      <a href="#J">J</a>
+      <a href="#K">K</a>
+      <a href="#L">L</a>
+      <a href="#M">M</a>
+      <a href="#N">N</a>
+      <a href="#O">O</a>
+      <a href="#P">P</a>
+      <a href="#Q">Q</a>
+      <a href="#R">R</a>
+      <a href="#S">S</a>
+      <a href="#T">T</a>
+      <a href="#U">U</a>
+      <a href="#V">V</a>
+      <a href="#W">W</a>
+      <a href="#X">X</a>
+      <a href="#Y">Y</a>
+      <a href="#Z">Z</a>
+    </div>
   </div>
 
 <dl id="glossaryList">
