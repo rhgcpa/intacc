@@ -906,10 +906,28 @@
       }, 100);
     }
 
+    function scrollWithOffset(targetId) {
+      const target = document.getElementById(targetId);
+      if (target) {
+        const offset = document.getElementById('topControls').offsetHeight + 10;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('#alphaNav a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          scrollWithOffset(targetId);
+        });
+      });
+
       document.querySelectorAll('#glossaryList dt').forEach(dt => {
         dt.addEventListener('click', isolateEntry);
       });
+
       console.log('Glossary loaded and interactive.');
     });
   </script>
