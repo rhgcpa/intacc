@@ -1,6 +1,37 @@
 <!-- Search Box -->
 <input type="text" id="searchBox" placeholder="Search glossary..." style="width:100%; padding:8px; margin-bottom:12px; font-size:16px;">
 
+<!-- Alphabetical Navigation -->
+<div id="alphabetNav" style="margin-bottom:12px; text-align:center;">
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('all')">All</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('A')">A</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('B')">B</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('C')">C</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('D')">D</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('E')">E</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('F')">F</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('G')">G</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('H')">H</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('I')">I</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('J')">J</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('K')">K</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('L')">L</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('M')">M</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('N')">N</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('O')">O</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('P')">P</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('Q')">Q</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('R')">R</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('S')">S</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('T')">T</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('U')">U</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('V')">V</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('W')">W</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('X')">X</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('Y')">Y</span>
+  <span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('Z')">Z</span>
+</div>
+
 <!-- A -->
 <dt id="A">12-month expected credit losses</dt>
 <dd>are the portion of lifetime ECLs, from possible default events, within 12 months after the reporting date. [Volume 1: 2.7.2]</dd>
@@ -741,23 +772,44 @@
 <!-- End of Glossary List -->
 </dl>
 
-<!-- Search Script -->
 <script>
-document.getElementById('searchBox').addEventListener('input', function () {
-  const query = this.value.toLowerCase();
-  const terms = document.querySelectorAll('dt');
-  const definitions = document.querySelectorAll('dd');
+const searchBox = document.getElementById('searchBox');
+const terms = document.querySelectorAll('dt');
+const definitions = document.querySelectorAll('dd');
 
+// Search functionality
+searchBox.addEventListener('input', function () {
+  const query = this.value.toLowerCase();
   for (let i = 0; i < terms.length; i++) {
     const termText = terms[i].textContent.toLowerCase();
     const defText = definitions[i]?.textContent.toLowerCase() || '';
     const match = termText.includes(query) || defText.includes(query);
-
     terms[i].style.display = match ? '' : 'none';
-    if (definitions[i]) {
-      definitions[i].style.display = match ? '' : 'none';
-    }
+    if (definitions[i]) definitions[i].style.display = match ? '' : 'none';
   }
+});
+
+// Alphabet filtering
+function filterByLetter(letter) {
+  for (let i = 0; i < terms.length; i++) {
+    const termText = terms[i].textContent.trim();
+    const startsWith = termText.charAt(0).toUpperCase() === letter.toUpperCase();
+    const show = letter === 'all' || startsWith;
+    terms[i].style.display = show ? '' : 'none';
+    if (definitions[i]) definitions[i].style.display = show ? '' : 'none';
+  }
+}
+
+// Click-to-isolate
+definitions.forEach((dd, i) => {
+  dd.style.cursor = 'pointer';
+  dd.addEventListener('click', () => {
+    for (let j = 0; j < terms.length; j++) {
+      const show = j === i;
+      terms[j].style.display = show ? '' : 'none';
+      if (definitions[j]) definitions[j].style.display = show ? '' : 'none';
+    }
+  });
 });
 </script>
 
