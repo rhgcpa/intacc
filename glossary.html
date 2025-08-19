@@ -10,19 +10,82 @@
         .then(layout => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(layout, 'text/html');
-
           document.title = 'Glossary';
           document.body.innerHTML = doc.body.innerHTML;
 
-          document.getElementById('content-area').innerHTML = `
-            <!-- Search Box -->
-            <input type="text" id="searchBox" placeholder="Search glossary..." style="width:100%; padding:8px; margin-bottom:12px; font-size:16px;">
+          const contentArea = document.getElementById('content-area');
+          if (contentArea) {
+            contentArea.innerHTML = `
+              <!-- Search Box -->
+              <input type="text" id="searchBox" placeholder="Search glossary..." style="width:100%; padding:8px; margin-bottom:12px; font-size:16px;">
 
-            <!-- Alphabetical Navigation -->
-            <div id="alphabetNav" style="margin-bottom:12px; text-align:center;">
-              <button onclick="resetView()" style="margin:0 6px; padding:4px 8px;">Reset View</button>
-              ${'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter => `<span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('${letter}')">${letter}</span>`).join('')}
-            </div>
+              <!-- Alphabetical Navigation -->
+              <div id="alphabetNav" style="margin-bottom:12px; text-align:center;">
+                <button onclick="resetView()" style="margin:0 6px; padding:4px 8px;">Reset View</button>
+                ${'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter => `<span style="margin:0 4px; cursor:pointer;" onclick="filterByLetter('${letter}')">${letter}</span>`).join('')}
+              </div>
+            `;
+          }
+
+          // Now make glossary entries visible
+          const glossarySection = document.getElementById('glossary-entries');
+          if (glossarySection) glossarySection.style.display = '';
+
+          // Search functionality
+          const searchBox = document.getElementById('searchBox');
+          const terms = document.querySelectorAll('dt');
+          const definitions = document.querySelectorAll('dd');
+
+          searchBox.addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            for (let i = 0; i < terms.length; i++) {
+              const termText = terms[i].textContent.toLowerCase();
+              const defText = definitions[i]?.textContent.toLowerCase() || '';
+              const match = termText.includes(query) || defText.includes(query);
+              terms[i].style.display = match ? '' : 'none';
+              if (definitions[i]) definitions[i].style.display = match ? '' : 'none';
+            }
+          });
+
+          // Alphabet filtering
+          window.filterByLetter = function (letter) {
+            for (let i = 0; i < terms.length; i++) {
+              const termText = terms[i].textContent.trim();
+              const startsWith = termText.charAt(0).toUpperCase() === letter.toUpperCase();
+              terms[i].style.display = startsWith ? '' : 'none';
+              if (definitions[i]) definitions[i].style.display = startsWith ? '' : 'none';
+            }
+          };
+
+          // Click-to-isolate
+          for (let i = 0; i < terms.length; i++) {
+            terms[i].style.cursor = 'pointer';
+            terms[i].addEventListener('click', () => isolateEntry(i));
+          }
+
+          function isolateEntry(index) {
+            for (let i = 0; i < terms.length; i++) {
+              const show = i === index;
+              terms[i].style.display = show ? '' : 'none';
+              if (definitions[i]) definitions[i].style.display = show ? '' : 'none';
+            }
+          }
+
+          // Reset View
+          window.resetView = function () {
+            for (let i = 0; i < terms.length; i++) {
+              terms[i].style.display = '';
+              if (definitions[i]) definitions[i].style.display = '';
+            }
+            searchBox.value = '';
+          };
+        });
+    };
+  </script>
+</head>
+<body>
+
+<div id="glossary-entries" style="display:none;">
 
 <dl id="glossaryList">
 <!-- A -->
@@ -764,6 +827,8 @@
 
 <!-- End of Glossary List -->
 </dl>
+
+</div>
 
             <script>
               const searchBox = document.getElementById('searchBox');
