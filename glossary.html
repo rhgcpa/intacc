@@ -830,60 +830,61 @@
 
 </div>
 
-            <script>
-              const searchBox = document.getElementById('searchBox');
-              const terms = document.querySelectorAll('dt');
-              const definitions = document.querySelectorAll('dd');
+<script>
+  window.onload = function () {
+    // Reveal glossary section
+    const glossarySection = document.getElementById('glossary-entries');
+    if (glossarySection) glossarySection.style.display = '';
 
-              // Search functionality
-              searchBox.addEventListener('input', function () {
-                const query = this.value.toLowerCase();
-                for (let i = 0; i < terms.length; i++) {
-                  const termText = terms[i].textContent.toLowerCase();
-                  const defText = definitions[i]?.textContent.toLowerCase() || '';
-                  const match = termText.includes(query) || defText.includes(query);
-                  terms[i].style.display = match ? '' : 'none';
-                  if (definitions[i]) definitions[i].style.display = match ? '' : 'none';
-                }
-              });
+    const searchBox = document.getElementById('searchBox');
+    const terms = document.querySelectorAll('dt');
+    const definitions = document.querySelectorAll('dd');
 
-              // Alphabet filtering
-              function filterByLetter(letter) {
-                for (let i = 0; i < terms.length; i++) {
-                  const termText = terms[i].textContent.trim();
-                  const startsWith = termText.charAt(0).toUpperCase() === letter.toUpperCase();
-                  terms[i].style.display = startsWith ? '' : 'none';
-                  if (definitions[i]) definitions[i].style.display = startsWith ? '' : 'none';
-                }
-              }
+    // Search functionality
+    searchBox.addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      for (let i = 0; i < terms.length; i++) {
+        const termText = terms[i].textContent.toLowerCase();
+        const defText = definitions[i]?.textContent.toLowerCase() || '';
+        const match = termText.includes(query) || defText.includes(query);
+        terms[i].style.display = match ? '' : 'none';
+        if (definitions[i]) definitions[i].style.display = match ? '' : 'none';
+      }
+    });
 
-              // Click-to-isolate
-              for (let i = 0; i < terms.length; i++) {
-                terms[i].style.cursor = 'pointer';
-                terms[i].addEventListener('click', () => isolateEntry(i));
-              }
-
-              function isolateEntry(index) {
-                for (let i = 0; i < terms.length; i++) {
-                  const show = i === index;
-                  terms[i].style.display = show ? '' : 'none';
-                  if (definitions[i]) definitions[i].style.display = show ? '' : 'none';
-                }
-              }
-
-              // Reset View
-              function resetView() {
-                for (let i = 0; i < terms.length; i++) {
-                  terms[i].style.display = '';
-                  if (definitions[i]) definitions[i].style.display = '';
-                }
-                searchBox.value = '';
-              }
-            </script>
-          `;
-        });
+    // Alphabet filtering
+    window.filterByLetter = function (letter) {
+      for (let i = 0; i < terms.length; i++) {
+        const termText = terms[i].textContent.trim();
+        const startsWith = termText.charAt(0).toUpperCase() === letter.toUpperCase();
+        terms[i].style.display = startsWith ? '' : 'none';
+        if (definitions[i]) definitions[i].style.display = startsWith ? '' : 'none';
+      }
     };
-  </script>
-</head>
-<body></body>
+
+    // Click-to-isolate
+    for (let i = 0; i < terms.length; i++) {
+      terms[i].style.cursor = 'pointer';
+      terms[i].addEventListener('click', () => isolateEntry(i));
+    }
+
+    function isolateEntry(index) {
+      for (let i = 0; i < terms.length; i++) {
+        const show = i === index;
+        terms[i].style.display = show ? '' : 'none';
+        if (definitions[i]) definitions[i].style.display = show ? '' : 'none';
+      }
+    }
+
+    // Reset View
+    window.resetView = function () {
+      for (let i = 0; i < terms.length; i++) {
+        terms[i].style.display = '';
+        if (definitions[i]) definitions[i].style.display = '';
+      }
+      searchBox.value = '';
+    };
+  };
+</script>
+</body>
 </html>
