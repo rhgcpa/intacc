@@ -12,13 +12,17 @@
     #menuBar {
       position: sticky;
       top: 0;
+      left: 0;
       background: #f0f0f0;
       padding: 10px;
       border-bottom: 1px solid #ccc;
       z-index: 1000;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
     }
     #menuBar a {
-      margin: 0 5px;
+      margin: 0 8px 5px 0;
       text-decoration: none;
       font-weight: bold;
       color: #333;
@@ -29,40 +33,69 @@
       padding: 10px;
       font-size: 16px;
     }
+    #resetButton {
+      display: block;
+      margin: 10px 20px;
+      padding: 8px 12px;
+      font-size: 14px;
+      background-color: #ddd;
+      border: none;
+      cursor: pointer;
+    }
     dt {
       font-weight: bold;
       margin-top: 10px;
+      cursor: pointer;
     }
     dd {
       margin-left: 20px;
       margin-bottom: 10px;
     }
   </style>
-  <script>
-    function filterGlossary() {
-      const input = document.getElementById('searchBox').value.toLowerCase();
-      const entries = document.querySelectorAll('#glossaryList dt');
-      entries.forEach(dt => {
-        const dd = dt.nextElementSibling;
-        const text = dt.textContent + ' ' + dd.textContent;
-        const match = text.toLowerCase().includes(input);
-        dt.style.display = match ? '' : 'none';
-        dd.style.display = match ? '' : 'none';
-      });
-    }
-  </script>
 </head>
 <body>
 
   <div id="menuBar">
+    <a href="index.html">Home</a>
+    <a href="glossary.html">Glossary</a>
+    <a href="quizzes.html">Quizzes</a>
+    <a href="references.html">References</a>
+    <a href="visuals.html">Visuals</a>
+    <a href="tools.html">Tools</a>
+    |
     <a href="#A">A</a>
     <a href="#B">B</a>
+    <a href="#C">C</a>
+    <a href="#D">D</a>
+    <a href="#E">E</a>
+    <a href="#F">F</a>
+    <a href="#G">G</a>
+    <a href="#H">H</a>
+    <a href="#I">I</a>
+    <a href="#J">J</a>
+    <a href="#K">K</a>
+    <a href="#L">L</a>
+    <a href="#M">M</a>
+    <a href="#N">N</a>
+    <a href="#O">O</a>
+    <a href="#P">P</a>
+    <a href="#Q">Q</a>
+    <a href="#R">R</a>
+    <a href="#S">S</a>
+    <a href="#T">T</a>
+    <a href="#U">U</a>
+    <a href="#V">V</a>
+    <a href="#W">W</a>
+    <a href="#X">X</a>
+    <a href="#Y">Y</a>
+    <a href="#Z">Z</a>
   </div>
 
   <input type="text" id="searchBox" onkeyup="filterGlossary()" placeholder="Search glossary terms...">
+  <button id="resetButton" onclick="resetView()">Reset View</button>
 
 <dl id="glossaryList">
-  <!-- A -->
+<!-- A -->
 <dt id="A">12-month expected credit losses</dt>
 <dd>are the portion of lifetime ECLs, from possible default events, within 12 months after the reporting date. [Volume 1: 2.7.2]</dd>
 
@@ -803,12 +836,42 @@
 </dl>
 
   <script>
-    // Post-glossary script block for future enhancements or layout hooks
-    // This can be used to initialize modules, scroll behavior, or layout sync
+    function filterGlossary() {
+      const input = document.getElementById('searchBox').value.toLowerCase();
+      const entries = document.querySelectorAll('#glossaryList dt');
+      entries.forEach(dt => {
+        const dd = dt.nextElementSibling;
+        const text = dt.textContent + ' ' + dd.textContent;
+        const match = text.toLowerCase().includes(input);
+        dt.style.display = match ? '' : 'none';
+        dd.style.display = match ? '' : 'none';
+      });
+    }
+
+    function resetView() {
+      document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
+        el.style.display = '';
+      });
+    }
+
+    function isolateEntry(event) {
+      const clickedDT = event.target;
+      const clickedDD = clickedDT.nextElementSibling;
+      document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
+        el.style.display = 'none';
+      });
+      clickedDT.style.display = '';
+      clickedDD.style.display = '';
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('Glossary loaded and ready.');
+      document.querySelectorAll('#glossaryList dt').forEach(dt => {
+        dt.addEventListener('click', isolateEntry);
+      });
+      console.log('Glossary loaded and interactive.');
     });
   </script>
 
 </body>
 </html>
+
