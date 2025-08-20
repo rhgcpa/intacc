@@ -884,9 +884,12 @@
     }
 
     function resetView() {
+      const searchBox = document.getElementById('searchBox');
+      searchBox.value = '';
       document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
         el.style.display = '';
       });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function isolateEntry(event) {
