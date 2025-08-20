@@ -85,8 +85,8 @@
       <a href="tools.html">Tools</a>
     </div>
 
-    <input type="text" id="searchBox" onkeyup="filterGlossary()" placeholder="Search glossary terms...">
-    <button id="resetButton" onclick="resetView()">Reset View</button>
+    <input type="text" id="searchBox" placeholder="Search glossary terms...">
+    <button id="resetButton">Reset View</button>
 
     <div id="alphaNav">
       <a href="#A">A</a>
@@ -919,6 +919,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('searchBox').addEventListener('keyup', filterGlossary);
+      document.getElementById('resetButton').addEventListener('click', resetView);
+
       document.querySelectorAll('#alphaNav a').forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
