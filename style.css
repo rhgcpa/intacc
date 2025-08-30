@@ -41,7 +41,7 @@ a:hover, button:hover {
   background-color: #005fa3;
 }
 
-/* Glossary Entry Styling */
+/* Glossary Term and Definition Styling */
 dt {
   font-weight: bold;
   margin-top: 10px;
@@ -50,6 +50,7 @@ dt {
 }
 
 dd {
+  font-weight: normal;
   margin-left: 20px;
   margin-bottom: 10px;
   background-color: #ffffff;
