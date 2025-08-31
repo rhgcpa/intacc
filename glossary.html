@@ -18,8 +18,10 @@
       <a href="tools.html">Tools</a>
     </div>
 
-    <input type="text" id="searchBox" placeholder="Search glossary terms...">
-    <button id="resetButton">Reset View</button>
+    <div class="search-reset-wrapper">
+      <input type="text" id="searchBox" placeholder="Search glossary terms...">
+      <button id="resetButton">Reset View</button>
+    </div>
 
     <div id="alphaNav">
       <a href="#A">A</a>
@@ -822,17 +824,22 @@
       document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
         el.style.display = '';
       });
+      document.getElementById('alphaNav').style.display = '';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function isolateEntry(event) {
       const clickedDT = event.target;
       const clickedDD = clickedDT.nextElementSibling;
+
       document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
         el.style.display = 'none';
       });
+
       clickedDT.style.display = '';
       clickedDD.style.display = '';
+      document.getElementById('alphaNav').style.display = '';
+
       setTimeout(() => {
         const offset = document.getElementById('topControls').offsetHeight + 10;
         window.scrollTo({
@@ -873,3 +880,4 @@
 
 </body>
 </html>
+
