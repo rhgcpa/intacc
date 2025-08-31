@@ -6,12 +6,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="glossary-section">
 
   <div id="topControls">
     <div id="menuBar">
       <a href="index.html">Home</a>
-      <a href="glossary.html">Glossary</a>
+      <a href="glossary.html" class="active">Glossary</a>
       <a href="quizzes.html">Quizzes</a>
       <a href="references.html">References</a>
       <a href="visuals.html">Visuals</a>
@@ -819,8 +819,7 @@
     }
 
     function resetView() {
-      const searchBox = document.getElementById('searchBox');
-      searchBox.value = '';
+      document.getElementById('searchBox').value = '';
       document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
         el.style.display = '';
       });
@@ -832,14 +831,26 @@
       const clickedDT = event.target;
       const clickedDD = clickedDT.nextElementSibling;
 
-      document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
-        el.style.display = 'none';
+      // Hide all definitions
+      document.querySelectorAll('#glossaryList dd').forEach(dd => {
+        dd.style.display = 'none';
       });
 
+      // Hide all terms except those with alphabetical anchors
+      document.querySelectorAll('#glossaryList dt').forEach(dt => {
+        const id = dt.getAttribute('id');
+        const isAnchor = id && /^[A-Z]$/.test(id);
+        dt.style.display = isAnchor ? '' : 'none';
+      });
+
+      // Show selected term and definition
       clickedDT.style.display = '';
       clickedDD.style.display = '';
+
+      // Keep alphaNav visible
       document.getElementById('alphaNav').style.display = '';
 
+      // Scroll with offset
       setTimeout(() => {
         const offset = document.getElementById('topControls').offsetHeight + 10;
         window.scrollTo({
