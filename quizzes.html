@@ -140,7 +140,6 @@
 </head>
 <body>
 
-  <!-- Top Navigation Tabs -->
   <div class="tabs">
     <div>Home</div>
     <div>Glossary</div>
@@ -150,7 +149,6 @@
     <div>Tools</div>
   </div>
 
-  <!-- Sticky Metadata and Controls -->
   <div class="sticky-meta">
     <h1>Volume 1 · Chapter 1 · Topic: Cash and Cash Equivalents · Quiz Type: Theory & Practice</h1>
     <div class="controls">
@@ -159,9 +157,8 @@
     </div>
   </div>
 
-  <!-- Reusable Quiz Card: Theory -->
   <div class="quiz-card theory">
-    <h3>Cash and Cash Equivalents – Theory </h3>
+    <h3>Cash and Cash Equivalents – Theory</h3>
     <p class="meta">Multiple Choice · Select one answer per question</p>
 
   <!-- Question 1 -->
@@ -283,30 +280,27 @@
     </div>
     <p class="answer">Correct Answer: A</p>
   </div>
-  
-  </div>
 
-  <!-- Reusable Quiz Card: Practice -->
+</div>
+
   <div class="quiz-card practice">
-    <h3>Cash and Cash Equivalents – Practice (Batch 1)</h3>
+    <h3>Cash and Cash Equivalents – Practice</h3>
     <p class="meta">Multiple Choice · Select one answer per question</p>
 
     <div class="question" data-answer="A">
-      <p>10. Before replenishment, the adjusted balance of Petty Cash Fund equals:</p>
+      <p>1. Before replenishment, the adjusted balance of Petty Cash Fund equals:</p>
       <div class="choices">
-        <label><input type="radio" name="q10" value="A" /> A. Currency in the custody of the Petty Cash Custodian.</label>
-        <label><input type="radio" name="q10" value="B" /> B. Established amount.</label>
-        <label><input type="radio" name="q10" value="C" /> C. Minimum threshold.</label>
-        <label><input type="radio" name="q10" value="D" /> D. Total of Petty Cash Vouchers.</label>
+        <label><input type="radio" name="qp1" value="A" /> A. Currency in the custody of the Petty Cash Custodian.</label>
+        <label><input type="radio" name="qp1" value="B" /> B. Established amount.</label>
+        <label><input type="radio" name="qp1" value="C" /> C. Minimum threshold.</label>
+        <label><input type="radio" name="qp1" value="D" /> D. Total of Petty Cash Vouchers.</label>
       </div>
       <p class="answer">Correct Answer: A</p>
     </div>
   </div>
 
-  <!-- Results Display -->
   <div id="results"></div>
 
-  <!-- Quiz Logic -->
   <script>
     document.getElementById("submit-quiz").addEventListener("click", function () {
       const questions = document.querySelectorAll(".question");
@@ -348,11 +342,10 @@
         const selected = q.querySelector("input[type='radio']:checked");
         if (selected) selected.checked = false;
       });
+
       document.getElementById("results").style.display = "none";
       document.getElementById("results").innerHTML = "";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   </script>
-
 </body>
 </html>
