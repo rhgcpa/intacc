@@ -4,6 +4,89 @@
   <meta charset="UTF-8">
   <title>Glossary</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --accent-color: #64b5f6;
+    }
+
+    body {
+      font-family: Bahnschrift, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #topControls {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 1000;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    #menuBar a {
+      margin-right: 10px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    #menuBar a.active {
+      color: var(--accent-color);
+    }
+
+    .search-reset-wrapper {
+      margin-top: 10px;
+    }
+
+    #searchBox {
+      padding: 6px;
+      font-size: 16px;
+      width: 60%;
+      font-family: Bahnschrift, sans-serif;
+    }
+
+    #resetButton {
+      padding: 6px 12px;
+      font-size: 16px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-family: Bahnschrift, sans-serif;
+    }
+
+    #alphaNav {
+      margin-top: 10px;
+    }
+
+    #alphaNav a {
+      font-family: Bahnschrift, sans-serif;
+      background-color: var(--accent-color);
+      color: white !important;
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 4px;
+      text-decoration: none;
+      margin-right: 4px;
+      display: inline-block;
+    }
+
+    #glossaryList {
+      padding: 20px;
+    }
+
+    dt {
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    dd {
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 
 <body class="glossary-section">
@@ -824,7 +907,6 @@
     }
 
     function scrollWithOffset(targetId) {
-      // Restore all entries before scrolling
       document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
         el.style.display = '';
       });
