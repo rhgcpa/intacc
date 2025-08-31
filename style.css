@@ -21,13 +21,30 @@ section {
 
 /* ========== Sticky Top Controls ========== */
 
-#controls {
+#topControls {
   position: sticky;
   top: 0;
   background-color: #f0f0f0;
   padding: 10px;
   border-bottom: 1px solid #ccc;
   z-index: 100;
+}
+
+/* ========== Menu Bar ========== */
+
+#menuBar {
+  margin-bottom: 10px;
+}
+
+#menuBar a {
+  margin-right: 10px;
+  text-decoration: none;
+  color: #0077cc;
+  font-weight: bold;
+}
+
+#menuBar a:hover {
+  text-decoration: underline;
 }
 
 /* ========== Search Box ========== */
@@ -39,33 +56,34 @@ section {
   font-size: 16px;
   border: 1px solid #aaa;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 
 /* ========== Alphabetical Navigation ========== */
 
-#alphabetNav {
+#alphaNav {
   margin-top: 10px;
   margin-bottom: 20px;
 }
 
-#alphabetNav button {
+#alphaNav a {
   margin: 2px;
   padding: 6px 10px;
   font-size: 14px;
-  border: none;
+  text-decoration: none;
   background-color: #0077cc;
   color: white;
   border-radius: 3px;
-  cursor: pointer;
+  display: inline-block;
 }
 
-#alphabetNav button:hover {
+#alphaNav a:hover {
   background-color: #005fa3;
 }
 
-/* ========== Reset and Isolation Buttons ========== */
+/* ========== Reset Button ========== */
 
-#resetButton, #isolateButton {
+#resetButton {
   margin-right: 10px;
   padding: 6px 12px;
   font-size: 14px;
@@ -76,7 +94,7 @@ section {
   cursor: pointer;
 }
 
-#resetButton:hover, #isolateButton:hover {
+#resetButton:hover {
   background-color: #aa2900;
 }
 
@@ -94,6 +112,11 @@ section {
 dl {
   margin: 0;
   padding: 0;
+}
+
+dl dt,
+dl dd {
+  display: block;
 }
 
 dt {
@@ -195,12 +218,13 @@ dl dd {
     width: 100%;
   }
 
-  #alphabetNav button {
+  #alphaNav a {
     font-size: 12px;
     padding: 4px 8px;
   }
 
-  #resetButton, #isolateButton, .quiz-submit {
+  #resetButton,
+  .quiz-submit {
     font-size: 12px;
     padding: 5px 10px;
   }
