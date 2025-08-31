@@ -1,6 +1,6 @@
 /* === Global Styles === */
 body {
-  font-family: Bahnschrift, sans-serif;
+  font-family: Bahnschrift, Segoe UI Semibold, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #fdfdfd;
@@ -81,7 +81,7 @@ body.tools-section      { --accent-color: #4db6ac; }
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-  font-family: Bahnschrift, sans-serif;
+  font-family: Bahnschrift, Segoe UI Semibold, sans-serif;
 }
 
 #resetButton:hover {
@@ -109,7 +109,7 @@ body.tools-section      { --accent-color: #4db6ac; }
 
 /* Glossary-specific override */
 body.glossary-section #alphaNav a {
-  font-family: Bahnschrift, sans-serif !important;
+  font-family: Bahnschrift, Segoe UI Semibold, sans-serif !important;
   color: white !important;
   background-color: var(--accent-color) !important;
 }
@@ -125,17 +125,17 @@ body.glossary-section #alphaNav a:hover {
 
 body.glossary-section dt {
   color: #1565c0 !important;
-  font-weight: bold;
+  font-weight: 800 !important;
   margin-top: 20px;
   cursor: pointer;
-  font-family: Bahnschrift, sans-serif !important;
+  font-family: Bahnschrift, Segoe UI Semibold, sans-serif !important;
 }
 
 body.glossary-section dd {
   color: #424242 !important;
   margin-left: 20px;
   margin-bottom: 10px;
-  font-family: Bahnschrift, sans-serif !important;
+  font-family: Bahnschrift, Segoe UI Semibold, sans-serif !important;
 }
 
 /* === Hidden Elements === */
