@@ -57,8 +57,16 @@ body.tools-section      { --accent-color: #4db6ac; }
   gap: 10px;
 }
 
+.search-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 #searchBox {
-  width: 60%;
+  width: 300px;
   padding: 8px;
   font-size: 16px;
   border: 1px solid #aaa;
@@ -74,7 +82,6 @@ body.tools-section      { --accent-color: #4db6ac; }
   cursor: pointer;
   font-weight: bold;
   font-family: Bahnschrift, sans-serif;
-  align-self: center;
 }
 
 #resetButton:hover {
@@ -116,19 +123,19 @@ body.glossary-section #alphaNav a:hover {
   padding: 20px;
 }
 
-dt {
+body.glossary-section dt {
   color: #1565c0 !important;
   font-weight: bold;
   margin-top: 20px;
   cursor: pointer;
-  font-family: Bahnschrift, sans-serif;
+  font-family: Bahnschrift, sans-serif !important;
 }
 
-dd {
+body.glossary-section dd {
   color: #424242 !important;
   margin-left: 20px;
   margin-bottom: 10px;
-  font-family: Bahnschrift, sans-serif;
+  font-family: Bahnschrift, sans-serif !important;
 }
 
 /* === Hidden Elements === */
