@@ -1,218 +1,126 @@
-/* === Global Reset === */
-* {
-  box-sizing: border-box;
+/* === Font Import === */
+@font-face {
+  font-family: 'Bahncrift';
+  src: url('fonts/Bahncrift.woff2') format('woff2'),
+       url('fonts/Bahncrift.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* === Base Styles === */
+body {
+  font-family: 'Bahncrift', Arial, sans-serif;
   margin: 0;
   padding: 0;
-}
-
-body {
-  font-family: Bahnschrift, "Bahnschrift", system-ui, sans-serif;
+  line-height: 1.6;
   background-color: #f9f9f9;
   color: #333;
-  line-height: 1.6;
-  padding: 20px;
 }
 
-/* === Sticky Top Controls === */
+h1, h2 {
+  margin: 0.5em 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* === Top Controls === */
 #topControls {
   position: sticky;
   top: 0;
   background-color: #fff;
-  padding: 12px 16px;
-  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  border-bottom: 2px solid #ccc;
   z-index: 1000;
 }
 
-/* === Menu Bar Tabs === */
-#menuBar {
+/* === Navigation Bar === */
+nav {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-#menuBar a {
-  text-decoration: none;
-  padding: 8px 16px;
-  background-color: #e0e0e0;
-  color: #333;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-
-#menuBar a:hover,
-#menuBar a.active {
-  background-color: #007acc;
-  color: #fff;
-}
-
-/* === Search + Reset Stack === */
-.search-reset-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   gap: 10px;
-  margin-bottom: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-.search-reset-wrapper input[type="text"] {
-  padding: 8px;
-  width: 100%;
-  max-width: 400px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.search-reset-wrapper button {
+nav a {
   padding: 6px 12px;
-  background-color: #007acc;
-  color: #fff;
-  border: none;
   border-radius: 4px;
+  font-weight: bold;
+  background-color: #eee;
+  transition: background-color 0.3s;
+}
+
+nav a:hover {
+  background-color: #ddd;
+}
+
+nav a.active {
+  background-color: #333;
+  color: #fff;
+}
+
+/* === Tab-Specific Accent Colors === */
+.home-section a.active,
+.home-section h2 { color: #4CAF50; }       /* Green */
+
+.glossary-section a.active,
+.glossary-section h2 { color: #0055AA; }   /* Deep Blue */
+
+.quizzes-section a.active,
+.quizzes-section h2 { color: #FF9800; }    /* Orange */
+
+.references-section a.active,
+.references-section h2 { color: #9C27B0; } /* Purple */
+
+.visuals-section a.active,
+.visuals-section h2 { color: #E91E63; }    /* Pink/Red */
+
+.tools-section a.active,
+.tools-section h2 { color: #607D8B; }      /* Slate Gray */
+
+/* === Glossary Layout === */
+#glossaryList {
+  margin: 20px;
+}
+
+#glossaryList dt {
+  font-weight: bold;
+  margin-top: 1em;
   cursor: pointer;
 }
 
-.search-reset-wrapper button:hover {
-  background-color: #005fa3;
+#glossaryList dd {
+  margin-left: 20px;
+  margin-bottom: 1em;
 }
 
 /* === Alphabetical Navigation === */
 #alphaNav {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin: 16px 0;
+  gap: 6px;
+  margin: 10px 20px;
 }
 
 #alphaNav a {
-  text-decoration: none;
-  color: #007acc;
-  font-weight: bold;
   padding: 4px 8px;
+  background-color: #ddd;
   border-radius: 4px;
-  transition: background-color 0.2s ease;
+  font-weight: bold;
+  color: #333;
 }
 
 #alphaNav a:hover {
-  background-color: #e0f0ff;
+  background-color: #bbb;
 }
 
-/* === Glossary Entries === */
-#glossaryList dt {
-  font-weight: bold;
-  margin-top: 16px;
-  color: #0055aa;
-  cursor: pointer;
+/* === Utility Classes === */
+.hidden {
+  display: none !important;
 }
 
-#glossaryList dt:hover {
-  text-decoration: underline;
-  background-color: #f0f8ff;
-}
-
-#glossaryList dd {
-  margin-left: 20px;
-  margin-bottom: 12px;
-  color: #444;
-}
-
-/* === Tab-Specific Accent Colors === */
-.home-section h2,
-.home-section a:hover {
-  color: #4CAF50;
-}
-
-.glossary-section h2,
-.glossary-section a:hover {
-  color: #0055AA;
-}
-
-.quizzes-section h2,
-.quizzes-section a:hover {
-  color: #FF9800;
-}
-
-.references-section h2,
-.references-section a:hover {
-  color: #9C27B0;
-}
-
-.visuals-section h2,
-.visuals-section a:hover {
-  color: #E91E63;
-}
-
-.tools-section h2,
-.tools-section a:hover {
-  color: #607D8B;
-}
-
-/* === Quizzes Section === */
-.quizzes-section {
-  margin-top: 24px;
-}
-
-.quizzes-section .question {
-  margin-bottom: 16px;
-}
-
-.quizzes-section .question p {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.quizzes-section .options label {
-  display: block;
-  margin-bottom: 6px;
-}
-
-/* === References Section === */
-.references-section {
-  margin-top: 24px;
-}
-
-.references-section ul {
-  list-style-type: disc;
-  margin-left: 20px;
-}
-
-/* === Visuals Section === */
-.visuals-section {
-  margin-top: 24px;
-}
-
-.visuals-section img {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-/* === Tools Section === */
-.tools-section {
-  margin-top: 24px;
-}
-
-.tools-section .tool-item {
-  margin-bottom: 16px;
-  padding: 12px;
-  background-color: #eef;
-  border-left: 4px solid #607D8B;
-  border-radius: 4px;
-}
-
-/* === Responsive Design === */
-@media (max-width: 600px) {
-  #menuBar,
-  #alphaNav {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .search-reset-wrapper input[type="text"] {
-    width: 100%;
-  }
+.visible {
+  display: block !important;
 }
