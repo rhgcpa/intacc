@@ -1,56 +1,110 @@
-/* Base Typography and Background */
+/* ========== Global Styles ========== */
+
 body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
   margin: 0;
-  padding: 0;
-  font-family: 'Bahnschrift', 'Segoe UI', 'Arial', sans-serif;
-  background: linear-gradient(to right, #f0f4ff, #e6f7ff);
-  color: #333;
+  padding: 20px;
   line-height: 1.6;
+  color: #333;
 }
 
-/* Headings */
-h1, h2, h3 {
-  color: #0055aa;
-  font-weight: 600;
-  margin: 1.5em auto 0.5em;
-  text-align: center;
+h1, h2 {
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 10px;
 }
 
-/* Paragraphs */
-p {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 1em;
-  font-size: 1rem;
+section {
+  margin-bottom: 40px;
 }
 
-/* Links and Buttons */
-a, button {
+/* ========== Sticky Top Controls ========== */
+
+#controls {
+  position: sticky;
+  top: 0;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  z-index: 100;
+}
+
+/* ========== Search Box ========== */
+
+#searchBox {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+/* ========== Alphabetical Navigation ========== */
+
+#alphabetNav {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+#alphabetNav button {
+  margin: 2px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: none;
   background-color: #0077cc;
   color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: background-color 0.3s ease;
+  border-radius: 3px;
   cursor: pointer;
 }
 
-a:hover, button:hover {
+#alphabetNav button:hover {
   background-color: #005fa3;
 }
 
-/* Glossary Term and Definition Styling */
+/* ========== Reset and Isolation Buttons ========== */
+
+#resetButton, #isolateButton {
+  margin-right: 10px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border: none;
+  background-color: #cc3300;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#resetButton:hover, #isolateButton:hover {
+  background-color: #aa2900;
+}
+
+/* ========== Scroll Offset Correction ========== */
+
+:target::before {
+  content: "";
+  display: block;
+  height: 80px;
+  margin-top: -80px;
+}
+
+/* ========== Glossary Styles ========== */
+
+dl {
+  margin: 0;
+  padding: 0;
+}
+
 dt {
   font-weight: bold;
-  margin-top: 10px;
-  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 5px;
   color: #0055aa;
 }
 
-dd {
-  font-weight: normal;
+dl dd {
+  font-weight: normal !important;
   margin-left: 20px;
   margin-bottom: 10px;
   background-color: #ffffff;
@@ -59,75 +113,95 @@ dd {
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Glossary Entry Container (Optional Enhancement) */
-.glossary-entry {
-  background-color: #ffffff;
-  border-left: 4px solid #0077cc;
-  padding: 10px;
-  margin-bottom: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+/* ========== Quizzes Styles ========== */
+
+.quiz-container {
+  margin-top: 20px;
 }
 
-.glossary-entry:hover {
-  background-color: #f0f8ff;
-}
-
-/* Sticky Top Controls */
-#topControls {
-  position: sticky;
-  top: 0;
-  background: #f9f9f9;
-  z-index: 1000;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-}
-
-#menuBar {
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-#menuBar a {
-  margin: 0 8px 5px 0;
-  text-decoration: none;
+.quiz-question {
   font-weight: bold;
-  color: #333;
+  margin-bottom: 10px;
 }
 
-#searchBox {
-  margin: 10px 20px 5px 20px;
-  width: calc(100% - 40px);
-  padding: 10px;
-  font-size: 16px;
-}
-
-#resetButton {
+.quiz-options label {
   display: block;
-  margin: 5px 20px;
-  padding: 8px 12px;
-  font-size: 14px;
-  background-color: #ddd;
-  border: none;
+  margin-bottom: 6px;
   cursor: pointer;
 }
 
-#alphaNav {
-  margin: 5px 20px 10px 20px;
+.quiz-submit {
+  margin-top: 10px;
+  padding: 6px 12px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
-#alphaNav a {
-  margin-right: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  color: #333;
+.quiz-submit:hover {
+  background-color: #005fa3;
 }
 
-/* Footer (Optional) */
-footer {
-  text-align: center;
-  font-size: 0.85rem;
-  color: #666;
-  padding: 20px 0;
+/* ========== References Styles ========== */
+
+.reference-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.reference-list li {
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 3px solid #888;
+}
+
+/* ========== Visuals Styles ========== */
+
+.visual-block {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.visual-block img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========== Tools Styles ========== */
+
+.tool-card {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #eef6ff;
+  border-left: 5px solid #3399ff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.tool-card h3 {
+  margin-top: 0;
+  color: #0055aa;
+}
+
+/* ========== Responsive Layout ========== */
+
+@media (max-width: 600px) {
+  #searchBox {
+    width: 100%;
+  }
+
+  #alphabetNav button {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  #resetButton, #isolateButton, .quiz-submit {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
 }
