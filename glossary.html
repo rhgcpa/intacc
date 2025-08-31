@@ -821,20 +821,14 @@
       clickedDT.style.display = '';
       clickedDD.style.display = '';
       document.getElementById('alphaNav').style.display = '';
-
-      // Rebind alphabetical navigation to preserve clickability
-      bindAlphaNav();
-
-      setTimeout(() => {
-        const offset = document.getElementById('topControls').offsetHeight + 10;
-        window.scrollTo({
-          top: clickedDT.getBoundingClientRect().top + window.scrollY - offset,
-          behavior: 'smooth'
-        });
-      }, 100);
     }
 
     function scrollWithOffset(targetId) {
+      // Restore all entries before scrolling
+      document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
+        el.style.display = '';
+      });
+
       const target = document.getElementById(targetId);
       if (target) {
         const offset = document.getElementById('topControls').offsetHeight + 10;
@@ -845,11 +839,11 @@
 
     function bindAlphaNav() {
       document.querySelectorAll('#alphaNav a').forEach(link => {
-        link.onclick = function(e) {
+        link.addEventListener('click', function(e) {
           e.preventDefault();
           const targetId = this.getAttribute('href').substring(1);
           scrollWithOffset(targetId);
-        };
+        });
       });
     }
 
@@ -857,7 +851,7 @@
       document.getElementById('searchBox').addEventListener('keyup', filterGlossary);
       document.getElementById('resetButton').addEventListener('click', resetView);
 
-      bindAlphaNav(); // Initial binding
+      bindAlphaNav();
 
       document.querySelectorAll('#glossaryList dt').forEach(dt => {
         dt.addEventListener('click', isolateEntry);
@@ -869,3 +863,4 @@
 
 </body>
 </html>
+
