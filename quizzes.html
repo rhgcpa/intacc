@@ -1,1 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quizzes – Volume 1</title>
+  <style>
+    body {
+      font-family: Bahnschrift, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background: #004080;
+      color: white;
+      padding: 1em;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+    button#submit-quiz {
+      background: #00aaff;
+      color: white;
+      border: none;
+      padding: 0.5em 1em;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .quiz-card {
+      background: white;
+      margin: 1em;
+      padding: 1em;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .quiz-card h3 {
+      margin-top: 0;
+    }
+    .meta {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 1em;
+    }
+    .question {
+      margin-bottom: 1.5em;
+    }
+    .question p {
+      margin: 0.5em 0;
+    }
+    .choices label {
+      display: block;
+      margin: 0.3em 0;
+      cursor: pointer;
+    }
+    .answer {
+      display: none;
+      margin-top: 0.5em;
+      font-weight: bold;
+    }
+    .incorrect .answer {
+      display: block;
+      color: red;
+    }
+    .correct {
+      background: #e0ffe0;
+    }
+    .incorrect {
+      background: #ffe0e0;
+    }
+    #results {
+      background: #fff;
+      margin: 1em;
+      padding: 1em;
+      border-left: 5px solid #004080;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Volume 1 · Chapter 1 · Topic: Cash and Cash Equivalents</h1>
+  <button id="submit-quiz">Submit Quiz</button>
+</header>
+
+<div class="quiz-card theory" data-volume="1" data-chapter="1" data-topic="Cash and Cash Equivalents">
+  <h3>Cash and Cash Equivalents – Theory</h3>
+  <p class="meta">Multiple Choice · Select one answer per question</p>
+
+  <!-- Question 1 -->
+  <div class="question" data-answer="B">
+    <p>1. Cash on hand includes:</p>
+    <div class="choices">
+      <label><input type="radio" name="q1" value="A" /> A. Checks dated less than 6 months after today.</label>
+      <label><input type="radio" name="q1" value="B" /> B. Checks dated less than 6 months before today.</label>
+      <label><input type="radio" name="q1" value="C" /> C. Checks dated more than 6 months after today.</label>
+      <label><input type="radio" name="q1" value="D" /> D. Checks dated more than 6 months before today.</label>
+    </div>
+    <p class="answer">Correct Answer: B</p>
+  </div>
+
+  <!-- Question 2 -->
+  <div class="question" data-answer="B">
+    <p>2. In defining cash equivalents, known maturity value denotes:</p>
+    <div class="choices">
+      <label><input type="radio" name="q2" value="A" /> A. Maturity date is determinable on acquisition date.</label>
+      <label><input type="radio" name="q2" value="B" /> B. Maturity value is determinable on acquisition date.</label>
+      <label><input type="radio" name="q2" value="C" /> C. Maturity value will be determined on maturity date.</label>
+      <label><input type="radio" name="q2" value="D" /> D. Maturity value will be known on maturity date.</label>
+    </div>
+    <p class="answer">Correct Answer: B</p>
+  </div>
+
+  <!-- Question 3 -->
+  <div class="question" data-answer="C">
+    <p>3. Which of the following is not considered cash equivalent?</p>
+    <div class="choices">
+      <label><input type="radio" name="q3" value="A" /> A. Treasury bills maturing in 2 months.</label>
+      <label><input type="radio" name="q3" value="B" /> B. Time deposits maturing in 3 months.</label>
+      <label><input type="radio" name="q3" value="C" /> C. Equity securities.</label>
+      <label><input type="radio" name="q3" value="D" /> D. Commercial papers maturing in 1 month.</label>
+    </div>
+    <p class="answer">Correct Answer: C</p>
+  </div>
+
+  <!-- Question 4 -->
+  <div class="question" data-answer="A">
+    <p>4. Which of the following is considered cash equivalent?</p>
+    <div class="choices">
+      <label><input type="radio" name="q4" value="A" /> A. Treasury bills purchased with 2-month maturity.</label>
+      <label><input type="radio" name="q4" value="B" /> B. Treasury bills purchased with 6-month maturity.</label>
+      <label><input type="radio" name="q4" value="C" /> C. Treasury bills purchased with 1-year maturity.</label>
+      <label><input type="radio" name="q4" value="D" /> D. Treasury bills purchased with 2-year maturity.</label>
+    </div>
+    <p class="answer">Correct Answer: A</p>
+  </div>
+
+  <!-- Question 5 -->
+  <div class="question" data-answer="D">
+    <p>5. Which of the following is not part of cash?</p>
+    <div class="choices">
+      <label><input type="radio" name="q5" value="A" /> A. Coins and currency.</label>
+      <label><input type="radio" name="q5" value="B" /> B. Undeposited checks.</label>
+      <label><input type="radio" name="q5" value="C" /> C. Money orders.</label>
+      <label><input type="radio" name="q5" value="D" /> D. Postdated checks.</label>
+    </div>
+    <p class="answer">Correct Answer: D</p>
+  </div>
+
+  <!-- Question 6 -->
+  <div class="question" data-answer="C">
+    <p>6. Which of the following is not considered cash equivalent?</p>
+    <div class="choices">
+      <label><input type="radio" name="q6" value="A" /> A. Treasury bills maturing in 3 months.</label>
+      <label><input type="radio" name="q6" value="B" /> B. Time deposits maturing in 2 months.</label>
+      <label><input type="radio" name="q6" value="C" /> C. Equity investments.</label>
+      <label><input type="radio" name="q6" value="D" /> D. Commercial papers maturing in 1 month.</label>
+    </div>
+    <p class="answer">Correct Answer: C</p>
+  </div>
+
+  <!-- Question 7 -->
+  <div class="question" data-answer="D">
+    <p>7. Which of the following is not considered cash?</p>
+    <div class="choices">
+      <label><input type="radio" name="q7" value="A" /> A. Coins and currency.</label>
+      <label><input type="radio" name="q7" value="B" /> B. Bank drafts.</label>
+      <label><input type="radio" name="q7" value="C" /> C. Money orders.</label>
+      <label><input type="radio" name="q7" value="D" /> D. Postdated checks.</label>
+    </div>
+    <p class="answer">Correct Answer: D</p>
+  </div>
+
+  <!-- Question 8 -->
+  <div class="question" data-answer="A">
+    <p>8. Which of the following is considered cash equivalent?</p>
+    <div class="choices">
+      <label><input type="radio" name="q8" value="A" /> A. Treasury bills purchased with 3-month maturity.</label>
+      <label><input type="radio" name="q8" value="B" /> B. Treasury bills purchased with 6-month maturity.</label>
+      <label><input type="radio" name="q8" value="C" /> C. Treasury bills purchased with 1-year maturity.</label>
+      <label><input type="radio" name="q8" value="D" /> D. Treasury bills purchased with 2-year maturity.</label>
+    </div>
+    <p class="answer">Correct Answer: A</p>
+  </div>
+
+  <!-- Question 9 -->
+  <div class="question" data-answer="B">
+    <p>9. Which of the following is considered cash?</p>
+    <div class="choices">
+      <label><input type="radio" name="q9" value="A" /> A. Postdated checks.</label>
+      <label><input type="radio" name="q9" value="B" /> B. Manager’s checks.</label>
+      <label><input type="radio" name="q9" value="C" /> C. IOUs.</label>
+      <label><input type="radio" name="q9" value="D" /> D. NSF checks.</label>
+    </div>
+    <p class="answer">Correct Answer: B</p>
+  </div>
+
+  <!-- Question 10 -->
+  <div class="question" data-answer="D">
+    <p>10. Which of the following is not considered cash equivalent?</p>
+    <div class="choices">
+      <label><input type="radio" name="q10" value="A" /> A. Treasury bills maturing in 2 months.</label>
+      <label><input type="radio" name="q10" value="B" /> B. Time deposits maturing in 3 months.</label>
+      <label><input type="radio" name="q10" value="C" /> C. Commercial papers maturing in 1 month.</label>
+      <label><input type="radio" name="q10" value="D" /> D. Equity securities.</label>
+    </div>
+    <p class="answer">Correct Answer: D</p>
+  </div>
+
+</div>
+
+<div id="results"></div>
+
+<script>
+  document.getElementById("submit-quiz").addEventListener("click", function () {
+    const questions = document.querySelectorAll(".question");
+    let correctCount = 0;
+    let total = questions.length;
+    let feedback = "";
+
+    questions.forEach((q, index) => {
+      const selected = q.querySelector("input[type='radio']:checked");
+      const correct = q.dataset.answer;
+      const answerText = q.querySelector(".answer");
+
+      if (selected) {
+        if (selected.value === correct) {
+          q.classList.add("correct");
+          correctCount++;
+        } else {
+          q.classList.add("incorrect");
+          feedback += `<p><strong>Question ${index + 1}:</strong> You selected <em>${selected.value}</em>. Correct answer is <strong>${correct}</strong>.</p>`;
+        }
+      } else {
+        q.classList.add("incorrect");
+        feedback += `<p><strong>Question ${index + 1}:</strong> No answer selected. Correct answer is <strong>${correct}</strong>.</p>`;
+      }
+    });
+
+    const results = document.getElementById("results");
+    results.style.display = "block";
+    results.innerHTML = `
+      <h2>Quiz Completed</h2>
+      <p>You got ${correctCount} out of ${total} correct.</p>
+      ${feedback}
+    `;
+  });
+</script>
+
+</body>
+</html>
 
