@@ -6,11 +6,11 @@
 }
 
 body {
-  font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
-  line-height: 1.6;
-  padding: 20px;
+  font-family: Bahnschrift, "Bahnschrift", system-ui, sans-serif;
   background-color: #f9f9f9;
   color: #333;
+  line-height: 1.6;
+  padding: 20px;
 }
 
 /* === Sticky Top Controls === */
@@ -47,7 +47,7 @@ body {
   color: #fff;
 }
 
-/* === Search + Reset Vertical Stack === */
+/* === Search + Reset Stack === */
 .search-reset-wrapper {
   display: flex;
   flex-direction: column;
@@ -77,7 +77,7 @@ body {
   background-color: #005fa3;
 }
 
-/* === Alphabetical Index === */
+/* === Alphabetical Navigation === */
 #alphaNav {
   display: flex;
   flex-wrap: wrap;
@@ -99,35 +99,106 @@ body {
   background-color: #e0f0ff;
 }
 
-/* === Glossary List === */
+/* === Glossary Entries === */
 #glossaryList dt {
   font-weight: bold;
   margin-top: 16px;
+  color: #0055aa;
   cursor: pointer;
+}
+
+#glossaryList dt:hover {
+  text-decoration: underline;
+  background-color: #f0f8ff;
 }
 
 #glossaryList dd {
   margin-left: 20px;
   margin-bottom: 12px;
+  color: #444;
 }
 
-/* === Quizzes & Other Tabs === */
-.quiz-section,
-.other-tab-section {
+/* === Quizzes Section === */
+.quiz-section {
   margin-top: 24px;
 }
 
-.quiz-section h2,
-.other-tab-section h2 {
-  margin-bottom: 12px;
+.quiz-section h2 {
   font-size: 1.4em;
+  margin-bottom: 12px;
+}
+
+.quiz-section .question {
+  margin-bottom: 16px;
+}
+
+.quiz-section .question p {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.quiz-section .options label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* === References Section === */
+.references-section {
+  margin-top: 24px;
+}
+
+.references-section h2 {
+  font-size: 1.4em;
+  margin-bottom: 12px;
+}
+
+.references-section ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+/* === Visuals Section === */
+.visuals-section {
+  margin-top: 24px;
+}
+
+.visuals-section h2 {
+  font-size: 1.4em;
+  margin-bottom: 12px;
+}
+
+.visuals-section img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* === Tools Section === */
+.tools-section {
+  margin-top: 24px;
+}
+
+.tools-section h2 {
+  font-size: 1.4em;
+  margin-bottom: 12px;
+}
+
+.tools-section .tool-item {
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #eef;
+  border-left: 4px solid #007acc;
+  border-radius: 4px;
 }
 
 /* === Responsive Design === */
 @media (max-width: 600px) {
   #menuBar,
   #alphaNav {
-    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
   }
 
   .search-reset-wrapper input[type="text"] {
