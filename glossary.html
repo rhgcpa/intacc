@@ -24,36 +24,16 @@
     </div>
 
     <div id="alphaNav">
-      <a href="#A">A</a>
-      <a href="#B">B</a>
-      <a href="#C">C</a>
-      <a href="#D">D</a>
-      <a href="#E">E</a>
-      <a href="#F">F</a>
-      <a href="#G">G</a>
-      <a href="#H">H</a>
-      <a href="#I">I</a>
-      <a href="#J">J</a>
-      <a href="#K">K</a>
-      <a href="#L">L</a>
-      <a href="#M">M</a>
-      <a href="#N">N</a>
-      <a href="#O">O</a>
-      <a href="#P">P</a>
-      <a href="#Q">Q</a>
-      <a href="#R">R</a>
-      <a href="#S">S</a>
-      <a href="#T">T</a>
-      <a href="#U">U</a>
-      <a href="#V">V</a>
-      <a href="#W">W</a>
-      <a href="#X">X</a>
-      <a href="#Y">Y</a>
+      <a href="#A">A</a><a href="#B">B</a><a href="#C">C</a><a href="#D">D</a><a href="#E">E</a>
+      <a href="#F">F</a><a href="#G">G</a><a href="#H">H</a><a href="#I">I</a><a href="#J">J</a>
+      <a href="#K">K</a><a href="#L">L</a><a href="#M">M</a><a href="#N">N</a><a href="#O">O</a>
+      <a href="#P">P</a><a href="#Q">Q</a><a href="#R">R</a><a href="#S">S</a><a href="#T">T</a>
+      <a href="#U">U</a><a href="#V">V</a><a href="#W">W</a><a href="#X">X</a><a href="#Y">Y</a>
       <a href="#Z">Z</a>
     </div>
   </div>
 
-<dl id="glossaryList">
+  <dl id="glossaryList">
 <!-- A -->
 <dt id="A">12-month expected credit losses</dt>
 <dd>are the portion of lifetime ECLs, from possible default events, within 12 months after the reporting date. [Volume 1: 2.7.2]</dd>
@@ -831,26 +811,20 @@
       const clickedDT = event.target;
       const clickedDD = clickedDT.nextElementSibling;
 
-      // Hide all definitions
       document.querySelectorAll('#glossaryList dd').forEach(dd => {
         dd.style.display = 'none';
       });
 
-      // Hide all terms except those with alphabetical anchors
       document.querySelectorAll('#glossaryList dt').forEach(dt => {
         const id = dt.getAttribute('id');
         const isAnchor = id && /^[A-Z]$/.test(id);
         dt.style.display = isAnchor ? '' : 'none';
       });
 
-      // Show selected term and definition
       clickedDT.style.display = '';
       clickedDD.style.display = '';
-
-      // Keep alphaNav visible
       document.getElementById('alphaNav').style.display = '';
 
-      // Scroll with offset
       setTimeout(() => {
         const offset = document.getElementById('topControls').offsetHeight + 10;
         window.scrollTo({
