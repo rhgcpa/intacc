@@ -89,6 +89,7 @@ body.tools-section      { --accent-color: #4db6ac; }
   padding: 10px;
 }
 
+/* Default styling for all sections */
 #alphaNav a {
   text-decoration: none;
   padding: 6px 10px;
@@ -98,8 +99,15 @@ body.tools-section      { --accent-color: #4db6ac; }
   color: #333;
 }
 
-#alphaNav a:hover {
-  background-color: #ddd;
+/* Glossary-specific override */
+body.glossary-section #alphaNav a {
+  font-family: Bahnschrift, sans-serif !important;
+  color: white !important;
+  background-color: var(--accent-color) !important;
+}
+
+body.glossary-section #alphaNav a:hover {
+  background-color: #1976d2 !important;
 }
 
 /* === Glossary Entries === */
