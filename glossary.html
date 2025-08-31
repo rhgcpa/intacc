@@ -822,14 +822,8 @@
       clickedDD.style.display = '';
       document.getElementById('alphaNav').style.display = '';
 
-      // Rebind alphabetical navigation after isolation
-      document.querySelectorAll('#alphaNav a').forEach(link => {
-        link.onclick = function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          scrollWithOffset(targetId);
-        };
-      });
+      // Rebind alphabetical navigation to preserve clickability
+      bindAlphaNav();
 
       setTimeout(() => {
         const offset = document.getElementById('topControls').offsetHeight + 10;
@@ -849,17 +843,21 @@
       }
     }
 
+    function bindAlphaNav() {
+      document.querySelectorAll('#alphaNav a').forEach(link => {
+        link.onclick = function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          scrollWithOffset(targetId);
+        };
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('searchBox').addEventListener('keyup', filterGlossary);
       document.getElementById('resetButton').addEventListener('click', resetView);
 
-      document.querySelectorAll('#alphaNav a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          scrollWithOffset(targetId);
-        });
-      });
+      bindAlphaNav(); // Initial binding
 
       document.querySelectorAll('#glossaryList dt').forEach(dt => {
         dt.addEventListener('click', isolateEntry);
@@ -871,4 +869,3 @@
 
 </body>
 </html>
-
