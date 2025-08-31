@@ -1,231 +1,168 @@
-/* ========== Global Styles ========== */
-
+/* === Global Font & Layout === */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 20px;
-  line-height: 1.6;
-  color: #333;
-}
-
-h1, h2 {
-  font-weight: bold;
-  color: #222;
-  margin-bottom: 10px;
-}
-
-section {
-  margin-bottom: 40px;
-}
-
-/* ========== Sticky Top Controls ========== */
-
-#topControls {
-  position: sticky;
-  top: 0;
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-  z-index: 100;
-}
-
-/* ========== Menu Bar ========== */
-
-#menuBar {
-  margin-bottom: 10px;
-}
-
-#menuBar a {
-  margin-right: 10px;
-  text-decoration: none;
-  color: #0077cc;
-  font-weight: bold;
-}
-
-#menuBar a:hover {
-  text-decoration: underline;
-}
-
-/* ========== Search Box ========== */
-
-#searchBox {
-  width: 100%;
-  max-width: 400px;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
-/* ========== Alphabetical Navigation ========== */
-
-#alphaNav {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-#alphaNav a {
-  margin: 2px;
-  padding: 6px 10px;
-  font-size: 14px;
-  text-decoration: none;
-  background-color: #0077cc;
-  color: white;
-  border-radius: 3px;
-  display: inline-block;
-}
-
-#alphaNav a:hover {
-  background-color: #005fa3;
-}
-
-/* ========== Reset Button ========== */
-
-#resetButton {
-  margin-right: 10px;
-  padding: 6px 12px;
-  font-size: 14px;
-  border: none;
-  background-color: #cc3300;
-  color: white;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-#resetButton:hover {
-  background-color: #aa2900;
-}
-
-/* ========== Scroll Offset Correction ========== */
-
-:target::before {
-  content: "";
-  display: block;
-  height: 80px;
-  margin-top: -80px;
-}
-
-/* ========== Glossary Styles ========== */
-
-dl {
+  font-family: 'Bahnschrift', 'Segoe UI', 'Calibri', 'Trebuchet MS', sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #fdfdfd;
+  color: #222;
 }
 
-dl dt,
-dl dd {
-  display: block;
+.container {
+  padding: 20px;
+  max-width: 960px;
+  margin: auto;
+}
+
+/* === Sticky Top Controls === */
+.sticky-controls {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 1000;
+  padding: 10px 0;
+  border-bottom: 2px solid #ccc;
+}
+
+/* === Search + Reset Layout === */
+.search-reset-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.search-box {
+  padding: 8px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+.reset-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #e0e0e0;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background-color 0.2s ease;
+}
+
+.reset-button:hover {
+  background-color: #d0d0d0;
+}
+
+/* === Tab Navigation Bar === */
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+.tab-nav a {
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* === Semantic Tab Colors === */
+.tab-nav a.home-tab     { background-color: #e3f2fd; color: #0d47a1; }
+.tab-nav a.glossary-tab { background-color: #fce4ec; color: #880e4f; }
+.tab-nav a.quizzes-tab  { background-color: #fff3e0; color: #e65100; }
+.tab-nav a.references-tab { background-color: #e8f5e9; color: #1b5e20; }
+.tab-nav a.visuals-tab  { background-color: #f3e5f5; color: #4a148c; }
+.tab-nav a.tools-tab    { background-color: #ede7f6; color: #311b92; }
+
+.tab-nav a:hover {
+  transform: scale(1.03);
+  border-color: #999;
+}
+
+/* === Active Tab Highlighting === */
+.tab-nav a.active {
+  box-shadow: 0 0 0 2px #3399ff inset;
+}
+
+/* === Alphabetical Index === */
+.alpha-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+.alpha-index a {
+  text-decoration: none;
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  color: #333;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.alpha-index a:hover {
+  background-color: #e0e0e0;
+}
+
+/* === Glossary Entries === */
+dl {
+  margin: 0;
 }
 
 dt {
   font-weight: bold;
-  margin-top: 20px;
-  margin-bottom: 5px;
-  color: #0055aa;
+  margin-top: 12px;
 }
 
-dl dd {
-  font-weight: normal !important;
+dd {
   margin-left: 20px;
-  margin-bottom: 10px;
-  background-color: #ffffff;
-  border-left: 4px solid #0077cc;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin-bottom: 8px;
 }
 
-/* ========== Quizzes Styles ========== */
-
-.quiz-container {
-  margin-top: 20px;
-}
-
-.quiz-question {
+/* === Section Headings === */
+.section-title {
+  font-size: 24px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin: 24px 0 12px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 6px;
 }
 
-.quiz-options label {
-  display: block;
-  margin-bottom: 6px;
-  cursor: pointer;
+/* === Tab-Specific Section Hooks === */
+.home-tab,
+.glossary-tab,
+.quizzes-tab,
+.references-tab,
+.visuals-tab,
+.tools-tab {
+  padding: 10px 0;
 }
 
-.quiz-submit {
-  margin-top: 10px;
-  padding: 6px 12px;
-  background-color: #0077cc;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.quiz-submit:hover {
-  background-color: #005fa3;
-}
-
-/* ========== References Styles ========== */
-
-.reference-list {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.reference-list li {
-  margin-bottom: 10px;
-  padding-left: 10px;
-  border-left: 3px solid #888;
-}
-
-/* ========== Visuals Styles ========== */
-
-.visual-block {
-  margin-bottom: 20px;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.visual-block img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* ========== Tools Styles ========== */
-
-.tool-card {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #eef6ff;
-  border-left: 5px solid #3399ff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.tool-card h3 {
-  margin-top: 0;
-  color: #0055aa;
-}
-
-/* ========== Responsive Layout ========== */
-
+/* === Responsive Adjustments === */
 @media (max-width: 600px) {
-  #searchBox {
+  .tab-nav,
+  .alpha-index {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tab-nav a {
     width: 100%;
+    text-align: center;
   }
 
-  #alphaNav a {
-    font-size: 12px;
-    padding: 4px 8px;
-  }
-
-  #resetButton,
-  .quiz-submit {
-    font-size: 12px;
-    padding: 5px 10px;
+  .search-reset-wrapper {
+    gap: 6px;
   }
 }
