@@ -74,19 +74,18 @@ body {
 }
 
 /* === Semantic Tab Colors === */
-.tab-nav a.home-tab     { background-color: #e3f2fd; color: #0d47a1; }
-.tab-nav a.glossary-tab { background-color: #fce4ec; color: #880e4f; }
-.tab-nav a.quizzes-tab  { background-color: #fff3e0; color: #e65100; }
-.tab-nav a.references-tab { background-color: #e8f5e9; color: #1b5e20; }
-.tab-nav a.visuals-tab  { background-color: #f3e5f5; color: #4a148c; }
-.tab-nav a.tools-tab    { background-color: #ede7f6; color: #311b92; }
+.tab-nav a.home-tab        { background-color: #e3f2fd; color: #0d47a1; }
+.tab-nav a.glossary-tab    { background-color: #fce4ec; color: #880e4f; }
+.tab-nav a.quizzes-tab     { background-color: #fff3e0; color: #e65100; }
+.tab-nav a.references-tab  { background-color: #e8f5e9; color: #1b5e20; }
+.tab-nav a.visuals-tab     { background-color: #f3e5f5; color: #4a148c; }
+.tab-nav a.tools-tab       { background-color: #ede7f6; color: #311b92; }
 
 .tab-nav a:hover {
   transform: scale(1.03);
   border-color: #999;
 }
 
-/* === Active Tab Highlighting === */
 .tab-nav a.active {
   box-shadow: 0 0 0 2px #3399ff inset;
 }
@@ -123,6 +122,13 @@ dl {
 dt {
   font-weight: bold;
   margin-top: 12px;
+  color: #0055aa;
+}
+
+dt:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  background-color: #f0f8ff;
 }
 
 dd {
