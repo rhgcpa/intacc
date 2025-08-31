@@ -64,6 +64,17 @@
       flex-wrap: wrap;
     }
 
+    .toggle-group {
+      margin: 1em;
+      text-align: center;
+    }
+
+    .toggle-group label {
+      margin: 0 1em;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     button {
       background: var(--accent-color);
       color: white;
@@ -136,6 +147,10 @@
       border-left: 5px solid var(--secondary-color);
       display: none;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -155,9 +170,14 @@
       <button id="submit-quiz">Submit Quiz</button>
       <button id="reset-quiz">Reset Quiz</button>
     </div>
+    <div class="toggle-group">
+      <label><input type="radio" name="quizMode" value="both" checked /> Both</label>
+      <label><input type="radio" name="quizMode" value="theory" /> Theory Only</label>
+      <label><input type="radio" name="quizMode" value="practice" /> Practice Only</label>
+    </div>
   </div>
 
-  <div class="quiz-card theory">
+  <div id="theory-card" class="quiz-card theory">
     <h3>Cash and Cash Equivalents – Theory</h3>
     <p class="meta">Multiple Choice · Select one answer per question</p>
 
@@ -283,7 +303,7 @@
 
 </div>
 
-  <div class="quiz-card practice">
+  <div id="practice-card" class="quiz-card practice">
     <h3>Cash and Cash Equivalents – Practice</h3>
     <p class="meta">Multiple Choice · Select one answer per question</p>
 
@@ -362,49 +382,57 @@
   <div id="results"></div>
 
   <script>
-    document.getElementById("submit-quiz").addEventListener("click", function () {
-      const questions = document.querySelectorAll(".question");
-      let correctCount = 0;
-      let total = questions.length;
-      let feedback = "";
-
-      questions.forEach((q, index) => {
-        const selected = q.querySelector("input[type='radio']:checked");
-        const correct = q.dataset.answer;
-
-        if (selected) {
-          if (selected.value === correct) {
-            q.classList.add("correct");
-            correctCount++;
-          } else {
-            q.classList.add("incorrect");
-            feedback += `<p><strong>Question ${index + 1}:</strong> You selected <em>${selected.value}</em>. Correct answer is <strong>${correct}</strong>.</p>`;
-          }
-        } else {
-          q.classList.add("incorrect");
-          feedback += `<p><strong>Question ${index + 1}:</strong> No answer selected. Correct answer is <strong>${correct}</strong>.</p>`;
-        }
+    // Toggle visibility based on quiz mode
+    document.querySelectorAll('input[name="quizMode"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const mode = radio.value;
+        document.getElementById('theory-card').classList.toggle('hidden', mode === 'practice');
+        document.getElementById('practice-card').classList.toggle('hidden', mode === 'theory');
       });
-
-      const results = document.getElementById("results");
-      results.style.display = "block";
-      results.innerHTML = `
-        <h2>Quiz Completed</h2>
-        <p>You got ${correctCount} out of ${total} correct.</p>
-        ${feedback}
-      `;
     });
 
-    document.getElementById("reset-quiz").addEventListener("click", function () {
-      const questions = document.querySelectorAll(".question");
-      questions.forEach(q => {
-        q.classList.remove("correct", "incorrect");
-        const selected = q.querySelector("input[type='radio']:checked");
-        if (selected) selected.checked = false;
+    // Submit quiz logic
+    document.getElementById('submit-quiz').addEventListener('click', () => {
+      let correct = 0;
+      let total = 0;
+
+      document.querySelectorAll('.question').forEach(q => {
+        const selected = q.querySelector('input[type="radio"]:checked');
+        const correctAnswer = q.dataset.answer;
+        const answerDisplay = q.querySelector('.answer');
+
+        if (selected) {
+          total++;
+          if (selected.value === correctAnswer) {
+            q.classList.add('correct');
+            q.classList.remove('incorrect');
+            correct++;
+          } else {
+            q.classList.add('incorrect');
+            q.classList.remove('correct');
+          }
+        } else {
+          q.classList.remove('correct', 'incorrect');
+        }
+
+        answerDisplay.style.display = 'block';
       });
 
-      document.getElementById("results").style.display = "none";
-      document.getElementById("results").innerHTML = "";
+      const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+      const results = document.getElementById('results');
+      results.innerHTML = `<h3>Results</h3><p>You answered ${correct} out of ${total} questions correctly. Score: ${score}%</p>`;
+      results.style.display = 'block';
+    });
+
+    // Reset quiz logic
+    document.getElementById('reset-quiz').addEventListener('click', () => {
+      document.querySelectorAll('.question').forEach(q => {
+        q.classList.remove('correct', 'incorrect');
+        q.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
+        q.querySelector('.answer').style.display = 'none';
+      });
+
+      document.getElementById('results').style.display = 'none';
     });
   </script>
 </body>
