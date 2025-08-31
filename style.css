@@ -118,26 +118,52 @@ body {
   color: #444;
 }
 
+/* === Tab-Specific Accent Colors === */
+.home-section h2,
+.home-section a:hover {
+  color: #4CAF50;
+}
+
+.glossary-section h2,
+.glossary-section a:hover {
+  color: #0055AA;
+}
+
+.quizzes-section h2,
+.quizzes-section a:hover {
+  color: #FF9800;
+}
+
+.references-section h2,
+.references-section a:hover {
+  color: #9C27B0;
+}
+
+.visuals-section h2,
+.visuals-section a:hover {
+  color: #E91E63;
+}
+
+.tools-section h2,
+.tools-section a:hover {
+  color: #607D8B;
+}
+
 /* === Quizzes Section === */
-.quiz-section {
+.quizzes-section {
   margin-top: 24px;
 }
 
-.quiz-section h2 {
-  font-size: 1.4em;
-  margin-bottom: 12px;
-}
-
-.quiz-section .question {
+.quizzes-section .question {
   margin-bottom: 16px;
 }
 
-.quiz-section .question p {
+.quizzes-section .question p {
   font-weight: bold;
   margin-bottom: 8px;
 }
 
-.quiz-section .options label {
+.quizzes-section .options label {
   display: block;
   margin-bottom: 6px;
 }
@@ -145,11 +171,6 @@ body {
 /* === References Section === */
 .references-section {
   margin-top: 24px;
-}
-
-.references-section h2 {
-  font-size: 1.4em;
-  margin-bottom: 12px;
 }
 
 .references-section ul {
@@ -160,11 +181,6 @@ body {
 /* === Visuals Section === */
 .visuals-section {
   margin-top: 24px;
-}
-
-.visuals-section h2 {
-  font-size: 1.4em;
-  margin-bottom: 12px;
 }
 
 .visuals-section img {
@@ -180,16 +196,11 @@ body {
   margin-top: 24px;
 }
 
-.tools-section h2 {
-  font-size: 1.4em;
-  margin-bottom: 12px;
-}
-
 .tools-section .tool-item {
   margin-bottom: 16px;
   padding: 12px;
   background-color: #eef;
-  border-left: 4px solid #007acc;
+  border-left: 4px solid #607D8B;
   border-radius: 4px;
 }
 
