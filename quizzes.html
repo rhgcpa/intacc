@@ -5,16 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quizzes – Volume 1</title>
   <style>
+    :root {
+      --primary-color: #002b5c;
+      --secondary-color: #004080;
+      --accent-color: #00aaff;
+      --hover-color: #0077cc;
+      --bg-color: #f9f9f9;
+      --card-bg: #ffffff;
+      --correct-bg: #e0ffe0;
+      --incorrect-bg: #ffe0e0;
+      --font-family: Bahnschrift, Arial, sans-serif;
+    }
+
     body {
-      font-family: Bahnschrift, Arial, sans-serif;
+      font-family: var(--font-family);
       margin: 0;
       padding: 0;
-      background: #f9f9f9;
+      background: var(--bg-color);
     }
+
     .tabs {
       display: flex;
       justify-content: space-around;
-      background: #002b5c;
+      background: var(--primary-color);
       color: white;
       padding: 0.8em;
       font-weight: bold;
@@ -22,27 +35,37 @@
       top: 0;
       z-index: 1000;
     }
+
     .tabs div {
       cursor: pointer;
     }
-    header {
-      background: #004080;
+
+    .sticky-meta {
+      position: sticky;
+      top: 3.2em;
+      z-index: 999;
+      background: var(--secondary-color);
       color: white;
-      padding: 1em;
+      padding: 1em 0;
       text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    header h1 {
+
+    .sticky-meta h1 {
       margin: 0;
       font-size: 1.2em;
     }
+
     .controls {
+      margin-top: 0.8em;
       display: flex;
       justify-content: center;
       gap: 1em;
-      margin: 1em;
+      flex-wrap: wrap;
     }
+
     button {
-      background: #00aaff;
+      background: var(--accent-color);
       color: white;
       border: none;
       padding: 0.5em 1em;
@@ -50,82 +73,96 @@
       font-weight: bold;
       border-radius: 4px;
     }
+
     button:hover {
-      background: #0077cc;
+      background: var(--hover-color);
     }
+
     .quiz-card {
-      background: white;
+      background: var(--card-bg);
       margin: 1em;
       padding: 1em;
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
+
     .quiz-card h3 {
       margin-top: 0;
     }
+
     .meta {
       font-size: 0.9em;
       color: #666;
       margin-bottom: 1em;
     }
+
     .question {
       margin-bottom: 1.5em;
     }
+
     .question p {
       margin: 0.5em 0;
     }
+
     .choices label {
       display: block;
       margin: 0.3em 0;
       cursor: pointer;
     }
+
     .answer {
       display: none;
       margin-top: 0.5em;
       font-weight: bold;
     }
+
     .incorrect .answer {
       display: block;
       color: red;
     }
+
     .correct {
-      background: #e0ffe0;
+      background: var(--correct-bg);
     }
+
     .incorrect {
-      background: #ffe0e0;
+      background: var(--incorrect-bg);
     }
+
     #results {
-      background: #fff;
+      background: var(--card-bg);
       margin: 1em;
       padding: 1em;
-      border-left: 5px solid #004080;
+      border-left: 5px solid var(--secondary-color);
       display: none;
     }
   </style>
 </head>
 <body>
 
-<div class="tabs">
-  <div>Home</div>
-  <div>Glossary</div>
-  <div>Quizzes</div>
-  <div>References</div>
-  <div>Visuals</div>
-  <div>Tools</div>
-</div>
+  <!-- Top Navigation Tabs -->
+  <div class="tabs">
+    <div>Home</div>
+    <div>Glossary</div>
+    <div>Quizzes</div>
+    <div>References</div>
+    <div>Visuals</div>
+    <div>Tools</div>
+  </div>
 
-<header>
-  <h1>Volume 1 · Chapter 1 · Topic: Cash and Cash Equivalents · Quiz Type: Theory</h1>
-</header>
+  <!-- Sticky Metadata and Controls -->
+  <div class="sticky-meta">
+    <h1>Volume 1 · Chapter 1 · Topic: Cash and Cash Equivalents · Quiz Type: Theory & Practice</h1>
+    <div class="controls">
+      <button id="submit-quiz">Submit Quiz</button>
+      <button id="reset-quiz">Reset Quiz</button>
+    </div>
+  </div>
 
-<div class="controls">
-  <button id="submit-quiz">Submit Quiz</button>
-  <button id="reset-quiz">Reset Quiz</button>
-</div>
-
-<div class="quiz-card theory">
-  <h3>Cash and Cash Equivalents – Theory (Batch 1)</h3>
-  <p class="meta">Multiple Choice · Select one answer per question</p>
+  <!-- Reusable Quiz Card: Theory -->
+  <div class="quiz-card theory">
+    <h3>Cash and Cash Equivalents – Theory (Batch 1)</h3>
+    <p class="meta">Multiple Choice · Select one answer per question</p>
 
   <!-- Question 1 -->
   <div class="question" data-answer="B">
@@ -246,57 +283,76 @@
     </div>
     <p class="answer">Correct Answer: A</p>
   </div>
+  
+  </div>
 
-</div>
+  <!-- Reusable Quiz Card: Practice -->
+  <div class="quiz-card practice">
+    <h3>Cash and Cash Equivalents – Practice (Batch 1)</h3>
+    <p class="meta">Multiple Choice · Select one answer per question</p>
 
-<div id="results"></div>
+    <div class="question" data-answer="A">
+      <p>10. Before replenishment, the adjusted balance of Petty Cash Fund equals:</p>
+      <div class="choices">
+        <label><input type="radio" name="q10" value="A" /> A. Currency in the custody of the Petty Cash Custodian.</label>
+        <label><input type="radio" name="q10" value="B" /> B. Established amount.</label>
+        <label><input type="radio" name="q10" value="C" /> C. Minimum threshold.</label>
+        <label><input type="radio" name="q10" value="D" /> D. Total of Petty Cash Vouchers.</label>
+      </div>
+      <p class="answer">Correct Answer: A</p>
+    </div>
+  </div>
 
-<script>
-  document.getElementById("submit-quiz").addEventListener("click", function () {
-    const questions = document.querySelectorAll(".question");
-    let correctCount = 0;
-    let total = questions.length;
-    let feedback = "";
+  <!-- Results Display -->
+  <div id="results"></div>
 
-    questions.forEach((q, index) => {
-      const selected = q.querySelector("input[type='radio']:checked");
-      const correct = q.dataset.answer;
+  <!-- Quiz Logic -->
+  <script>
+    document.getElementById("submit-quiz").addEventListener("click", function () {
+      const questions = document.querySelectorAll(".question");
+      let correctCount = 0;
+      let total = questions.length;
+      let feedback = "";
 
-      if (selected) {
-        if (selected.value === correct) {
-          q.classList.add("correct");
-          correctCount++;
+      questions.forEach((q, index) => {
+        const selected = q.querySelector("input[type='radio']:checked");
+        const correct = q.dataset.answer;
+
+        if (selected) {
+          if (selected.value === correct) {
+            q.classList.add("correct");
+            correctCount++;
+          } else {
+            q.classList.add("incorrect");
+            feedback += `<p><strong>Question ${index + 1}:</strong> You selected <em>${selected.value}</em>. Correct answer is <strong>${correct}</strong>.</p>`;
+          }
         } else {
           q.classList.add("incorrect");
-          feedback += `<p><strong>Question ${index + 1}:</strong> You selected <em>${selected.value}</em>. Correct answer is <strong>${correct}</strong>.</p>`;
+          feedback += `<p><strong>Question ${index + 1}:</strong> No answer selected. Correct answer is <strong>${correct}</strong>.</p>`;
         }
-      } else {
-        q.classList.add("incorrect");
-        feedback += `<p><strong>Question ${index + 1}:</strong> No answer selected. Correct answer is <strong>${correct}</strong>.</p>`;
-      }
+      });
+
+      const results = document.getElementById("results");
+      results.style.display = "block";
+      results.innerHTML = `
+        <h2>Quiz Completed</h2>
+        <p>You got ${correctCount} out of ${total} correct.</p>
+        ${feedback}
+      `;
     });
 
-    const results = document.getElementById("results");
-    results.style.display = "block";
-    results.innerHTML = `
-      <h2>Quiz Completed</h2>
-      <p>You got ${correctCount} out of ${total} correct.</p>
-      ${feedback}
-    `;
-  });
-
-  document.getElementById("reset-quiz").addEventListener("click", function () {
-    const questions = document.querySelectorAll(".question");
-    questions.forEach(q => {
-      q.classList.remove("correct", "incorrect");
-      const selected = q.querySelector("input[type='radio']:checked");
-      if (selected) selected.checked = false;
+    document.getElementById("reset-quiz").addEventListener("click", function () {
+      const questions = document.querySelectorAll(".question");
+      questions.forEach(q => {
+        q.classList.remove("correct", "incorrect");
+        const selected = q.querySelector("input[type='radio']:checked");
+        if (selected) selected.checked = false;
+      });
+      document.getElementById("results").style.display = "none";
+      document.getElementById("results").innerHTML = "";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    document.getElementById("results").style.display = "none";
-    document.getElementById("results").innerHTML = "";
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-</script>
+  </script>
 
 </body>
 </html>
