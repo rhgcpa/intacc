@@ -4,101 +4,6 @@
   <meta charset="UTF-8">
   <title>Glossary</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: 'Bahnschrift', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    #topControls {
-      position: sticky;
-      top: 0;
-      background-color: #f9f9f9;
-      z-index: 1000;
-      padding: 10px 0;
-      border-bottom: 1px solid #ccc;
-    }
-
-    #menuBar {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      padding: 10px 0;
-    }
-
-    #menuBar a {
-      text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-
-    #menuBar a:nth-child(1) { background-color: #e57373; color: white; }
-    #menuBar a:nth-child(2) { background-color: #64b5f6; color: white; }
-    #menuBar a:nth-child(3) { background-color: #81c784; color: white; }
-    #menuBar a:nth-child(4) { background-color: #ffd54f; color: black; }
-    #menuBar a:nth-child(5) { background-color: #ba68c8; color: white; }
-    #menuBar a:nth-child(6) { background-color: #4db6ac; color: white; }
-
-    .search-reset-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px;
-    }
-
-    #searchBox {
-      width: 60%;
-      padding: 8px;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-
-    #resetButton {
-      background-color: #ff8a65;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    #alphaNav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px;
-    }
-
-    #alphaNav a {
-      text-decoration: none;
-      padding: 6px 10px;
-      background-color: #eeeeee;
-      border-radius: 4px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    #glossaryList {
-      padding: 20px;
-    }
-
-    dt {
-      color: #1565c0;
-      font-weight: bold;
-      margin-top: 20px;
-      cursor: pointer;
-    }
-
-    dd {
-      color: #424242;
-      margin-left: 20px;
-      margin-bottom: 10px;
-    }
-  </style>
 </head>
 
 <body class="glossary-section">
@@ -917,6 +822,15 @@
       clickedDD.style.display = '';
       document.getElementById('alphaNav').style.display = '';
 
+      // Rebind alphabetical navigation after isolation
+      document.querySelectorAll('#alphaNav a').forEach(link => {
+        link.onclick = function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          scrollWithOffset(targetId);
+        };
+      });
+
       setTimeout(() => {
         const offset = document.getElementById('topControls').offsetHeight + 10;
         window.scrollTo({
@@ -957,3 +871,4 @@
 
 </body>
 </html>
+
