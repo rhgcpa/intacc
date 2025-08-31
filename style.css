@@ -1,126 +1,109 @@
-/* === Font Import === */
-@font-face {
-  font-family: 'Bahncrift';
-  src: url('fonts/Bahncrift.woff2') format('woff2'),
-       url('fonts/Bahncrift.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-/* === Base Styles === */
+/* === Global Styles === */
 body {
-  font-family: 'Bahncrift', Arial, sans-serif;
+  font-family: Bahncrift, sans-serif;
   margin: 0;
   padding: 0;
-  line-height: 1.6;
-  background-color: #f9f9f9;
-  color: #333;
-}
-
-h1, h2 {
-  margin: 0.5em 0;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* === Top Controls === */
-#topControls {
-  position: sticky;
-  top: 0;
-  background-color: #fff;
-  padding: 10px;
-  border-bottom: 2px solid #ccc;
-  z-index: 1000;
-}
-
-/* === Navigation Bar === */
-nav {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-
-nav a {
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-weight: bold;
-  background-color: #eee;
-  transition: background-color 0.3s;
-}
-
-nav a:hover {
-  background-color: #ddd;
-}
-
-nav a.active {
-  background-color: #333;
-  color: #fff;
+  background-color: #fdfdfd;
+  color: #222;
 }
 
 /* === Tab-Specific Accent Colors === */
-.home-section a.active,
-.home-section h2 { color: #4CAF50; }       /* Green */
-
-.glossary-section a.active,
-.glossary-section h2 { color: #0055AA; }   /* Deep Blue */
-
-.quizzes-section a.active,
-.quizzes-section h2 { color: #FF9800; }    /* Orange */
-
-.references-section a.active,
-.references-section h2 { color: #9C27B0; } /* Purple */
-
-.visuals-section a.active,
-.visuals-section h2 { color: #E91E63; }    /* Pink/Red */
-
-.tools-section a.active,
-.tools-section h2 { color: #607D8B; }      /* Slate Gray */
-
-/* === Glossary Layout === */
-#glossaryList {
-  margin: 20px;
+body.glossary {
+  --accent-color: #0077cc;
+}
+body.quizzes {
+  --accent-color: #cc7700;
+}
+body.references {
+  --accent-color: #009966;
 }
 
-#glossaryList dt {
+/* === Menu Bar === */
+nav {
+  position: sticky;
+  top: 0;
+  background-color: var(--accent-color);
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.6em 0;
+  z-index: 1000;
+}
+nav a {
+  color: white;
+  text-decoration: none;
   font-weight: bold;
-  margin-top: 1em;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* === Glossary Controls === */
+.controls {
+  position: sticky;
+  top: 3em;
+  background-color: #f0f0f0;
+  padding: 1em;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  border-bottom: 1px solid #ccc;
+}
+.controls input[type="text"] {
+  padding: 0.5em;
+  font-size: 1em;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+.controls button {
+  padding: 0.5em;
+  font-size: 1em;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
-
-#glossaryList dd {
-  margin-left: 20px;
-  margin-bottom: 1em;
+.controls button:hover {
+  background-color: #005fa3;
 }
 
 /* === Alphabetical Navigation === */
-#alphaNav {
+.alpha-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 10px 20px;
+  gap: 0.4em;
+}
+.alpha-nav button {
+  padding: 0.4em 0.6em;
+  font-size: 0.9em;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.alpha-nav button:hover {
+  background-color: #ddd;
 }
 
-#alphaNav a {
-  padding: 4px 8px;
-  background-color: #ddd;
-  border-radius: 4px;
+/* === Glossary Entries === */
+dl {
+  margin: 2em;
+}
+dt {
   font-weight: bold;
+  color: var(--accent-color);
+  margin-top: 1em;
+}
+dd {
+  margin-left: 1em;
+  margin-bottom: 1em;
   color: #333;
 }
 
-#alphaNav a:hover {
-  background-color: #bbb;
-}
-
-/* === Utility Classes === */
+/* === Hidden Elements for Isolation/Search === */
 .hidden {
-  display: none !important;
-}
-
-.visible {
-  display: block !important;
+  display: none;
 }
