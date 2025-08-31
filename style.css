@@ -1,6 +1,6 @@
 /* === Global Styles === */
 body {
-  font-family: Bahnschrift, Segoe UI Semibold, sans-serif;
+  font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
   margin: 0;
   padding: 0;
   background-color: #fdfdfd;
@@ -39,6 +39,7 @@ body.tools-section      { --accent-color: #4db6ac; }
   border-radius: 4px;
   font-weight: bold;
   color: white;
+  font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
 }
 
 #menuBar a:nth-child(1) { background-color: #e57373; }
@@ -71,6 +72,7 @@ body.tools-section      { --accent-color: #4db6ac; }
   font-size: 16px;
   border: 1px solid #aaa;
   border-radius: 4px;
+  font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
 }
 
 #resetButton {
@@ -81,7 +83,7 @@ body.tools-section      { --accent-color: #4db6ac; }
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-  font-family: Bahnschrift, Segoe UI Semibold, sans-serif;
+  font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
 }
 
 #resetButton:hover {
@@ -97,7 +99,6 @@ body.tools-section      { --accent-color: #4db6ac; }
   padding: 10px;
 }
 
-/* Default styling for all sections */
 #alphaNav a {
   text-decoration: none;
   padding: 6px 10px;
@@ -105,13 +106,12 @@ body.tools-section      { --accent-color: #4db6ac; }
   border-radius: 4px;
   font-weight: bold;
   color: #333;
+  font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
 }
 
-/* Glossary-specific override */
 body.glossary-section #alphaNav a {
-  font-family: Bahnschrift, Segoe UI Semibold, sans-serif !important;
-  color: white !important;
   background-color: var(--accent-color) !important;
+  color: white !important;
 }
 
 body.glossary-section #alphaNav a:hover {
@@ -125,17 +125,17 @@ body.glossary-section #alphaNav a:hover {
 
 body.glossary-section dt {
   color: #1565c0 !important;
-  font-weight: 800 !important;
+  font-weight: 900 !important;
   margin-top: 20px;
   cursor: pointer;
-  font-family: Bahnschrift, Segoe UI Semibold, sans-serif !important;
+  font-family: Bahnschrift, 'Segoe UI', 'Arial Black', 'Noto Sans', sans-serif !important;
 }
 
 body.glossary-section dd {
   color: #424242 !important;
   margin-left: 20px;
   margin-bottom: 10px;
-  font-family: Bahnschrift, Segoe UI Semibold, sans-serif !important;
+  font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif !important;
 }
 
 /* === Hidden Elements === */
