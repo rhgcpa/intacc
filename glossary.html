@@ -12,6 +12,8 @@
       font-family: Bahnschrift, sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #fdfdfd;
+      color: #222;
     }
 
     #topControls {
@@ -23,25 +25,42 @@
       border-bottom: 1px solid #ccc;
     }
 
-    #menuBar a {
-      margin-right: 10px;
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
+    #menuBar {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      padding-bottom: 10px;
     }
 
-    #menuBar a.active {
-      color: var(--accent-color);
+    #menuBar a {
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+      color: white;
     }
+
+    #menuBar a:nth-child(1) { background-color: #e57373; }
+    #menuBar a:nth-child(2) { background-color: #64b5f6; }
+    #menuBar a:nth-child(3) { background-color: #81c784; }
+    #menuBar a:nth-child(4) { background-color: #ffd54f; color: black; }
+    #menuBar a:nth-child(5) { background-color: #ba68c8; }
+    #menuBar a:nth-child(6) { background-color: #4db6ac; }
 
     .search-reset-wrapper {
-      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 10px;
     }
 
     #searchBox {
       padding: 6px;
       font-size: 16px;
-      width: 60%;
+      width: 300px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
     }
 
     #resetButton {
@@ -50,11 +69,21 @@
       background-color: var(--accent-color);
       color: white;
       border: none;
+      border-radius: 4px;
       cursor: pointer;
+      font-weight: bold;
+    }
+
+    #resetButton:hover {
+      background-color: #1976d2;
     }
 
     #alphaNav {
-      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
     }
 
     #alphaNav a {
@@ -65,8 +94,11 @@
       padding: 6px 10px;
       border-radius: 4px;
       text-decoration: none;
-      margin-right: 4px;
       display: inline-block;
+    }
+
+    #alphaNav a:hover {
+      background-color: #1976d2;
     }
 
     #glossaryList {
@@ -77,18 +109,23 @@
       font-weight: bold;
       margin-top: 20px;
       cursor: pointer;
+      color: var(--accent-color);
     }
 
     dd {
       margin-left: 20px;
       margin-bottom: 10px;
+      color: #424242;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 
-<body>
+<body class="glossary-section">
 
-  <!-- === Top Controls === -->
   <div id="topControls">
     <div id="menuBar">
       <a href="index.html">Home</a>
@@ -102,19 +139,17 @@
     <div class="search-reset-wrapper">
       <input type="text" id="searchBox" placeholder="Search glossary terms...">
       <button id="resetButton">Reset View</button>
-    </div>
-
-    <div id="alphaNav">
-      <a href="#A">A</a><a href="#B">B</a><a href="#C">C</a><a href="#D">D</a><a href="#E">E</a>
-      <a href="#F">F</a><a href="#G">G</a><a href="#H">H</a><a href="#I">I</a><a href="#J">J</a>
-      <a href="#K">K</a><a href="#L">L</a><a href="#M">M</a><a href="#N">N</a><a href="#O">O</a>
-      <a href="#P">P</a><a href="#Q">Q</a><a href="#R">R</a><a href="#S">S</a><a href="#T">T</a>
-      <a href="#U">U</a><a href="#V">V</a><a href="#W">W</a><a href="#X">X</a><a href="#Y">Y</a>
-      <a href="#Z">Z</a>
+      <div id="alphaNav">
+        <a href="#A">A</a><a href="#B">B</a><a href="#C">C</a><a href="#D">D</a><a href="#E">E</a>
+        <a href="#F">F</a><a href="#G">G</a><a href="#H">H</a><a href="#I">I</a><a href="#J">J</a>
+        <a href="#K">K</a><a href="#L">L</a><a href="#M">M</a><a href="#N">N</a><a href="#O">O</a>
+        <a href="#P">P</a><a href="#Q">Q</a><a href="#R">R</a><a href="#S">S</a><a href="#T">T</a>
+        <a href="#U">U</a><a href="#V">V</a><a href="#W">W</a><a href="#X">X</a><a href="#Y">Y</a>
+        <a href="#Z">Z</a>
+      </div>
     </div>
   </div>
 
-  <!-- === Glossary Entries === -->
 <dl id="glossaryList">
 <!-- A -->
 <dt id="A">12-month expected credit losses</dt>
@@ -856,11 +891,30 @@
 <!-- End of Glossary List -->
 </dl>
 
-  <!-- === Glossary Script === -->
   <script>
+    const searchBox = document.getElementById('searchBox');
+    const resetButton = document.getElementById('resetButton');
+    const glossaryList = document.getElementById('glossaryList');
+    const alphaNav = document.getElementById('alphaNav');
+
+    searchBox.addEventListener('input', filterGlossary);
+    resetButton.addEventListener('click', resetView);
+
+    glossaryList.querySelectorAll('dt').forEach(dt => {
+      dt.addEventListener('click', isolateEntry);
+    });
+
+    alphaNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        scrollWithOffset(targetId);
+      });
+    });
+
     function filterGlossary() {
-      const input = document.getElementById('searchBox').value.toLowerCase();
-      const entries = document.querySelectorAll('#glossaryList dt');
+      const input = searchBox.value.toLowerCase();
+      const entries = glossaryList.querySelectorAll('dt');
       let firstMatch = null;
       entries.forEach(dt => {
         const dd = dt.nextElementSibling;
@@ -882,32 +936,29 @@
     }
 
     function resetView() {
-      document.getElementById('searchBox').value = '';
-      document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
+      searchBox.value = '';
+      glossaryList.querySelectorAll('dt, dd').forEach(el => {
         el.style.display = '';
       });
-      document.getElementById('alphaNav').style.display = '';
+      alphaNav.style.display = '';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function isolateEntry(event) {
       const clickedDT = event.target;
       const clickedDD = clickedDT.nextElementSibling;
-
-      document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
+      glossaryList.querySelectorAll('dt, dd').forEach(el => {
         el.style.display = 'none';
       });
-
       clickedDT.style.display = '';
       clickedDD.style.display = '';
-      document.getElementById('alphaNav').style.display = '';
+      alphaNav.style.display = '';
     }
 
     function scrollWithOffset(targetId) {
-      document.querySelectorAll('#glossaryList dt, #glossaryList dd').forEach(el => {
+      glossaryList.querySelectorAll('dt, dd').forEach(el => {
         el.style.display = '';
       });
-
       const target = document.getElementById(targetId);
       if (target) {
         const offset = document.getElementById('topControls').offsetHeight + 10;
@@ -915,31 +966,7 @@
         window.scrollTo({ top, behavior: 'smooth' });
       }
     }
-
-    function bindAlphaNav() {
-      document.querySelectorAll('#alphaNav a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          scrollWithOffset(targetId);
-        });
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('searchBox').addEventListener('keyup', filterGlossary);
-      document.getElementById('resetButton').addEventListener('click', resetView);
-
-      bindAlphaNav();
-
-      document.querySelectorAll('#glossaryList dt').forEach(dt => {
-        dt.addEventListener('click', isolateEntry);
-      });
-
-      console.log('Glossary loaded and interactive.');
-    });
   </script>
-
 </body>
 </html>
 
