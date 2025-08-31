@@ -1,174 +1,136 @@
-/* === Global Font & Layout === */
-body {
-  font-family: 'Bahnschrift', 'Segoe UI', 'Calibri', 'Trebuchet MS', sans-serif;
+/* === Global Reset === */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background-color: #fdfdfd;
-  color: #222;
 }
 
-.container {
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
   padding: 20px;
-  max-width: 960px;
-  margin: auto;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
 /* === Sticky Top Controls === */
-.sticky-controls {
+#topControls {
   position: sticky;
   top: 0;
-  background-color: #ffffff;
+  background-color: #fff;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ccc;
   z-index: 1000;
-  padding: 10px 0;
-  border-bottom: 2px solid #ccc;
 }
 
-/* === Search + Reset Vertical Stack === */
+/* === Tab Navigation === */
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.tab-nav button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.tab-nav button:hover,
+.tab-nav button.active {
+  background-color: #007acc;
+  color: #fff;
+}
+
+/* === Search + Reset Stack === */
 .search-reset-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.search-box {
-  padding: 8px;
-  font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #bbb;
-  border-radius: 4px;
-}
-
-.reset-button {
-  padding: 6px 12px;
-  font-size: 14px;
-  background-color: #e0e0e0;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.reset-button:hover {
-  background-color: #d0d0d0;
-}
-
-/* === Tab Navigation Bar === */
-.tab-nav {
-  display: flex;
-  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 16px;
-  justify-content: center;
 }
 
-.tab-nav a {
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: bold;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  border: 1px solid transparent;
+.search-reset-wrapper input[type="text"] {
+  padding: 8px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-/* === Semantic Tab Colors === */
-.tab-nav a.home-tab        { background-color: #e3f2fd; color: #0d47a1; }
-.tab-nav a.glossary-tab    { background-color: #fce4ec; color: #880e4f; }
-.tab-nav a.quizzes-tab     { background-color: #fff3e0; color: #e65100; }
-.tab-nav a.references-tab  { background-color: #e8f5e9; color: #1b5e20; }
-.tab-nav a.visuals-tab     { background-color: #f3e5f5; color: #4a148c; }
-.tab-nav a.tools-tab       { background-color: #ede7f6; color: #311b92; }
-
-.tab-nav a:hover {
-  transform: scale(1.03);
-  border-color: #999;
+.search-reset-wrapper button {
+  padding: 6px 12px;
+  background-color: #007acc;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.tab-nav a.active {
-  box-shadow: 0 0 0 2px #3399ff inset;
+.search-reset-wrapper button:hover {
+  background-color: #005fa3;
 }
 
 /* === Alphabetical Index === */
-.alpha-index {
+#alphaNav {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 16px;
+  gap: 10px;
   justify-content: center;
+  margin: 16px 0;
 }
 
-.alpha-index a {
+#alphaNav a {
   text-decoration: none;
-  padding: 4px 8px;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  color: #333;
+  color: #007acc;
   font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
   transition: background-color 0.2s ease;
 }
 
-.alpha-index a:hover {
-  background-color: #e0e0e0;
+#alphaNav a:hover {
+  background-color: #e0f0ff;
 }
 
-/* === Glossary Entries === */
-dl {
-  margin: 0;
-}
-
-dt {
+/* === Glossary List === */
+#glossaryList dt {
   font-weight: bold;
-  margin-top: 12px;
-  color: #0055aa;
-}
-
-dt:hover {
+  margin-top: 16px;
   cursor: pointer;
-  text-decoration: underline;
-  background-color: #f0f8ff;
 }
 
-dd {
+#glossaryList dd {
   margin-left: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
-/* === Section Headings === */
-.section-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 24px 0 12px;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 6px;
+/* === Quizzes & Other Tabs === */
+.quiz-section,
+.other-tab-section {
+  margin-top: 24px;
 }
 
-/* === Tab-Specific Section Hooks === */
-.home-tab,
-.glossary-tab,
-.quizzes-tab,
-.references-tab,
-.visuals-tab,
-.tools-tab {
-  padding: 10px 0;
+.quiz-section h2,
+.other-tab-section h2 {
+  margin-bottom: 12px;
+  font-size: 1.4em;
 }
 
-/* === Responsive Adjustments === */
+/* === Responsive Design === */
 @media (max-width: 600px) {
   .tab-nav,
-  .alpha-index {
-    flex-direction: column;
-    align-items: center;
+  #alphaNav {
+    justify-content: flex-start;
   }
 
-  .tab-nav a {
+  .search-reset-wrapper input[type="text"] {
     width: 100%;
-    text-align: center;
-  }
-
-  .search-reset-wrapper {
-    gap: 6px;
   }
 }
