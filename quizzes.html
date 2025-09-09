@@ -4,1026 +4,1416 @@
   <meta charset="UTF-8" />
   <title>Quizzes — EXCELlent AccounTax</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Uses the shared site-wide stylesheet as basis for formats -->
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Sticky tab bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #fff;
+      border-bottom: 1px solid #ccc;
+    }
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      padding: 0.5rem 1rem;
+    }
+    .tab {
+      text-decoration: none;
+      color: #333;
+      padding: 0.25rem 0.5rem;
+    }
+    .tab.active {
+      font-weight: bold;
+      border-bottom: 2px solid #0078d4;
+    }
+
+    /* Sticky action bar */
+    .actionbar {
+      position: sticky;
+      top: 2.5rem; /* height of topbar */
+      z-index: 999;
+      background: #f9f9f9;
+      border-bottom: 1px solid #ccc;
+      padding: 0.5rem 1rem;
+    }
+    .actionbar-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+    .select label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+    .select select {
+      min-width: 150px;
+    }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .btn {
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+    }
+    .btn[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Content area */
+    .container {
+      padding: 1rem;
+    }
+    .section-heading {
+      margin-top: 1.5rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.25rem;
+    }
+    .q {
+      border: 1px solid #ddd;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      border-radius: 4px;
+      background: #fff;
+    }
+    .q-meta {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+    .choices {
+      margin-top: 0.5rem;
+    }
+    .choice {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+    .letter {
+      font-weight: bold;
+    }
+    .feedback.correct {
+      color: green;
+    }
+    .feedback.incorrect {
+      color: red;
+    }
+    .feedback.hidden,
+    .reveals.hidden {
+      display: none;
+    }
+    .scoreboard {
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      background: #f0f0f0;
+      display: flex;
+      gap: 2rem;
+    }
+    .scoreboard.hidden {
+      display: none;
+    }
+    .score label {
+      display: block;
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .score strong {
+      font-size: 1.2rem;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Sticky tabs -->
-  <header class="topbar" role="navigation" aria-label="Primary">
-    <nav class="tabs">
-      <a class="tab" href="#home" data-tab="home">Home</a>
-      <a class="tab" href="#glossary" data-tab="glossary">Glossary</a>
-      <a class="tab active" href="#quizzes" data-tab="quizzes">Quizzes</a>
-      <a class="tab" href="#references" data-tab="references">References</a>
-      <a class="tab" href="#visuals" data-tab="visuals">Visuals</a>
-      <a class="tab" href="#tools" data-tab="tools">Tools</a>
-    </nav>
-  </header>
+<header class="topbar" role="navigation" aria-label="Primary">
+  <nav class="tabs">
+    <a class="tab" href="#home" data-tab="home">Home</a>
+    <a class="tab" href="#glossary" data-tab="glossary">Glossary</a>
+    <a class="tab active" href="#quizzes" data-tab="quizzes">Quizzes</a>
+    <a class="tab" href="#references" data-tab="references">References</a>
+    <a class="tab" href="#visuals" data-tab="visuals">Visuals</a>
+    <a class="tab" href="#tools" data-tab="tools">Tools</a>
+  </nav>
+</header>
 
-  <!-- Sticky filters and actions -->
-  <div class="actionbar" role="region" aria-label="Quiz filters and actions">
-    <div class="actionbar-inner">
-      <div class="select">
-        <label for="volume">Volume</label>
-        <select id="volume">
-          <option value="">Select volume</option>
-          <option value="1">Volume 1</option>
-          <option value="2">Volume 2</option>
-          <option value="3">Volume 3</option>
-        </select>
-      </div>
+<div class="actionbar" role="region" aria-label="Quiz filters and actions">
+  <div class="actionbar-inner">
+    <div class="select">
+      <label for="volume">Volume</label>
+      <select id="volume">
+        <option value="">Select volume</option>
+        <option value="1">Volume 1</option>
+        <option value="2">Volume 2</option>
+        <option value="3">Volume 3</option>
+      </select>
+    </div>
 
-      <div class="select">
-        <label for="chapter">Chapter</label>
-        <select id="chapter" disabled>
-          <option value="">Select chapter</option>
-        </select>
-      </div>
+    <div class="select">
+      <label for="chapter">Chapter</label>
+      <select id="chapter" disabled>
+        <option value="">Select chapter</option>
+      </select>
+    </div>
 
-      <div class="select">
-        <label for="topic">Topic</label>
-        <select id="topic" disabled>
-          <option value="">Select topic</option>
-        </select>
-      </div>
+    <div class="select">
+      <label for="topic">Topic</label>
+      <select id="topic" disabled>
+        <option value="">Select topic</option>
+      </select>
+    </div>
 
-      <div class="select">
-        <label for="qtype">Question type</label>
-        <select id="qtype" disabled>
-          <option value="">Select type</option>
-          <option value="theory">Theory</option>
-          <option value="practice">Practice</option>
-          <option value="both">Both</option>
-        </select>
-      </div>
+    <div class="select">
+      <label for="qtype">Question type</label>
+      <select id="qtype" disabled>
+        <option value="">Select type</option>
+        <option value="theory">Theory</option>
+        <option value="practice">Practice</option>
+        <option value="both">Both</option>
+      </select>
+    </div>
 
-      <div class="actions">
-        <button id="submitBtn" class="btn primary" disabled>Submit</button>
-        <button id="resetBtn" class="btn secondary" disabled>Reset</button>
-      </div>
+    <div class="actions">
+      <button id="submitBtn" class="btn primary" disabled>Submit</button>
+      <button id="resetBtn" class="btn secondary" disabled>Reset</button>
     </div>
   </div>
+</div>
 
-  <!-- Main content -->
-  <main class="container">
-    <section id="quizzesPanel" class="panel">
-      <p class="filters-note">
-        Use the selectors above to load questions. Tabs remain clickable even when you scroll.
-      </p>
+<main class="container">
+  <section id="quizzesPanel" class="panel">
+    <p class="filters-note">
+      Use the selectors above to load questions. Tabs and controls remain clickable even when you scroll.
+    </p>
 
-      <div id="content"></div>
+    <div id="content"></div>
 
-      <div id="scoreboard" class="scoreboard hidden" aria-live="polite">
-        <div class="score">
-          <label>Raw score</label>
-          <strong id="rawScore">0 / 0</strong>
-        </div>
-        <div class="score">
-          <label>Percentage</label>
-          <strong id="pctScore">0%</strong>
-        </div>
+    <div id="scoreboard" class="scoreboard hidden" aria-live="polite">
+      <div class="score">
+        <label>Raw score</label>
+        <strong id="rawScore">0 / 0</strong>
       </div>
-    </section>
-  </main>
-
-  <!-- Scripts -->
-  <script>
-    // State
-    const state = {
-      volume: "",
-      chapter: "",
-      topic: "",
-      qtype: "",
-      submitted: false
-    };
-
-    // Elements
-    const volumeSel = document.getElementById('volume');
-    const chapterSel = document.getElementById('chapter');
-    const topicSel = document.getElementById('topic');
-    const qtypeSel = document.getElementById('qtype');
-    const contentEl = document.getElementById('content');
-    const submitBtn = document.getElementById('submitBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const scoreboard = document.getElementById('scoreboard');
-    const rawScoreEl = document.getElementById('rawScore');
-    const pctScoreEl = document.getElementById('pctScore');
-
-    // Tabs activation (visual only; anchors remain clickable)
-    function activateTab(name){
-      document.querySelectorAll('.tab').forEach(a=>{
-        a.classList.toggle('active', a.dataset.tab === name);
-      });
-    }
-    document.querySelectorAll('.tab').forEach(tab=>{
-      tab.addEventListener('click', ()=> activateTab(tab.dataset.tab));
-    });
-
-    // Reset UI shell
-    function clearUI(){
-      state.submitted = false;
-      contentEl.innerHTML = '';
-      scoreboard.classList.add('hidden');
-      rawScoreEl.textContent = '0 / 0';
-      pctScoreEl.textContent = '0%';
-    }
-
-    // Populate selects (chapters and topics will be hydrated in the next batch)
-    function populateChapters(volKey){
-      chapterSel.innerHTML = '<option value="">Select chapter</option>';
-      topicSel.innerHTML = '<option value="">Select topic</option>';
-      chapterSel.disabled = true;
-      topicSel.disabled = true;
-      qtypeSel.value = "";
-      qtypeSel.disabled = true;
-      submitBtn.disabled = true;
-      resetBtn.disabled = false;
-    }
-    function populateTopics(){
-      topicSel.innerHTML = '<option value="">Select topic</option>';
-      topicSel.disabled = true;
-      qtypeSel.value = "";
-      qtypeSel.disabled = true;
-      submitBtn.disabled = true;
-    }
-
-    // Enable type when ready
-    function enableTypeIfReady(){
-      const ready = !!(state.volume && state.chapter && state.topic);
-      qtypeSel.disabled = !ready;
-      submitBtn.disabled = true;
-      resetBtn.disabled = false;
-    }
-
-    // Event bindings (data hydration and rendering will come in Batch 2)
-    volumeSel.addEventListener('change', ()=>{
-      state.volume = volumeSel.value;
-      state.chapter = "";
-      state.topic = "";
-      state.qtype = "";
-      populateChapters(state.volume);
-      clearUI();
-    });
-
-    chapterSel.addEventListener('change', ()=>{
-      state.chapter = chapterSel.value;
-      state.topic = "";
-      state.qtype = "";
-      populateTopics();
-      clearUI();
-    });
-
-    topicSel.addEventListener('change', ()=>{
-      state.topic = topicSel.value;
-      enableTypeIfReady();
-      clearUI();
-    });
-
-    qtypeSel.addEventListener('change', ()=>{
-      state.qtype = qtypeSel.value;
-      clearUI(); // Rendering comes in Batch 2
-      submitBtn.disabled = !state.qtype;
-    });
-
-    submitBtn.addEventListener('click', ()=>{
-      // Evaluation and reveals will be implemented in Batch 3
-    });
-
-    resetBtn.addEventListener('click', ()=>{
-      state.volume = "";
-      state.chapter = "";
-      state.topic = "";
-      state.qtype = "";
-      state.submitted = false;
-
-      volumeSel.value = "";
-      populateChapters("");
-      chapterSel.value = "";
-      topicSel.value = "";
-      qtypeSel.value = "";
-      chapterSel.disabled = true;
-      topicSel.disabled = true;
-      qtypeSel.disabled = true;
-      submitBtn.disabled = true;
-      resetBtn.disabled = true;
-
-      clearUI();
-      volumeSel.focus();
-    });
-
-    // Bootstrap
-    resetBtn.disabled = true;
-    activateTab('quizzes');
-  </script>
-</body>
-</html>
+      <div class="score">
+        <label>Percentage</label>
+        <strong id="pctScore">0%</strong>
+      </div>
+    </div>
+  </section>
+</main>
 
 <script>
 // ==========================
-// Batch 2: Data + Rendering
+// State & Elements
 // ==========================
+const state = {
+  volume: "",
+  chapter: "",
+  topic: "",
+  qtype: "",
+  submitted: false
+};
 
-// Quiz data
+const volumeSel = document.getElementById('volume');
+const chapterSel = document.getElementById('chapter');
+const topicSel = document.getElementById('topic');
+const qtypeSel = document.getElementById('qtype');
+const contentEl = document.getElementById('content');
+const submitBtn = document.getElementById('submitBtn');
+const resetBtn = document.getElementById('resetBtn');
+const scoreboard = document.getElementById('scoreboard');
+const rawScoreEl = document.getElementById('rawScore');
+const pctScoreEl = document.getElementById('pctScore');
+
+// ==========================
+// Tab activation
+// ==========================
+function activateTab(name){
+  document.querySelectorAll('.tab').forEach(a=>{
+    a.classList.toggle('active', a.dataset.tab === name);
+  });
+}
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', e=>{
+    e.preventDefault();
+    activateTab(tab.dataset.tab);
+  });
+});
+
+// ==========================
+// UI helpers
+// ==========================
+function clearUI(){
+  state.submitted = false;
+  contentEl.innerHTML = '';
+  scoreboard.classList.add('hidden');
+  rawScoreEl.textContent = '0 / 0';
+  pctScoreEl.textContent = '0%';
+}
+</script>
+
+<script>
+// ==========================
+// Data (Batch 2)
+// ==========================
 const DATA = {
   volumes: {
     "1": {
       label: "Volume 1",
       chapters: {
         "1": {
-          label: "Chapter 1: Cash and Cash Equivalents",
+          label: "Cash and Cash Equivalents",
           topics: {
-            "1.6": {
-              label: "1.6 Quiz on Cash and Cash Equivalents",
+            "1.1": {
+              label: "Cash and Cash Equivalents",
               theory: [
                 {
-                  id: "ThQ1",
-                  stem: "Cash on hand includes:",
+                  id: "V1C1T1Q1",
+                  stem: "Which of the following is considered cash?",
                   choices: [
-                    "Checks dated less than 6 months after today.",
-                    "Checks dated less than 6 months before today.",
-                    "Checks dated more than 6 months after today.",
-                    "Checks dated more than 6 months before today."
+                    "Postdated checks",
+                    "Money orders",
+                    "NSF checks",
+                    "IOUs"
                   ],
                   correctIndex: 1
                 },
                 {
-                  id: "ThQ2",
-                  stem: "In defining cash equivalents, known maturity value denotes:",
+                  id: "V1C1T1Q2",
+                  stem: "Which of the following is NOT considered cash equivalent?",
                   choices: [
-                    "Maturity date is determinable on acquisition date.",
-                    "Maturity value is determinable on acquisition date.",
-                    "Maturity value will be determined on maturity date.",
-                    "Maturity value will be known on maturity date."
+                    "Treasury bills purchased three months before maturity",
+                    "Commercial paper purchased two months before maturity",
+                    "Money market instruments purchased one month before maturity",
+                    "Equity securities purchased one month before maturity"
                   ],
-                  correctIndex: 1
+                  correctIndex: 3
                 },
                 {
-                  id: "ThQ3",
-                  stem: "Which are excluded from cash equivalents?",
+                  id: "V1C1T1Q3",
+                  stem: "Cash equivalents are held for the purpose of:",
                   choices: [
-                    "Credit cards receivable.",
-                    "Debit cards receivable.",
-                    "Time deposits downgraded lower than savings accounts when pre-terminated.",
-                    "Time deposits downgraded not lower than savings accounts when pre-terminated."
-                  ],
-                  correctIndex: 2
-                },
-                {
-                  id: "ThQ4",
-                  stem: "Which are classified as restricted cash, and presented as noncurrent assets?",
-                  choices: [
-                    "Currency usable for at least 12 months after the reporting period.",
-                    "Currency usable for less than 12 months after the reporting period.",
-                    "Currency usable for more than 12 months after the reporting period.",
-                    "Currency usable within 12 months after the reporting period."
+                    "Meeting short-term cash commitments",
+                    "Speculative investment",
+                    "Long-term investment",
+                    "Earning interest income"
                   ],
                   correctIndex: 0
                 },
                 {
-                  id: "ThQ5",
-                  stem: "Which are classified as short-term investments, and presented as current assets?",
+                  id: "V1C1T1Q4",
+                  stem: "Which of the following is NOT part of cash on hand?",
                   choices: [
-                    "Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.",
-                    "Bank deposits withdrawable with significant penalty and usable for more than 12 months.",
-                    "Bank deposits withdrawable with significant penalty and usable within 12 months.",
-                    "Bank deposits withdrawable without penalty and usable for less than 12 months."
+                    "Customer's postdated checks",
+                    "Undeposited cash collections",
+                    "Petty cash fund",
+                    "Cashier's checks"
+                  ],
+                  correctIndex: 0
+                },
+                {
+                  id: "V1C1T1Q5",
+                  stem: "Which of the following is NOT part of cash in bank?",
+                  choices: [
+                    "Savings account",
+                    "Current account",
+                    "Time deposit maturing in 30 days",
+                    "Time deposit maturing in 120 days"
+                  ],
+                  correctIndex: 3
+                },
+                {
+                  id: "V1C1T1Q6",
+                  stem: "Which of the following is NOT considered cash equivalent?",
+                  choices: [
+                    "Treasury bills purchased one month before maturity",
+                    "Commercial paper purchased two months before maturity",
+                    "Money market instruments purchased three months before maturity",
+                    "Equity securities purchased two months before maturity"
+                  ],
+                  correctIndex: 3
+                },
+                {
+                  id: "V1C1T1Q7",
+                  stem: "Which of the following is NOT considered cash?",
+                  choices: [
+                    "Traveler's checks",
+                    "Money orders",
+                    "Postdated checks",
+                    "Demand deposits"
                   ],
                   correctIndex: 2
                 },
                 {
-                  id: "ThQ6",
-                  stem: "These describe a bank overdraft, except:",
+                  id: "V1C1T1Q8",
+                  stem: "Which of the following is NOT considered cash equivalent?",
                   choices: [
-                    "It is allowed only if caused by normal bank charges or other incidental handling fees.",
-                    "It is disallowed in the Philippines.",
-                    "It is known as temporary overdrawing in the Philippines.",
-                    "It is the negative (or overdrawn) balance in a demand deposit account."
-                  ],
-                  correctIndex: 1
-                },
-                {
-                  id: "ThQ7",
-                  stem: "Check withdrawals are recorded as:",
-                  choices: [
-                    "Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.",
-                    "Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.",
-                    "Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.",
-                    "Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity."
+                    "Treasury bills purchased two months before maturity",
+                    "Commercial paper purchased one month before maturity",
+                    "Money market instruments purchased three months before maturity",
+                    "Equity securities purchased three months before maturity"
                   ],
                   correctIndex: 3
                 },
                 {
-                  id: "ThQ8",
-                  stem: "Timing differences for Deposit Liabilities of financial institution comprise:",
+                  id: "V1C1T1Q9",
+                  stem: "Which of the following is NOT part of cash?",
                   choices: [
-                    "Credit memos and debit memos.",
-                    "Outstanding checks and debit memos.",
-                    "Outstanding deposits and credit memos.",
-                    "Outstanding deposits and outstanding checks."
+                    "Cash on hand",
+                    "Cash in bank",
+                    "Postdated checks",
+                    "Cash equivalents"
                   ],
-                  correctIndex: 3
+                  correctIndex: 2
                 },
                 {
-                  id: "ThQ9",
-                  stem: "Which describe debit memos?",
+                  id: "V1C1T1Q10",
+                  stem: "Which of the following is NOT considered cash equivalent?",
                   choices: [
-                    "They are already credited to Demand Deposits but not yet debited to Deposit Liabilities.",
-                    "They are already credited to Deposit Liabilities but not yet debited to Demand Deposits.",
-                    "They are already debited to Demand Deposits but not yet credited to Deposit Liabilities.",
-                    "They are already debited to Deposit Liabilities but not yet credited to Demand Deposits."
+                    "Treasury bills purchased three months before maturity",
+                    "Commercial paper purchased two months before maturity",
+                    "Money market instruments purchased one month before maturity",
+                    "Equity securities purchased one month before maturity"
                   ],
                   correctIndex: 3
-                },
-                {
-                  id: "ThQ10",
-                  stem: "Before replenishment, the adjusted balance of Petty Cash Fund equals:",
-                  choices: [
-                    "Currency in the custody of the Petty Cash Custodian.",
-                    "Established amount.",
-                    "Minimum threshold.",
-                    "Total of Petty Cash Vouchers."
-                  ],
-                  correctIndex: 0
                 }
               ],
               practice: [
                 {
-                  id: "PrQ1",
-                  stem: "With these givens, the closing outstanding checks are:",
-                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq01.png",
+                  id: "V1C1P1Q1",
+                  stem: "From the following data, compute the adjusted cash balance.",
                   choices: [
-                    "289,000.00.",
-                    "311,000.00.",
-                    "489,000.00.",
-                    "511,000.00."
+                    "₱1,500,000",
+                    "₱1,600,000",
+                    "₱1,700,000",
+                    "₱1,800,000"
                   ],
                   correctIndex: 1,
-                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa01.png"
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ1.png",
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA1.png"
                 },
                 {
-                  id: "PrQ2",
-                  stem: "With these givens, the opening outstanding checks are:",
-                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq02.png",
+                  id: "V1C1P1Q2",
+                  stem: "From the following data, compute the adjusted book balance.",
                   choices: [
-                    "289,000.00.",
-                    "311,000.00.",
-                    "489,000.00.",
-                    "511,000.00."
+                    "₱2,499,800",
+                    "₱2,500,000",
+                    "₱2,500,200",
+                    "₱2,500,400"
                   ],
-                  correctIndex: 1,
-                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa02.png"
+                  correctIndex: 0,
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ2.png",
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA2.png"
                 },
                 {
-                  id: "PrQ3",
-                  stem: "With these givens, the closing book balance is:",
-                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq03.png",
+                  id: "V1C1P1Q3",
+                  stem: "From the following data, compute the adjusted bank balance.",
                   choices: [
-                    "2,496,000.00.",
-                    "2,499,800.00.",
-                    "2,500,200.00.",
-                    "2,504,000.00."
+                    "₱2,500,000",
+                    "₱2,513,000",
+                    "₱2,487,000",
+                    "₱2,526,000"
                   ],
-                  correctIndex: 1,
-                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa03.png"
+                  correctIndex: 0,
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ3.png",
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA3.png"
                 },
                 {
-                  id: "PrQ4",
-                  stem: "With these givens, the closing outstanding deposits are:",
-                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq04.png",
+                  id: "V1C1P1Q4",
+                  stem: "From the following data, compute the closing outstanding deposits.",
                   choices: [
-                    "487,000.00.",
-                    "513,000.00.",
-                    "887,000.00.",
-                    "913,000.00."
+                    "₱898,700",
+                    "₱900,000",
+                    "₱913,000",
+                    "₱920,000"
                   ],
-                  correctIndex: 3,
-                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa04.png"
+                  correctIndex: 0,
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ4.png",
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA4.png"
                 },
                 {
-                  id: "PrQ5",
-                  stem: "With these givens, the closing outstanding deposits are:",
-                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq05.png",
+                  id: "V1C1P1Q5",
+                  stem: "From the following data, compute the opening outstanding checks.",
                   choices: [
-                    "398,700.00.",
-                    "398,900.00.",
-                    "898,700.00.",
-                    "898,900.00."
+                    "₱11,000",
+                    "₱13,000",
+                    "₱15,000",
+                    "₱16,000"
                   ],
-                  correctIndex: 2,
-                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa05.png"
+                  correctIndex: 0,
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ5.png",
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA5.png"
                 }
               ]
+            }
+          }
+        },
+        "2": {
+          label: "Financial Assets",
+          topics: {
+            "2.10": {
+              label: "Definition, Recognition, Measurement, Impairment",
+
+theory: [
+  // ===== 15 from Definition and Classification of Financial Assets =====
+  {
+    id: "V1C2T2.10Q1",
+    stem: "Which of the following is a financial asset?",
+    choices: [
+      "Inventories",
+      "Prepaid expenses",
+      "Equity instrument of another entity",
+      "Property, plant and equipment"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q2",
+    stem: "Which of the following is NOT a financial asset?",
+    choices: [
+      "Cash",
+      "Trade receivables",
+      "Investment in bonds",
+      "Investment in own shares"
+    ],
+    correctIndex: 3
+  },
+  {
+    id: "V1C2T2.10Q3",
+    stem: "Which of the following is a contractual right to receive cash or another financial asset?",
+    choices: [
+      "Loan receivable",
+      "Inventory",
+      "Prepaid rent",
+      "Property, plant and equipment"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q4",
+    stem: "Which of the following is NOT a contractual right to receive cash or another financial asset?",
+    choices: [
+      "Trade receivable",
+      "Cash",
+      "Prepaid insurance",
+      "Investment in debt securities"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q5",
+    stem: "Which of the following is a financial asset classified as equity instrument?",
+    choices: [
+      "Ordinary shares of another entity",
+      "Preference shares of the same entity",
+      "Treasury shares",
+      "Redeemable preference shares issued by the entity"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q6",
+    stem: "Which of the following is NOT a financial asset?",
+    choices: [
+      "Cash equivalents",
+      "Trade receivables",
+      "Investment in own bonds",
+      "Investment in bonds of another entity"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q7",
+    stem: "Which of the following is a financial asset?",
+    choices: [
+      "Cash",
+      "Inventory",
+      "Prepaid expenses",
+      "Property, plant and equipment"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q8",
+    stem: "Which of the following is NOT a financial asset?",
+    choices: [
+      "Cash",
+      "Trade receivable",
+      "Investment in debt securities",
+      "Investment in own shares"
+    ],
+    correctIndex: 3
+  },
+  {
+    id: "V1C2T2.10Q9",
+    stem: "Which of the following is a contractual right to receive cash?",
+    choices: [
+      "Loan receivable",
+      "Inventory",
+      "Prepaid rent",
+      "Property, plant and equipment"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q10",
+    stem: "Which of the following is NOT a contractual right to receive cash?",
+    choices: [
+      "Trade receivable",
+      "Cash",
+      "Prepaid insurance",
+      "Investment in debt securities"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q11",
+    stem: "Which of the following is a financial asset classified as equity instrument?",
+    choices: [
+      "Ordinary shares of another entity",
+      "Preference shares of the same entity",
+      "Treasury shares",
+      "Redeemable preference shares issued by the entity"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q12",
+    stem: "Which of the following is NOT a financial asset?",
+    choices: [
+      "Cash equivalents",
+      "Trade receivables",
+      "Investment in own bonds",
+      "Investment in bonds of another entity"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q13",
+    stem: "Which of the following is a financial asset?",
+    choices: [
+      "Cash",
+      "Inventory",
+      "Prepaid expenses",
+      "Property, plant and equipment"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q14",
+    stem: "Which of the following is NOT a financial asset?",
+    choices: [
+      "Cash",
+      "Trade receivable",
+      "Investment in debt securities",
+      "Investment in own shares"
+    ],
+    correctIndex: 3
+  },
+  {
+    id: "V1C2T2.10Q15",
+    stem: "Which of the following is a contractual right to receive cash?",
+    choices: [
+      "Loan receivable",
+      "Inventory",
+      "Prepaid rent",
+      "Property, plant and equipment"
+    ],
+    correctIndex: 0
+  },
+
+  // ===== 5 from Recognition and Initial Measurement =====
+  {
+    id: "V1C2T2.10Q16",
+    stem: "When is a financial asset recognized?",
+    choices: [
+      "When the entity becomes a party to the contractual provisions",
+      "When cash is received",
+      "When the asset is delivered",
+      "When the contract is signed"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q17",
+    stem: "At initial recognition, a financial asset is measured at:",
+    choices: [
+      "Fair value",
+      "Cost",
+      "Nominal value",
+      "Amortized cost"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q18",
+    stem: "Transaction costs are included in the initial measurement of a financial asset unless:",
+    choices: [
+      "The asset is measured at fair value through profit or loss",
+      "The asset is measured at amortized cost",
+      "The asset is measured at fair value through other comprehensive income",
+      "The asset is an equity instrument"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q19",
+    stem: "Which of the following is NOT included in transaction costs?",
+    choices: [
+      "Fees and commissions paid to agents",
+      "Levies by regulatory agencies",
+      "Transfer taxes and duties",
+      "Financing costs"
+    ],
+    correctIndex: 3
+  },
+  {
+    id: "V1C2T2.10Q20",
+    stem: "Which of the following is included in transaction costs?",
+    choices: [
+      "Interest expense",
+      "Commissions paid to brokers",
+      "Dividend payments",
+      "Foreign exchange losses"
+    ],
+    correctIndex: 1
+  },
+
+  // ===== 15 from Subsequent Measurement =====
+  {
+    id: "V1C2T2.10Q21",
+    stem: "Which of the following is a category of financial assets under PFRS 9?",
+    choices: [
+      "Held-to-maturity",
+      "Loans and receivables",
+      "Fair value through profit or loss",
+      "Available-for-sale"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q22",
+    stem: "Debt instruments can be measured at amortized cost if:",
+    choices: [
+      "The business model is to hold assets to collect contractual cash flows",
+      "The contractual terms give rise to cash flows that are solely payments of principal and interest",
+      "Both A and B",
+      "Neither A nor B"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q23",
+    stem: "Equity instruments are generally measured at:",
+    choices: [
+      "Amortized cost",
+      "Fair value through profit or loss",
+      "Cost",
+      "Nominal value"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q24",
+    stem: "A debt instrument is measured at fair value through other comprehensive income if:",
+    choices: [
+      "The business model is to hold assets to collect contractual cash flows and to sell",
+      "The contractual terms give rise to cash flows that are solely payments of principal and interest",
+      "Both A and B",
+      "Neither A nor B"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q25",
+    stem: "Which of the following is NOT a category of financial assets under PFRS 9?",
+    choices: [
+      "Fair value through profit or loss",
+      "Fair value through other comprehensive income",
+      "Amortized cost",
+      "Held-to-maturity"
+    ],
+    correctIndex: 3
+  },
+  {
+    id: "V1C2T2.10Q26",
+    stem: "Debt instruments measured at amortized cost are subject to:",
+    choices: [
+      "Fair value changes recognized in profit or loss",
+      "Fair value changes recognized in other comprehensive income",
+      "Effective interest method amortization",
+      "No subsequent measurement"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q27",
+    stem: "Equity instruments designated at fair value through other comprehensive income:",
+    choices: [
+      "Have fair value changes recognized in profit or loss",
+      "Have fair value changes recognized in other comprehensive income",
+      "Are measured at amortized cost",
+      "Are not remeasured after initial recognition"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q28",
+    stem: "Which of the following is measured at fair value through profit or loss by default?",
+    choices: [
+      "Equity instruments",
+      "Debt instruments held to collect contractual cash flows",
+      "Debt instruments held to collect and sell",
+      "Loans receivable"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q29",
+    stem: "The effective interest method is used for:",
+    choices: [
+      "Amortized cost measurement",
+      "Fair value through profit or loss measurement",
+      "Fair value through other comprehensive income measurement",
+      "All of the above"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q30",
+    stem: "Which of the following is NOT true about amortized cost measurement?",
+    choices: [
+      "It uses the effective interest method",
+      "It recognizes interest income in profit or loss",
+      "It recognizes fair value changes in other comprehensive income",
+      "It is applied to certain debt instruments"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q31",
+    stem: "Fair value changes of debt instruments measured at FVOCI are recognized in:",
+    choices: [
+      "Profit or loss",
+      "Other comprehensive income",
+      "Both profit or loss and other comprehensive income",
+      "Neither profit or loss nor other comprehensive income"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q32",
+    stem: "Interest income from debt instruments measured at FVOCI is recognized in:",
+    choices: [
+      "Profit or loss",
+      "Other comprehensive income",
+      "Both profit or loss and other comprehensive income",
+      "Neither profit or loss nor other comprehensive income"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q33",
+    stem: "Dividends from equity instruments measured at FVOCI are recognized in:",
+    choices: [
+      "Profit or loss",
+      "Other comprehensive income",
+      "Both profit or loss and other comprehensive income",
+      "Neither profit or loss nor other comprehensive income"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q34",
+    stem: "Which of the following is NOT true about equity instruments designated at FVOCI?",
+    choices: [
+      "Fair value changes are recognized in other comprehensive income",
+      "Dividends are recognized in profit or loss",
+      "Gains or losses on disposal are reclassified to profit or loss",
+      "They are measured at fair value"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q35",
+    stem: "Which of the following is measured at amortized cost?",
+    choices: [
+      "Trade receivables",
+      "Equity instruments",
+      "Debt instruments held for trading",
+      "Derivatives"
+    ],
+    correctIndex: 0
+  },
+
+  // ===== 20 from Impairment, Financing, Associates, and Joint Ventures =====
+  {
+    id: "V1C2T2.10Q36",
+    stem: "Under the expected credit loss model, impairment is recognized for:",
+    choices: [
+      "All financial assets measured at amortized cost",
+      "All financial assets measured at FVOCI",
+      "Loan commitments and financial guarantee contracts",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    id: "V1C2T2.10Q37",
+    stem: "Expected credit losses are:",
+    choices: [
+      "Probability-weighted amounts",
+      "Discounted to present value",
+      "Based on reasonable and supportable information",
+      "All of the above"
+    ],
+    correctIndex: 3
+  },
+  {
+    id: "V1C2T2.10Q38",
+    stem: "12-month expected credit losses are:",
+    choices: [
+      "Losses from default events possible within 12 months",
+      "Losses from all possible default events over the life of the asset",
+      "Losses recognized only when default occurs",
+      "Losses recognized only when there is objective evidence of impairment"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q39",
+    stem: "Lifetime expected credit losses are:",
+    choices: [
+      "Losses from default events possible within 12 months",
+      "Losses from all possible default events over the life of the asset",
+      "Losses recognized only when default occurs",
+      "Losses recognized only when there is objective evidence of impairment"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q40",
+    stem: "Which of the following is NOT subject to the expected credit loss model?",
+    choices: [
+      "Trade receivables",
+      "Debt instruments at amortized cost",
+      "Equity instruments",
+      "Debt instruments at FVOCI"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q41",
+    stem: "For trade receivables without a significant financing component, entities may:",
+    choices: [
+      "Apply the simplified approach",
+      "Apply the general approach",
+      "Apply either approach",
+      "Not recognize impairment"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q42",
+    stem: "Under the simplified approach, entities recognize:",
+    choices: [
+      "12-month expected credit losses",
+      "Lifetime expected credit losses",
+      "Losses only when default occurs",
+      "Losses only when there is objective evidence of impairment"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q43",
+    stem: "Which of the following is NOT a financial asset subject to impairment?",
+    choices: [
+      "Loan receivable",
+      "Trade receivable",
+      "Equity instrument",
+      "Debt instrument at amortized cost"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q44",
+    stem: "Which of the following is a financial asset subject to impairment?",
+    choices: [
+      "Equity instrument",
+      "Loan receivable",
+      "Investment in associate",
+      "Investment in joint venture"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q45",
+    stem: "Investments in associates are accounted for using:",
+    choices: [
+      "Cost method",
+      "Equity method",
+      "Fair value method",
+      "Amortized cost method"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q46",
+    stem: "Investments in joint ventures are accounted for using:",
+    choices: [
+      "Cost method",
+      "Equity method",
+      "Fair value method",
+      "Amortized cost method"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q47",
+    stem: "Under the equity method, the investment in associate is initially recognized at:",
+    choices: [
+      "Cost",
+      "Fair value",
+      "Amortized cost",
+      "Nominal value"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q48",
+    stem: "Under the equity method, the investor recognizes its share of the investee’s:",
+    choices: [
+      "Profit or loss",
+      "Other comprehensive income",
+      "Both profit or loss and other comprehensive income",
+      "Neither profit or loss nor other comprehensive income"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q49",
+    stem: "Which of the following decreases the carrying amount of an investment under the equity method?",
+    choices: [
+      "Investor’s share of investee’s profit",
+      "Dividends received from investee",
+      "Investor’s share of investee’s other comprehensive income",
+      "Additional investment made by investor"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q50",
+    stem: "Which of the following increases the carrying amount of an investment under the equity method?",
+    choices: [
+      "Dividends received from investee",
+      "Investor’s share of investee’s loss",
+      "Investor’s share of investee’s profit",
+      "Disposal of part of the investment"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q51",
+    stem: "When significant influence is lost, the investment in associate is:",
+    choices: [
+      "Continued to be accounted for under the equity method",
+      "Measured at fair value through profit or loss",
+      "Measured at amortized cost",
+      "Derecognized"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q52",
+    stem: "Significant influence is presumed when the investor holds:",
+    choices: [
+      "10% or more of the voting power",
+      "20% or more of the voting power",
+      "30% or more of the voting power",
+      "50% or more of the voting power"
+    ],
+    correctIndex: 1
+  },
+  {
+    id: "V1C2T2.10Q53",
+    stem: "Joint control exists when decisions about relevant activities require:",
+    choices: [
+      "Unanimous consent of all parties sharing control",
+      "Majority vote of the parties",
+      "Consent of the largest investor",
+      "Consent of any one investor"
+    ],
+    correctIndex: 0
+  },
+  {
+    id: "V1C2T2.10Q54",
+    stem: "Which of the following is NOT a joint arrangement under PFRS 11?",
+    choices: [
+      "Joint operation",
+      "Joint venture",
+      "Jointly controlled asset",
+      "Jointly controlled entity"
+    ],
+    correctIndex: 2
+  },
+  {
+    id: "V1C2T2.10Q55",
+    stem: "In a joint operation, a party recognizes:",
+    choices: [
+      "Its share of assets, liabilities, revenues, and expenses",
+      "An investment accounted for under the equity method",
+      "Only its share of profit or loss",
+      "Only its share of assets and liabilities"
+    ],
+    correctIndex: 0
+  }
+],
+
+practice: [
+  // ===== 5 from Recognition and Initial Measurement =====
+  {
+    id: "V1C2T2.10P1Q1",
+    stem: "From the following data, compute the initial carrying amount of the financial asset.",
+    choices: [
+      "₱1,246,000",
+      "₱1,300,000",
+      "₱1,430,000",
+      "₱1,446,000"
+    ],
+    correctIndex: 0,
+    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrQ1.png",
+    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrA1.png"
+  },
+  {
+    id: "V1C2T2.10P1Q2",
+    stem: "From the following data, compute the total transaction costs.",
+    choices: [
+      "₱130,000",
+      "₱146,000",
+      "₱160,000",
+      "₱176,000"
+    ],
+    correctIndex: 1,
+    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrQ2.png",
+    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrA2.png"
+  },
+  {
+    id: "V1C2T2.10P1Q3",
+    stem: "From the following data, compute the fair value of the financial asset.",
+    choices: [
+      "₱1,100,000",
+      "₱1,200,000",
+      "₱1,300,000",
+      "₱1,600,000"
+    ],
+    correctIndex: 2,
+    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrQ3.png",
+    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrA3.png"
+  },
+  {
+    id: "V1C2T2.10P1Q4",
+    stem: "From the following data, compute the total consideration paid.",
+    choices: [
+      "₱1,100,000",
+      "₱1,230,000",
+      "₱1,246,000",
+      "₱1,260,000"
+    ],
+    correctIndex: 2,
+    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrQ4.png",
+    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrA4.png"
+  },
+  {
+    id: "V1C2T2.10P1Q5",
+    stem: "From the following data, compute the total acquisition cost of the financial asset.",
+    choices: [
+      "₱1,246,000",
+      "₱1,300,000",
+      "₱1,430,000",
+      "₱1,446,000"
+    ],
+    correctIndex: 3,
+    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrQ5.png",
+    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPrA5.png"
+  },
+
+  // ===== 5 from Subsequent Measurement =====
+  {
+    id: "V1C2T2.10P2Q1",
+    stem: "From the following data, compute the interest income for Year 1 using the effective interest method.",
+    choices: [
+      "₱139,616.19",
+      "₱143,802.32",
+      "₱150,114.58",
+      "₱245,618.25"
+    ],
+    correctIndex: 0,
+    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrQ1.png",
+    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrA1.png"
+  },
+  {
+    id: "V1C2T2.10P2Q2",
+    stem: "From the following data, compute the interest income for Year 2 using the effective interest method.",
+    choices: [
+      "₱139,616.19",
+      "₱143,802.32",
+      "₱150,114.58",
+      "₱245,618.25"
+    ],
+    correctIndex: 1,
+    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrQ2.png",
+    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrA2.png"
+  },
+  {
+    id: "V1C2T2.10P2Q3",
+    stem: "From the following data, compute the interest income for Year 3 using the effective interest method.",
+    choices: [
+      "₱139,616.19",
+      "₱143,802.32",
+      "₱150,114.58",
+      "₱245,618.25"
+    ],
+    correctIndex: 2,
+    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrQ3.png",
+    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrA3.png"
+  },
+  {
+    id: "V1C2T2.10P2Q4",
+    stem: "From the following data, compute the interest income for Year 4 using the effective interest method.",
+    choices: [
+      "₱139,616.19",
+      "₱143,802.32",
+      "₱150,114.58",
+      "₱245,618.25"
+    ],
+    correctIndex: 3,
+    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrQ4.png",
+    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrA4.png"
+  },
+  {
+    id: "V1C2T2.10P2Q5",
+    stem: "From the following data, compute the carrying amount of the financial asset at the end of Year 4.",
+    choices: [
+      "₱1,005,616.19",
+      "₱1,050,818.51",
+      "₱1,102,333.09",
+      "₱786,951.34"
+    ],
+    correctIndex: 3,
+    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrQ5.png",
+    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPrA5.png"
+  }
+]
             }
           }
         }
       }
     },
-
-"2": {
-  label: "Chapter 2: Other Financial Assets",
-  topics: {
-    "2.10": {
-      label: "2.10 Quiz on Other Financial Assets",
-      theory: [
-        // 2.10.1 Definition and Classification of Financial Assets
-        {
-          id: "V1C2ThQ1",
-          stem: "These describe a contract, except:",
-          choices: [
-            "It has clear economic consequences.",
-            "It is an agreement between two or more parties.",
-            "It is unavoidable by the parties.",
-            "It must be in writing."
-          ],
-          correctIndex: 3
-        },
-        {
-          id: "V1C2ThQ2",
-          stem: "The entity’s own equity instruments include:",
-          choices: [
-            "Contracts for future delivery of the entity’s own equity instruments.",
-            "Equity instruments to deliver prorate share in net assets to another entity, upon liquidation.",
-            "Puttable financial instruments classified as equity instruments.",
-            "The entity’s own ordinary shares."
-          ],
-          correctIndex: 3
-        },
-        {
-          id: "V1C2ThQ3",
-          stem: "Which describes a debt instrument measured at FVOCI?",
-          choices: [
-            "It is held for trading.",
-            "It is held to collect contractual cash flows over its life and realize its fair value through sale.",
-            "It is irrevocably designated as measured at FVOCI upon initial recognition.",
-            "It is managed on fair value basis."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2ThQ4",
-          stem: "These describe a debt instrument measured at FVOCI, except:",
-          choices: [
-            "It is held to collect contractual cash flows over its life and realize its fair value through sale.",
-            "It is irrevocably designated as measured at FVOCI upon initial recognition.",
-            "It is not irrevocably designated as measured at FVPL upon initial recognition.",
-            "Its contractual cash flows are solely payments of principal and interest on outstanding principal."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2ThQ5",
-          stem: "These describe the business model for a debt instrument, except:",
-          choices: [
-            "It is assessed upon initial recognition of the financial asset.",
-            "It is based on best-case, average-case, and worst-case scenarios.",
-            "It is determined by the key management personnel.",
-            "It is the manner of generating cash flows from the financial asset."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2ThQ6",
-          stem: "These are irrelevant in assessing the business model for a debt instrument, except:",
-          choices: [
-            "Credit-impairment of the debt instrument.",
-            "Intent of the entity.",
-            "Reasonably expected scenarios.",
-            "Requirement of a third party."
-          ],
-          correctIndex: 2
-        },
-        {
-          id: "V1C2ThQ7",
-          stem: "When the business model for a portfolio of debt instruments changes,",
-          choices: [
-            "Old and new instruments are classified under new and old models, respectively.",
-            "Old and new instruments are classified under old and new models, respectively.",
-            "Old and new instruments continue to be classified under new model.",
-            "Old and new instruments start to be classified under new model."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2ThQ8",
-          stem: "Sales of debt instruments are consistent with the hold to collect business model, if close to:",
-          choices: [
-            "Initial recognition, with proceeds approximating the remaining contractual cash flows.",
-            "Initial recognition, with proceeds exceeding the remaining contractual cash flows.",
-            "Maturity, with proceeds approximating the remaining contractual cash flows.",
-            "Maturity, with proceeds exceeding the remaining contractual cash flows."
-          ],
-          correctIndex: 2
-        },
-        {
-          id: "V1C2ThQ9",
-          stem: "Cash flows on loans with capped interest rates are solely payments of principal and interest, if:",
-          choices: [
-            "Interest equals the maximum market interest rate.",
-            "Interest is below the maximum market interest rate.",
-            "Interest is limited to the maximum market interest rate.",
-            "Interest reflects compensation in a basic lending arrangement."
-          ],
-          correctIndex: 3
-        },
-        {
-          id: "V1C2ThQ10",
-          stem: "Cash flows on debt instruments are solely payments of principal and interest, if:",
-          choices: [
-            "Difference between undiscounted contractual and benchmark cash flows is insignificant.",
-            "Difference between undiscounted contractual and benchmark cash flows is significant.",
-            "Tenor of interest rate is longer than frequency of interest reset.",
-            "Tenor of interest rate is shorter than frequency of interest reset."
-          ],
-          correctIndex: 0
-        },
-
-        // 2.10.2 Recognition and Initial Measurement of Financial Assets
-        {
-          id: "V1C2ThQ11",
-          stem: "When the firm order is received, these firm commitments are recognized as financial assets, except:",
-          choices: [
-            "Those settled net, and are deemed as if they were derivatives.",
-            "Those irrevocably designated as measured at FVPL upon initial recognition.",
-            "Those designated as hedge items in fair value hedges.",
-            "Those to be delivered for ordered goods, or to be rendered for ordered services."
-          ],
-          correctIndex: 3
-        },
-        {
-          id: "V1C2ThQ12",
-          stem: "Under trade date accounting, the regular way transaction is recorded when:",
-          choices: [
-            "The contract allows settlement beyond the established time frame.",
-            "The contract requires net settlement (instead of delivery) of the financial asset.",
-            "The entity commits to purchase (or sell) the financial asset.",
-            "The financial asset is delivered to (or by) the entity."
-          ],
-          correctIndex: 2
-        },
-
-        // 2.10.3 Subsequent Measurement of Financial Assets
-        {
-          id: "V1C2ThQ13",
-          stem: "For debt instruments measured at amortized cost, dividend income is:",
-          choices: [
-            "Not applicable.",
-            "Recognized in other comprehensive income, at the amount received (or receivable).",
-            "Recognized in profit or loss, at the amount received (or receivable).",
-            "Recognized in profit or loss, unless it represents partial recovery of investment cost."
-          ],
-          correctIndex: 0
-        },
-        {
-          id: "V1C2ThQ14",
-          stem: "For equity instruments measured at FVPL, dividend income is:",
-          choices: [
-            "Not applicable.",
-            "Recognized in other comprehensive income, at the amount received (or receivable).",
-            "Recognized in profit or loss, at the amount received (or receivable).",
-            "Recognized in profit or loss, unless it represents partial recovery of investment cost."
-          ],
-          correctIndex: 2
-        },
-
-        // 2.10.4 Impairment, Financing, Associates, and Joint Ventures
-        {
-          id: "V1C2ThQ15",
-          stem: "If the debt instruments are not credit-impaired on the reporting date, then:",
-          choices: [
-            "12-month loss allowance is recognized, and interest revenue is based on credit-adjusted EIR.",
-            "12-month loss allowance is recognized, and interest revenue is based on EIR.",
-            "Lifetime loss allowance is recognized, and interest revenue is based on credit-adjusted EIR.",
-            "Lifetime loss allowance is recognized, and interest revenue is based on EIR."
-          ],
-          correctIndex: 3
-        },
-        {
-          id: "V1C2ThQ16",
-          stem: "If the increase in credit risk since initial recognition of the debt instruments is significant, then:",
-          choices: [
-            "12-month loss allowance is recognized, with changes thereto recognized in other comprehensive income.",
-            "12-month loss allowance is recognized, with changes thereto recognized in profit or loss.",
-            "Lifetime loss allowance is recognized, with changes thereto recognized in other comprehensive income.",
-            "Lifetime loss allowance is recognized, with changes thereto recognized in profit or loss."
-          ],
-          correctIndex: 3
-        }
-      ],
-practice: [
-  {
-    id: "V1C2PrQ1",
-    stem: "With these givens, financial assets at FVPL are recognized on April 4 at:",
-    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPq01.png",
-    choices: [
-      "0.00.",
-      "1,300,000.00.",
-      "1,600,000.00.",
-      "2,000,000.00."
-    ],
-    correctIndex: 3,
-    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPa01.png"
-  },
-  {
-    id: "V1C2PrQ2",
-    stem: "With these givens, disposal gain on debt instruments at amortized cost is recognized on March 28 at:",
-    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPq02.png",
-    choices: [
-      "0.00.",
-      "200,000.00.",
-      "300,000.00.",
-      "400,000.00."
-    ],
-    correctIndex: 1,
-    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPa02.png"
-  },
-  {
-    id: "V1C2PrQ3",
-    stem: "With these givens, fair value gain on financial assets at FVPL is recognized on March 28 at:",
-    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPq03.png",
-    choices: [
-      "0.00.",
-      "200,000.00.",
-      "300,000.00.",
-      "400,000.00."
-    ],
-    correctIndex: 1,
-    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPa03.png"
-  },
-  {
-    id: "V1C2PrQ4",
-    stem: "With these givens, disposal gain on debt instruments at FVOCI cost is recognized on April 4 at:",
-    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPq04.png",
-    choices: [
-      "0.00.",
-      "200,000.00.",
-      "300,000.00.",
-      "400,000.00."
-    ],
-    correctIndex: 1,
-    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPa04.png"
-  },
-  {
-    id: "V1C2PrQ5",
-    stem: "With these givens, financial assets at FVPL are initially measured at:",
-    questionImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPq05.png",
-    choices: [
-      "1,100,000.00.",
-      "1,116,000.00.",
-      "1,230,000.00.",
-      "1,246,000.00."
-    ],
-    correctIndex: 0,
-    answerImage: "images/IntaccV1C02RecognitionAndInitialMeasurementOfFinancialAssetsPa05.png"
-  },
-  {
-    id: "V1C2PrQ6",
-    stem: "With these givens, the interest revenue for Year 2 is:",
-    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPq01.png",
-    choices: [
-      "321,579.26.",
-      "341,000.00.",
-      "350,603.51.",
-      "371,777.08."
-    ],
-    correctIndex: 2,
-    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPa01.png"
-  },
-  {
-    id: "V1C2PrQ7",
-    stem: "With these givens, the interest revenue for Year 2 is:",
-    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPq02.png",
-    choices: [
-      "4,505.18.",
-      "245,478.25.",
-      "249,983.43.",
-      "561,000.00."
-    ],
-    correctIndex: 2,
-    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPa02.png"
-  },
-  {
-    id: "V1C2PrQ8",
-    stem: "With these givens, for reclassification from amortized cost to FVOCI, fair value gain is recognized in other comprehensive income at:",
-    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPq03.png",
-    choices: [
-      "0.00.",
-      "300,000.00.",
-      "1,300,000.00.",
-      "1,600,000.00."
-    ],
-    correctIndex: 1,
-    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPa03.png"
-  },
-  {
-    id: "V1C2PrQ9",
-    stem: "With these givens, if reclassified from FVOCI, debt instruments at amortized cost are recognized at:",
-    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPq04.png",
-    choices: [
-      "0.00.",
-      "300,000.00.",
-      "1,300,000.00.",
-      "1,600,000.00."
-    ],
-    correctIndex: 2,
-    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPa04.png"
-  },
-  {
-    id: "V1C2PrQ10",
-    stem: "With these givens, if reclassified from FVPL, debt instruments at FVOCI are recognized at:",
-    questionImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPq05.png",
-    choices: [
-      "0.00.",
-      "300,000.00.",
-      "1,300,000.00.",
-      "1,600,000.00."
-    ],
-    correctIndex: 2,
-    answerImage: "images/IntaccV1C02SubsequentMeasurementOfFinancialAssetsPa05.png"
-      }
-    ] // end of practice array
-  } // end of topic 2.10
-} // end of chapters["2"]
-
     "2": { label: "Volume 2", chapters: {} },
     "3": { label: "Volume 3", chapters: {} }
   }
 };
-
-// Populate chapters based on volume
-function populateChapters(volKey){
-  chapterSel.innerHTML = '<option value="">Select chapter</option>';
-  topicSel.innerHTML = '<option value="">Select topic</option>';
-  chapterSel.disabled = true;
-  topicSel.disabled = true;
-  qtypeSel.value = "";
-  qtypeSel.disabled = true;
-  submitBtn.disabled = true;
-  resetBtn.disabled = false;
-
-  const vol = DATA.volumes[volKey];
-  if(!vol) return;
-
-  const chapters = vol.chapters || {};
-  Object.keys(chapters).forEach(chKey=>{
-    const opt = document.createElement('option');
-    opt.value = chKey;
-    opt.textContent = chapters[chKey].label || `Chapter ${chKey}`;
-    chapterSel.appendChild(opt);
-  });
-  chapterSel.disabled = Object.keys(chapters).length === 0;
-}
-
-// Populate topics based on chapter
-function populateTopics(volKey, chKey){
-  topicSel.innerHTML = '<option value="">Select topic</option>';
-  topicSel.disabled = true;
-  qtypeSel.value = "";
-  qtypeSel.disabled = true;
-  submitBtn.disabled = true;
-
-  const ch = DATA.volumes?.[volKey]?.chapters?.[chKey];
-  if(!ch) return;
-
-  const topics = ch.topics || {};
-  Object.keys(topics).forEach(tk=>{
-    const opt = document.createElement('option');
-    opt.value = tk;
-    opt.textContent = topics[tk].label || `Topic ${tk}`;
-    topicSel.appendChild(opt);
-  });
-  topicSel.disabled = Object.keys(topics).length === 0;
-}
-
-// Render questions based on selection
-function renderQuestions(){
-  clearUI();
-
-  const topicObj = DATA.volumes?.[state.volume]?.chapters?.[state.chapter]?.topics?.[state.topic];
-  if(!topicObj){
-    contentEl.innerHTML = '<p class="muted">No questions available for this selection yet.</p>';
-    return;
-  }
-
-  const showTheory = state.qtype === 'theory' || state.qtype === 'both';
-  const showPractice = state.qtype === 'practice' || state.qtype === 'both';
-  const blocks = [];
-
-  if(showTheory && Array.isArray(topicObj.theory) && topicObj.theory.length){
-    blocks.push(renderTheorySection(topicObj.theory));
-  }
-  if(showPractice && Array.isArray(topicObj.practice) && topicObj.practice.length){
-    blocks.push(renderPracticeSection(topicObj.practice));
-  }
-
-  if(blocks.length === 0){
-    contentEl.innerHTML = '<p class="muted">No questions available for this selection.</p>';
-  } else {
-    contentEl.append(...blocks);
-  }
-
-  const hasQuestions = contentEl.querySelectorAll('.q').length > 0;
-  submitBtn.disabled = !hasQuestions;
-  resetBtn.disabled = false;
-}
-
-// Render theory section
-function renderTheorySection(items){
-  const wrap = document.createElement('div');
-  const h = document.createElement('h3');
-  h.className = 'section-heading';
-  h.textContent = 'Theory questions';
-  wrap.appendChild(h);
-
-  items.forEach((q, idx)=>{
-    const qEl = renderTheoryQuestion(q, idx+1);
-    wrap.appendChild(qEl);
-  });
-
-  return wrap;
-}
-
-// Render practice section
-function renderPracticeSection(items){
-  const wrap = document.createElement('div');
-  const h = document.createElement('h3');
-  h.className = 'section-heading';
-  h.textContent = 'Practice questions';
-  wrap.appendChild(h);
-
-  items.forEach((q, idx)=>{
-    const qEl = renderPracticeQuestion(q, idx+1);
-    wrap.appendChild(qEl);
-  });
-
-  return wrap;
-}
-
-// Render a single theory question
-function renderTheoryQuestion(q, number){
-  const qId = q.id || `ThQ_${number}`;
-  const qWrap = document.createElement('div');
-  qWrap.className = 'q';
-  qWrap.dataset.qid = qId;
-  qWrap.dataset.kind = 'theory';
-  qWrap.innerHTML = `
-    <div class="q-meta">Theory Question ${number}</div>
-    <h4 class="q-stem">${escapeHtml(q.stem)}</h4>
-    <div class="choices" role="radiogroup" aria-label="Theory Question ${number} choices">
-      ${q.choices.map((c, i)=> `
-        <label class="choice">
-          <input type="radio" name="${qId}" value="${i}" />
-          <span class="letter">${String.fromCharCode(65+i)}.</span>
-          <span>${escapeHtml(c)}</span>
-        </label>
-      `).join('')}
-    </div>
-    <div class="feedback hidden" aria-live="polite"></div>
-    <div class="reveals hidden"></div>
-  `;
-  return qWrap;
-}
-
-// Render a single practice question
-function renderPracticeQuestion(q, number){
-  const qId = q.id || `PrQ_${number}`;
-  const qWrap = document.createElement('div');
-  qWrap.className = 'q';
-  qWrap.dataset.qid = qId;
-  qWrap.dataset.kind = 'practice';
-  qWrap.innerHTML = `
-    <div class="q-meta">Practice Question ${number}</div>
-    <h4 class="q-stem">${escapeHtml(q.stem)}</h4>
-    <div class="q-media">
-      <figure>
-        <img src="${escapeAttr(q.questionImage)}" alt="Practice Question ${number} image" />
-        <figcaption>Question exhibit</figcaption>
-      </figure>
-    </div>
-    <div class="choices" role="radiogroup" aria-label="Practice Question ${number} choices">
-      ${q.choices.map((c, i)=> `
-        <label class="choice">
-          <input type="radio" name="${qId}" value="${i}" />
-          <span class="letter">${String.fromCharCode(65+i)}.</span>
-          <span>${escapeHtml(c)}</span>
-        </label>
-      `).join('')}
-    </div>
-    <div class="feedback hidden" aria-live="polite"></div>
-    <div class="reveals hidden"></div>
-  `;
-  return qWrap;
-}
-
-// Utility functions
-function escapeHtml(s){
-  return String(s)
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
-    .replaceAll("'","&#039;");
-}
-function escapeAttr(s){
-  return escapeHtml(s);
-}
 </script>
 
 <script>
 // ==========================
-// Batch 3: Submit / Reveal / Score
+// Populate selectors
 // ==========================
+volumeSel.addEventListener('change', () => {
+  state.volume = volumeSel.value;
+  chapterSel.innerHTML = '<option value="">Select chapter</option>';
+  topicSel.innerHTML = '<option value="">Select topic</option>';
+  qtypeSel.value = '';
+  chapterSel.disabled = !state.volume;
+  topicSel.disabled = true;
+  qtypeSel.disabled = true;
+  clearUI();
 
-// Find a question object by its ID
-function findQuestionById(qid){
-  const t = DATA.volumes?.[state.volume]?.chapters?.[state.chapter]?.topics?.[state.topic];
-  if(!t) return null;
-  const all = [
-    ...(t.theory || []),
-    ...(t.practice || [])
-  ];
-  return all.find(x => x.id === qid) || null;
-}
+  if (state.volume) {
+    const chapters = DATA.volumes[state.volume].chapters;
+    Object.keys(chapters).forEach(chKey => {
+      const opt = document.createElement('option');
+      opt.value = chKey;
+      opt.textContent = chapters[chKey].label;
+      chapterSel.appendChild(opt);
+    });
+  }
+});
 
-// Handle submit
-function onSubmit(){
-  const qNodes = Array.from(contentEl.querySelectorAll('.q'));
-  if(!qNodes.length) return;
+chapterSel.addEventListener('change', () => {
+  state.chapter = chapterSel.value;
+  topicSel.innerHTML = '<option value="">Select topic</option>';
+  qtypeSel.value = '';
+  topicSel.disabled = !state.chapter;
+  qtypeSel.disabled = true;
+  clearUI();
 
-  let total = 0;
-  let correct = 0;
+  if (state.chapter) {
+    const topics = DATA.volumes[state.volume].chapters[state.chapter].topics;
+    Object.keys(topics).forEach(tKey => {
+      const opt = document.createElement('option');
+      opt.value = tKey;
+      opt.textContent = topics[tKey].label;
+      topicSel.appendChild(opt);
+    });
+  }
+});
 
-  qNodes.forEach(qn=>{
-    const kind = qn.dataset.kind;
-    const qid = qn.dataset.qid;
-    const radios = qn.querySelectorAll('input[type="radio"]');
-    const selected = Array.from(radios).find(r => r.checked);
-    const reveal = qn.querySelector('.reveals');
-    const feedback = qn.querySelector('.feedback');
+topicSel.addEventListener('change', () => {
+  state.topic = topicSel.value;
+  qtypeSel.value = '';
+  qtypeSel.disabled = !state.topic;
+  clearUI();
+});
 
-    const qData = findQuestionById(qid);
-    if(!qData) return;
+qtypeSel.addEventListener('change', () => {
+  state.qtype = qtypeSel.value;
+  clearUI();
+  if (state.qtype) {
+    renderQuestions();
+    submitBtn.disabled = false;
+    resetBtn.disabled = false;
+  } else {
+    submitBtn.disabled = true;
+    resetBtn.disabled = true;
+  }
+});
 
-    total += 1;
-    const userIndex = selected ? parseInt(selected.value,10) : -1;
-    const isCorrect = userIndex === qData.correctIndex;
+// ==========================
+// Render questions
+// ==========================
+function renderQuestions() {
+  const topicObj = DATA.volumes[state.volume].chapters[state.chapter].topics[state.topic];
+  let questions = [];
 
-    // Feedback
-    feedback.classList.remove('hidden', 'correct', 'incorrect');
-    feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
-    feedback.innerHTML = `
-      <span class="status">${isCorrect ? 'Correct' : 'Incorrect'}</span>
-      ${selected ? '' : '<span class="muted"> (no answer selected)</span>'}
-    `;
+  if (state.qtype === 'theory' || state.qtype === 'both') {
+    questions = questions.concat(topicObj.theory);
+  }
+  if (state.qtype === 'practice' || state.qtype === 'both') {
+    questions = questions.concat(topicObj.practice);
+  }
 
-    // Reveal correct answer
-    const correctLetter = String.fromCharCode(65 + qData.correctIndex);
-    const correctText = qData.choices[qData.correctIndex];
+  contentEl.innerHTML = '';
+  questions.forEach((q, idx) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'q';
+    qDiv.dataset.qid = q.id;
 
-    reveal.classList.remove('hidden');
-    reveal.innerHTML = `
-      <div><span class="tag">Answer</span> ${correctLetter}. ${escapeHtml(correctText)}</div>
-    `;
+    const meta = document.createElement('div');
+    meta.className = 'q-meta';
+    meta.textContent = `Q${idx + 1}`;
+    qDiv.appendChild(meta);
 
-    // If practice, show answer image
-    if(kind === 'practice' && qData.answerImage){
-      const am = document.createElement('div');
-      am.className = 'answer-media';
-      am.innerHTML = `
-        <figure>
-          <img src="${escapeAttr(qData.answerImage)}" alt="Practice answer image for ${qid}" />
-          <figcaption>Answer exhibit</figcaption>
-        </figure>
-      `;
-      reveal.appendChild(am);
+    const stem = document.createElement('div');
+    stem.className = 'stem';
+    stem.textContent = q.stem;
+    qDiv.appendChild(stem);
+
+    if (q.questionImage) {
+      const img = document.createElement('img');
+      img.src = q.questionImage;
+      img.alt = 'Question image';
+      img.style.maxWidth = '100%';
+      qDiv.appendChild(img);
     }
 
-    // Lock choices
-    radios.forEach(r => r.disabled = true);
+    const choicesDiv = document.createElement('div');
+    choicesDiv.className = 'choices';
+    q.choices.forEach((choice, cIdx) => {
+      const choiceDiv = document.createElement('label');
+      choiceDiv.className = 'choice';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = q.id;
+      radio.value = cIdx;
+      const letter = document.createElement('span');
+      letter.className = 'letter';
+      letter.textContent = String.fromCharCode(65 + cIdx) + '.';
+      const text = document.createElement('span');
+      text.textContent = choice;
+      choiceDiv.appendChild(radio);
+      choiceDiv.appendChild(letter);
+      choiceDiv.appendChild(text);
+      choicesDiv.appendChild(choiceDiv);
+    });
+    qDiv.appendChild(choicesDiv);
 
-    if(isCorrect) correct += 1;
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback hidden';
+    qDiv.appendChild(feedback);
+
+    if (q.answerImage) {
+      const reveals = document.createElement('div');
+      reveals.className = 'reveals hidden';
+      const ansImg = document.createElement('img');
+      ansImg.src = q.answerImage;
+      ansImg.alt = 'Answer image';
+      ansImg.style.maxWidth = '100%';
+      reveals.appendChild(ansImg);
+      qDiv.appendChild(reveals);
+    }
+
+    contentEl.appendChild(qDiv);
   });
-
-  // Scoreboard
-  const pct = total ? Math.round((correct/total)*100) : 0;
-  rawScoreEl.textContent = `${correct} / ${total}`;
-  pctScoreEl.textContent = `${pct}%`;
-  scoreboard.classList.remove('hidden');
-
-  state.submitted = true;
 }
 
-// Wire up submit to render logic
-submitBtn.addEventListener('click', onSubmit);
+// ==========================
+// Submit & score
+// ==========================
+submitBtn.addEventListener('click', () => {
+  if (state.submitted) return;
+  const topicObj = DATA.volumes[state.volume].chapters[state.chapter].topics[state.topic];
+  let questions = [];
+  if (state.qtype === 'theory' || state.qtype === 'both') {
+    questions = questions.concat(topicObj.theory);
+  }
+  if (state.qtype === 'practice' || state.qtype === 'both') {
+    questions = questions.concat(topicObj.practice);
+  }
 
-// When qtype changes, render questions
-qtypeSel.addEventListener('change', ()=>{
-  state.qtype = qtypeSel.value;
-  if(state.qtype){
+  let score = 0;
+  questions.forEach(q => {
+    const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+    const qDiv = document.querySelector(`.q[data-qid="${q.id}"]`);
+    const feedback = qDiv.querySelector('.feedback');
+    if (selected) {
+      if (parseInt(selected.value, 10) === q.correctIndex) {
+        score++;
+        feedback.textContent = 'Correct';
+        feedback.classList.add('correct');
+      } else {
+        feedback.textContent = `Incorrect. Correct answer: ${String.fromCharCode(65 + q.correctIndex)}`;
+        feedback.classList.add('incorrect');
+      }
+    } else {
+      feedback.textContent = `No answer. Correct answer: ${String.fromCharCode(65 + q.correctIndex)}`;
+      feedback.classList.add('incorrect');
+    }
+    feedback.classList.remove('hidden');
+
+    const reveals = qDiv.querySelector('.reveals');
+    if (reveals) reveals.classList.remove('hidden');
+  });
+
+  rawScoreEl.textContent = `${score} / ${questions.length}`;
+  pctScoreEl.textContent = `${((score / questions.length) * 100).toFixed(0)}%`;
+  scoreboard.classList.remove('hidden');
+  state.submitted = true;
+});
+
+// ==========================
+// Reset
+// ==========================
+resetBtn.addEventListener('click', () => {
+  clearUI();
+  if (state.qtype) {
     renderQuestions();
-  } else {
-    clearUI();
-    submitBtn.disabled = true;
   }
 });
 </script>
+</body>
+</html>
