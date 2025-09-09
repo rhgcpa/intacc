@@ -2,447 +2,702 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quizzes – Volume 1</title>
-  <style>
-    :root {
-      --primary-color: #002b5c;
-      --secondary-color: #004080;
-      --accent-color: #00aaff;
-      --hover-color: #0077cc;
-      --bg-color: #f9f9f9;
-      --card-bg: #ffffff;
-      --correct-bg: #e0ffe0;
-      --incorrect-bg: #ffe0e0;
-      --font-family: Bahnschrift, Arial, sans-serif;
-    }
-
-    body {
-      font-family: var(--font-family);
-      margin: 0;
-      padding: 0;
-      background: var(--bg-color);
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: space-around;
-      background: var(--primary-color);
-      color: white;
-      padding: 0.8em;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .tabs div {
-      cursor: pointer;
-    }
-
-    .tabs .disabled {
-      pointer-events: none;
-      opacity: 0.5;
-    }
-
-    .sticky-meta {
-      position: sticky;
-      top: 3.2em;
-      z-index: 999;
-      background: var(--secondary-color);
-      color: white;
-      padding: 1em 0;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .sticky-meta h1 {
-      margin: 0;
-      font-size: 1.2em;
-    }
-
-    .controls {
-      margin-top: 0.8em;
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-      flex-wrap: wrap;
-    }
-
-    .toggle-group {
-      margin: 1em;
-      text-align: center;
-    }
-
-    .toggle-group label {
-      margin: 0 1em;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button {
-      background: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 0.5em 1em;
-      cursor: pointer;
-      font-weight: bold;
-      border-radius: 4px;
-    }
-
-    button:hover {
-      background: var(--hover-color);
-    }
-
-    .quiz-card {
-      background: var(--card-bg);
-      margin: 1em;
-      padding: 1em;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-
-    .quiz-card h3 {
-      margin-top: 0;
-    }
-
-    .meta {
-      font-size: 0.9em;
-      color: #666;
-      margin-bottom: 1em;
-    }
-
-    .question {
-      margin-bottom: 1.5em;
-    }
-
-    .question p {
-      margin: 0.5em 0;
-    }
-
-    .choices label {
-      display: block;
-      margin: 0.3em 0;
-      cursor: pointer;
-    }
-
-    .answer {
-      display: none;
-      margin-top: 0.5em;
-      font-weight: bold;
-    }
-
-    .answer-img {
-      display: none;
-      margin-top: 0.5em;
-      max-width: 100%;
-      border: 1px solid #ccc;
-    }
-
-    .correct {
-      background: var(--correct-bg);
-    }
-
-    .incorrect {
-      background: var(--incorrect-bg);
-    }
-
-    #results {
-      background: var(--card-bg);
-      margin: 1em;
-      padding: 1em;
-      border-left: 5px solid var(--secondary-color);
-      display: none;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+  <title>Quizzes — EXCELlent AccounTax</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Uses the shared site-wide stylesheet as basis for formats -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="tabs">
-    <div>Home</div>
-    <div>Glossary</div>
-    <div>Quizzes</div>
-    <div>References</div>
-    <div>Visuals</div>
-    <div>Tools</div>
-  </div>
+  <!-- Sticky tabs -->
+  <header class="topbar" role="navigation" aria-label="Primary">
+    <nav class="tabs">
+      <a class="tab" href="#home" data-tab="home">Home</a>
+      <a class="tab" href="#glossary" data-tab="glossary">Glossary</a>
+      <a class="tab active" href="#quizzes" data-tab="quizzes">Quizzes</a>
+      <a class="tab" href="#references" data-tab="references">References</a>
+      <a class="tab" href="#visuals" data-tab="visuals">Visuals</a>
+      <a class="tab" href="#tools" data-tab="tools">Tools</a>
+    </nav>
+  </header>
 
-  <div class="sticky-meta">
-    <h1>Volume 1 · Chapter 1 · Topic: Cash and Cash Equivalents · Quiz Type: Theory & Practice</h1>
-    <div class="controls">
-      <button id="submit-quiz">Submit Quiz</button>
-      <button id="reset-quiz">Reset Quiz</button>
-    </div>
-    <div class="toggle-group">
-      <label><input type="radio" name="quizMode" value="both" checked /> Both</label>
-      <label><input type="radio" name="quizMode" value="theory" /> Theory Only</label>
-      <label><input type="radio" name="quizMode" value="practice" /> Practice Only</label>
-    </div>
-  </div>
-
-  <div id="theory-card" class="quiz-card theory">
-    <h3>Cash and Cash Equivalents – Theory</h3>
-    <p class="meta">Multiple Choice · Select one answer per question</p>
-
-<!-- Theory Question 1 -->
-<div class="question" data-answer="B">
-  <p>1. Cash on hand includes:</p>
-  <div class="choices">
-    <label><input type="radio" name="q1" value="A" /> A. Checks dated less than 6 months after today.</label>
-    <label><input type="radio" name="q1" value="B" /> B. Checks dated less than 6 months before today.</label>
-    <label><input type="radio" name="q1" value="C" /> C. Checks dated more than 6 months after today.</label>
-    <label><input type="radio" name="q1" value="D" /> D. Checks dated more than 6 months before today.</label>
-  </div>
-  <p class="answer">Correct Answer: B</p>
-</div>
-
-<!-- Theory Question 2 -->
-<div class="question" data-answer="B">
-  <p>2. In defining cash equivalents, known maturity value denotes:</p>
-  <div class="choices">
-    <label><input type="radio" name="q2" value="A" /> A. Maturity date is determinable on acquisition date.</label>
-    <label><input type="radio" name="q2" value="B" /> B. Maturity value is determinable on acquisition date.</label>
-    <label><input type="radio" name="q2" value="C" /> C. Maturity value will be determined on maturity date.</label>
-    <label><input type="radio" name="q2" value="D" /> D. Maturity value will be known on maturity date.</label>
-  </div>
-  <p class="answer">Correct Answer: B</p>
-</div>
-
-<!-- Theory Question 3 -->
-<div class="question" data-answer="C">
-  <p>3. Which are excluded from cash equivalents?</p>
-  <div class="choices">
-    <label><input type="radio" name="q3" value="A" /> A. Credit cards receivable.</label>
-    <label><input type="radio" name="q3" value="B" /> B. Debit cards receivable.</label>
-    <label><input type="radio" name="q3" value="C" /> C. Time deposits downgraded lower than savings accounts when pre-terminated.</label>
-    <label><input type="radio" name="q3" value="D" /> D. Time deposits downgraded not lower than savings accounts when pre-terminated.</label>
-  </div>
-  <p class="answer">Correct Answer: C</p>
-</div>
-
-<!-- Theory Question 4 -->
-<div class="question" data-answer="A">
-  <p>4. Which are classified as restricted cash, and presented as noncurrent assets?</p>
-  <div class="choices">
-    <label><input type="radio" name="q4" value="A" /> A. Currency usable for at least 12 months after the reporting period.</label>
-    <label><input type="radio" name="q4" value="B" /> B. Currency usable for less than 12 months after the reporting period.</label>
-    <label><input type="radio" name="q4" value="C" /> C. Currency usable for more than 12 months after the reporting period.</label>
-    <label><input type="radio" name="q4" value="D" /> D. Currency usable within 12 months after the reporting period.</label>
-  </div>
-  <p class="answer">Correct Answer: A</p>
-</div>
-
-<!-- Theory Question 5 -->
-<div class="question" data-answer="C">
-  <p>5. Which are classified as short-term investments, and presented as current assets?</p>
-  <div class="choices">
-    <label><input type="radio" name="q5" value="A" /> A. Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.</label>
-    <label><input type="radio" name="q5" value="B" /> B. Bank deposits withdrawable with significant penalty and usable for more than 12 months.</label>
-    <label><input type="radio" name="q5" value="C" /> C. Bank deposits withdrawable with significant penalty and usable within 12 months.</label>
-    <label><input type="radio" name="q5" value="D" /> D. Bank deposits withdrawable without penalty and usable for less than 12 months.</label>
-  </div>
-  <p class="answer">Correct Answer: C</p>
-</div>
-
-<!-- Theory Question 6 -->
-<div class="question" data-answer="B">
-  <p>6. These describe a bank overdraft, except:</p>
-  <div class="choices">
-    <label><input type="radio" name="q6" value="A" /> A. It is allowed only if caused by normal bank charges or other incidental handling fees.</label>
-    <label><input type="radio" name="q6" value="B" /> B. It is disallowed in the Philippines.</label>
-    <label><input type="radio" name="q6" value="C" /> C. It is known as temporary overdrawing in the Philippines.</label>
-    <label><input type="radio" name="q6" value="D" /> D. It is the negative (or overdrawn) balance in a demand deposit account.</label>
-  </div>
-  <p class="answer">Correct Answer: B</p>
-</div>
-
-<!-- Theory Question 7 -->
-<div class="question" data-answer="D">
-  <p>7. Check withdrawals are recorded as:</p>
-  <div class="choices">
-    <label><input type="radio" name="q7" value="A" /> A. Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.</label>
-    <label><input type="radio" name="q7" value="B" /> B. Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.</label>
-    <label><input type="radio" name="q7" value="C" /> C. Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.</label>
-    <label><input type="radio" name="q7" value="D" /> D. Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity.</label>
-  </div>
-  <p class="answer">Correct Answer: D</p>
-</div>
-
-<!-- Theory Question 8 -->
-<div class="question" data-answer="D">
-  <p>8. Timing differences for Deposit Liabilities of financial institution comprise:</p>
-  <div class="choices">
-    <label><input type="radio" name="q8" value="A" /> A. Credit memos and debit memos.</label>
-    <label><input type="radio" name="q8" value="B" /> B. Outstanding checks and debit memos.</label>
-    <label><input type="radio" name="q8" value="C" /> C. Outstanding deposits and credit memos.</label>
-    <label><input type="radio" name="q8" value="D" /> D. Outstanding deposits and outstanding checks.</label>
-  </div>
-  <p class="answer">Correct Answer: D</p>
-</div>
-
-<!-- Theory Question 9 -->
-<div class="question" data-answer="D">
-  <p>9. Which describe debit memos?</p>
-  <div class="choices">
-    <label><input type="radio" name="q9" value="A" /> A. Already credited to Demand Deposits but not yet debited to Deposit Liabilities.</label>
-    <label><input type="radio" name="q9" value="B" /> B. Already credited to Deposit Liabilities but not yet debited to Demand Deposits.</label>
-    <label><input type="radio" name="q9" value="C" /> C. Already debited to Demand Deposits but not yet credited to Deposit Liabilities.</label>
-    <label><input type="radio" name="q9" value="D" /> D. Already debited to Deposit Liabilities but not yet credited to Demand Deposits.</label>
-  </div>
-  <p class="answer">Correct Answer: D</p>
-</div>
-
-<!-- Theory Question 10 -->
-<div class="question" data-answer="C">
-  <p>10. Which describe credit memos?</p>
-  <div class="choices">
-    <label><input type="radio" name="q10" value="A" /> A. Already debited to Deposit Liabilities but not yet credited to Demand Deposits.</label>
-    <label><input type="radio" name="q10" value="B" /> B. Already credited to Deposit Liabilities but not yet debited to Demand Deposits.</label>
-    <label><input type="radio" name="q10" value="C" /> C. Already credited to Demand Deposits but not yet debited to Deposit Liabilities.</label>
-    <label><input type="radio" name="q10" value="D" /> D. Already debited to Demand Deposits but not yet credited to Deposit Liabilities.</label>
-  </div>
-  <p class="answer">Correct Answer: C</p>
-</div>
-  </div> <!-- End of theory-card -->
-
-  <div id="practice-card" class="quiz-card practice">
-    <h3>Cash and Cash Equivalents – Practice</h3>
-    <p class="meta">Multiple Choice · Select one answer per question</p>
-
-    <!-- Practice Question 1 -->
-    <div class="question" data-answer="B">
-      <p>Practice Question 1. With these givens, the closing outstanding checks are:</p>
-      <img src="excel-ranges/qp1-question.png" alt="Excel range for Practice Question 1" class="question-img" />
-      <div class="choices">
-        <label><input type="radio" name="qp1" value="A" /> A. 289,000.00</label>
-        <label><input type="radio" name="qp1" value="B" /> B. 311,000.00</label>
-        <label><input type="radio" name="qp1" value="C" /> C. 489,000.00</label>
-        <label><input type="radio" name="qp1" value="D" /> D. 511,000.00</label>
+  <!-- Sticky filters and actions -->
+  <div class="actionbar" role="region" aria-label="Quiz filters and actions">
+    <div class="actionbar-inner">
+      <div class="select">
+        <label for="volume">Volume</label>
+        <select id="volume">
+          <option value="">Select volume</option>
+          <option value="1">Volume 1</option>
+          <option value="2">Volume 2</option>
+          <option value="3">Volume 3</option>
+        </select>
       </div>
-      <p class="answer">Correct Answer: B</p>
-      <img src="excel-ranges/qp1-answer.png" alt="Excel range for Answer 1" class="answer-img" />
-    </div>
 
-    <!-- Practice Question 2 -->
-    <div class="question" data-answer="C">
-      <p>Practice Question 2. The adjusted cash balance is:</p>
-      <img src="excel-ranges/qp2-question.png" alt="Excel range for Practice Question 2" class="question-img" />
-      <div class="choices">
-        <label><input type="radio" name="qp2" value="A" /> A. 1,200,000.00</label>
-        <label><input type="radio" name="qp2" value="B" /> B. 1,250,000.00</label>
-        <label><input type="radio" name="qp2" value="C" /> C. 1,300,000.00</label>
-        <label><input type="radio" name="qp2" value="D" /> D. 1,350,000.00</label>
+      <div class="select">
+        <label for="chapter">Chapter</label>
+        <select id="chapter" disabled>
+          <option value="">Select chapter</option>
+        </select>
       </div>
-      <p class="answer">Correct Answer: C</p>
-      <img src="excel-ranges/qp2-answer.png" alt="Excel range for Answer 2" class="answer-img" />
-    </div>
 
-    <!-- Practice Question 3 -->
-    <div class="question" data-answer="A">
-      <p>Practice Question 3. Which of the following is a reconciling item?</p>
-      <img src="excel-ranges/qp3-question.png" alt="Excel range for Practice Question 3" class="question-img" />
-      <div class="choices">
-        <label><input type="radio" name="qp3" value="A" /> A. Outstanding checks</label>
-        <label><input type="radio" name="qp3" value="B" /> B. Canceled checks</label>
-        <label><input type="radio" name="qp3" value="C" /> C. Certified checks</label>
-        <label><input type="radio" name="qp3" value="D" /> D. Manager’s checks</label>
+      <div class="select">
+        <label for="topic">Topic</label>
+        <select id="topic" disabled>
+          <option value="">Select topic</option>
+        </select>
       </div>
-      <p class="answer">Correct Answer: A</p>
-      <img src="excel-ranges/qp3-answer.png" alt="Excel range for Answer 3" class="answer-img" />
-    </div>
 
-    <!-- Practice Question 4 -->
-    <div class="question" data-answer="D">
-      <p>Practice Question 4. Cash equivalents include:</p>
-      <img src="excel-ranges/qp4-question.png" alt="Excel range for Practice Question 4" class="question-img" />
-      <div class="choices">
-        <label><input type="radio" name="qp4" value="A" /> A. Postdated checks</label>
-        <label><input type="radio" name="qp4" value="B" /> B. Time deposits with significant penalty</label>
-        <label><input type="radio" name="qp4" value="C" /> C. Restricted cash</label>
-        <label><input type="radio" name="qp4" value="D" /> D. Treasury bills maturing in 90 days</label>
+      <div class="select">
+        <label for="qtype">Question type</label>
+        <select id="qtype" disabled>
+          <option value="">Select type</option>
+          <option value="theory">Theory</option>
+          <option value="practice">Practice</option>
+          <option value="both">Both</option>
+        </select>
       </div>
-      <p class="answer">Correct Answer: D</p>
-      <img src="excel-ranges/qp4-answer.png" alt="Excel range for Answer 4" class="answer-img" />
-    </div>
 
-    <!-- Practice Question 5 -->
-    <div class="question" data-answer="B">
-      <p>Practice Question 5. Which item is excluded from cash?</p>
-      <img src="excel-ranges/qp5-question.png" alt="Excel range for Practice Question 5" class="question-img" />
-      <div class="choices">
-        <label><input type="radio" name="qp5" value="A" /> A. Undelivered checks</label>
-        <label><input type="radio" name="qp5" value="B" /> B. Postdated checks</label>
-        <label><input type="radio" name="qp5" value="C" /> C. Manager’s checks</label>
-        <label><input type="radio" name="qp5" value="D" /> D. Traveler’s checks</label>
+      <div class="actions">
+        <button id="submitBtn" class="btn primary" disabled>Submit</button>
+        <button id="resetBtn" class="btn secondary" disabled>Reset</button>
       </div>
-      <p class="answer">Correct Answer: B</p>
-      <img src="excel-ranges/qp5-answer.png" alt="Excel range for Answer 5" class="answer-img" />
     </div>
   </div>
 
-  <div id="results"></div>
+  <!-- Main content -->
+  <main class="container">
+    <section id="quizzesPanel" class="panel">
+      <p class="filters-note">
+        Use the selectors above to load questions. Tabs remain clickable even when you scroll.
+      </p>
 
+      <div id="content"></div>
+
+      <div id="scoreboard" class="scoreboard hidden" aria-live="polite">
+        <div class="score">
+          <label>Raw score</label>
+          <strong id="rawScore">0 / 0</strong>
+        </div>
+        <div class="score">
+          <label>Percentage</label>
+          <strong id="pctScore">0%</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
   <script>
-    document.querySelectorAll('input[name="quizMode"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        const mode = radio.value;
-        document.getElementById('theory-card').classList.toggle('hidden', mode === 'practice');
-        document.getElementById('practice-card').classList.toggle('hidden', mode === 'theory');
+    // State
+    const state = {
+      volume: "",
+      chapter: "",
+      topic: "",
+      qtype: "",
+      submitted: false
+    };
+
+    // Elements
+    const volumeSel = document.getElementById('volume');
+    const chapterSel = document.getElementById('chapter');
+    const topicSel = document.getElementById('topic');
+    const qtypeSel = document.getElementById('qtype');
+    const contentEl = document.getElementById('content');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const scoreboard = document.getElementById('scoreboard');
+    const rawScoreEl = document.getElementById('rawScore');
+    const pctScoreEl = document.getElementById('pctScore');
+
+    // Tabs activation (visual only; anchors remain clickable)
+    function activateTab(name){
+      document.querySelectorAll('.tab').forEach(a=>{
+        a.classList.toggle('active', a.dataset.tab === name);
       });
+    }
+    document.querySelectorAll('.tab').forEach(tab=>{
+      tab.addEventListener('click', ()=> activateTab(tab.dataset.tab));
     });
 
-    document.getElementById('submit-quiz').addEventListener('click', () => {
-      let correct = 0, total = 0;
+    // Reset UI shell
+    function clearUI(){
+      state.submitted = false;
+      contentEl.innerHTML = '';
+      scoreboard.classList.add('hidden');
+      rawScoreEl.textContent = '0 / 0';
+      pctScoreEl.textContent = '0%';
+    }
 
-      document.querySelectorAll('.question').forEach(q => {
-        const selected = q.querySelector('input[type="radio"]:checked');
-        const correctAnswer = q.dataset.answer;
-        const answerDisplay = q.querySelector('.answer');
-        const answerImg = q.querySelector('.answer-img');
+    // Populate selects (chapters and topics will be hydrated in the next batch)
+    function populateChapters(volKey){
+      chapterSel.innerHTML = '<option value="">Select chapter</option>';
+      topicSel.innerHTML = '<option value="">Select topic</option>';
+      chapterSel.disabled = true;
+      topicSel.disabled = true;
+      qtypeSel.value = "";
+      qtypeSel.disabled = true;
+      submitBtn.disabled = true;
+      resetBtn.disabled = false;
+    }
+    function populateTopics(){
+      topicSel.innerHTML = '<option value="">Select topic</option>';
+      topicSel.disabled = true;
+      qtypeSel.value = "";
+      qtypeSel.disabled = true;
+      submitBtn.disabled = true;
+    }
 
-        if (selected) {
-          total++;
-          if (selected.value === correctAnswer) {
-            q.classList.add('correct');
-            q.classList.remove('incorrect');
-            correct++;
-          } else {
-            q.classList.add('incorrect');
-            q.classList.remove('correct');
-          }
-        } else {
-          q.classList.remove('correct', 'incorrect');
-        }
+    // Enable type when ready
+    function enableTypeIfReady(){
+      const ready = !!(state.volume && state.chapter && state.topic);
+      qtypeSel.disabled = !ready;
+      submitBtn.disabled = true;
+      resetBtn.disabled = false;
+    }
 
-        answerDisplay.style.display = 'block';
-        if (answerImg) answerImg.style.display = 'block';
-      });
-
-      const score = total > 0 ? Math.round((correct / total) * 100) : 0;
-      const results = document.getElementById('results');
-      results.innerHTML = `<h3>Results</h3><p>You answered ${correct} out of ${total} questions correctly. Score: ${score}%</p>`;
-      results.style.display = 'block';
-
-      document.querySelectorAll('.tabs div').forEach(tab => tab.classList.add('disabled'));
+    // Event bindings (data hydration and rendering will come in Batch 2)
+    volumeSel.addEventListener('change', ()=>{
+      state.volume = volumeSel.value;
+      state.chapter = "";
+      state.topic = "";
+      state.qtype = "";
+      populateChapters(state.volume);
+      clearUI();
     });
 
-    document.getElementById('reset-quiz').addEventListener('click', () => {
-      document.querySelectorAll('.question').forEach(q => {
-        q.classList.remove('correct', 'incorrect');
-        q.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
-        q.querySelector('.answer').style.display = 'none';
-        const answerImg = q.querySelector('.answer-img');
-        if (answerImg) answerImg.style.display = 'none';
-      });
-
-      document.getElementById('results').style.display = 'none';
-
-      document.querySelectorAll('.tabs div').forEach(tab => tab.classList.remove('disabled'));
+    chapterSel.addEventListener('change', ()=>{
+      state.chapter = chapterSel.value;
+      state.topic = "";
+      state.qtype = "";
+      populateTopics();
+      clearUI();
     });
+
+    topicSel.addEventListener('change', ()=>{
+      state.topic = topicSel.value;
+      enableTypeIfReady();
+      clearUI();
+    });
+
+    qtypeSel.addEventListener('change', ()=>{
+      state.qtype = qtypeSel.value;
+      clearUI(); // Rendering comes in Batch 2
+      submitBtn.disabled = !state.qtype;
+    });
+
+    submitBtn.addEventListener('click', ()=>{
+      // Evaluation and reveals will be implemented in Batch 3
+    });
+
+    resetBtn.addEventListener('click', ()=>{
+      state.volume = "";
+      state.chapter = "";
+      state.topic = "";
+      state.qtype = "";
+      state.submitted = false;
+
+      volumeSel.value = "";
+      populateChapters("");
+      chapterSel.value = "";
+      topicSel.value = "";
+      qtypeSel.value = "";
+      chapterSel.disabled = true;
+      topicSel.disabled = true;
+      qtypeSel.disabled = true;
+      submitBtn.disabled = true;
+      resetBtn.disabled = true;
+
+      clearUI();
+      volumeSel.focus();
+    });
+
+    // Bootstrap
+    resetBtn.disabled = true;
+    activateTab('quizzes');
   </script>
 </body>
 </html>
+
+<script>
+// ==========================
+// Batch 2: Data + Rendering
+// ==========================
+
+// Quiz data
+const DATA = {
+  volumes: {
+    "1": {
+      label: "Volume 1",
+      chapters: {
+        "1": {
+          label: "Chapter 1: Cash and Cash Equivalents",
+          topics: {
+            "1.6": {
+              label: "1.6 Quiz on Cash and Cash Equivalents",
+              theory: [
+                {
+                  id: "ThQ1",
+                  stem: "Cash on hand includes:",
+                  choices: [
+                    "Checks dated less than 6 months after today.",
+                    "Checks dated less than 6 months before today.",
+                    "Checks dated more than 6 months after today.",
+                    "Checks dated more than 6 months before today."
+                  ],
+                  correctIndex: 1
+                },
+                {
+                  id: "ThQ2",
+                  stem: "In defining cash equivalents, known maturity value denotes:",
+                  choices: [
+                    "Maturity date is determinable on acquisition date.",
+                    "Maturity value is determinable on acquisition date.",
+                    "Maturity value will be determined on maturity date.",
+                    "Maturity value will be known on maturity date."
+                  ],
+                  correctIndex: 1
+                },
+                {
+                  id: "ThQ3",
+                  stem: "Which are excluded from cash equivalents?",
+                  choices: [
+                    "Credit cards receivable.",
+                    "Debit cards receivable.",
+                    "Time deposits downgraded lower than savings accounts when pre-terminated.",
+                    "Time deposits downgraded not lower than savings accounts when pre-terminated."
+                  ],
+                  correctIndex: 2
+                },
+                {
+                  id: "ThQ4",
+                  stem: "Which are classified as restricted cash, and presented as noncurrent assets?",
+                  choices: [
+                    "Currency usable for at least 12 months after the reporting period.",
+                    "Currency usable for less than 12 months after the reporting period.",
+                    "Currency usable for more than 12 months after the reporting period.",
+                    "Currency usable within 12 months after the reporting period."
+                  ],
+                  correctIndex: 0
+                },
+                {
+                  id: "ThQ5",
+                  stem: "Which are classified as short-term investments, and presented as current assets?",
+                  choices: [
+                    "Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.",
+                    "Bank deposits withdrawable with significant penalty and usable for more than 12 months.",
+                    "Bank deposits withdrawable with significant penalty and usable within 12 months.",
+                    "Bank deposits withdrawable without penalty and usable for less than 12 months."
+                  ],
+                  correctIndex: 2
+                },
+                {
+                  id: "ThQ6",
+                  stem: "These describe a bank overdraft, except:",
+                  choices: [
+                    "It is allowed only if caused by normal bank charges or other incidental handling fees.",
+                    "It is disallowed in the Philippines.",
+                    "It is known as temporary overdrawing in the Philippines.",
+                    "It is the negative (or overdrawn) balance in a demand deposit account."
+                  ],
+                  correctIndex: 1
+                },
+                {
+                  id: "ThQ7",
+                  stem: "Check withdrawals are recorded as:",
+                  choices: [
+                    "Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.",
+                    "Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.",
+                    "Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.",
+                    "Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity."
+                  ],
+                  correctIndex: 3
+                },
+                {
+                  id: "ThQ8",
+                  stem: "Timing differences for Deposit Liabilities of financial institution comprise:",
+                  choices: [
+                    "Credit memos and debit memos.",
+                    "Outstanding checks and debit memos.",
+                    "Outstanding deposits and credit memos.",
+                    "Outstanding deposits and outstanding checks."
+                  ],
+                  correctIndex: 3
+                },
+                {
+                  id: "ThQ9",
+                  stem: "Which describe debit memos?",
+                  choices: [
+                    "They are already credited to Demand Deposits but not yet debited to Deposit Liabilities.",
+                    "They are already credited to Deposit Liabilities but not yet debited to Demand Deposits.",
+                    "They are already debited to Demand Deposits but not yet credited to Deposit Liabilities.",
+                    "They are already debited to Deposit Liabilities but not yet credited to Demand Deposits."
+                  ],
+                  correctIndex: 3
+                },
+                {
+                  id: "ThQ10",
+                  stem: "Before replenishment, the adjusted balance of Petty Cash Fund equals:",
+                  choices: [
+                    "Currency in the custody of the Petty Cash Custodian.",
+                    "Established amount.",
+                    "Minimum threshold.",
+                    "Total of Petty Cash Vouchers."
+                  ],
+                  correctIndex: 0
+                }
+              ],
+              practice: [
+                {
+                  id: "PrQ1",
+                  stem: "With these givens, the closing outstanding checks are:",
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq01.png",
+                  choices: [
+                    "289,000.00.",
+                    "311,000.00.",
+                    "489,000.00.",
+                    "511,000.00."
+                  ],
+                  correctIndex: 1,
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa01.png"
+                },
+                {
+                  id: "PrQ2",
+                  stem: "With these givens, the opening outstanding checks are:",
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq02.png",
+                  choices: [
+                    "289,000.00.",
+                    "311,000.00.",
+                    "489,000.00.",
+                    "511,000.00."
+                  ],
+                  correctIndex: 1,
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa02.png"
+                },
+                {
+                  id: "PrQ3",
+                  stem: "With these givens, the closing book balance is:",
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq03.png",
+                  choices: [
+                    "2,496,000.00.",
+                    "2,499,800.00.",
+                    "2,500,200.00.",
+                    "2,504,000.00."
+                  ],
+                  correctIndex: 1,
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa03.png"
+                },
+                {
+                  id: "PrQ4",
+                  stem: "With these givens, the closing outstanding deposits are:",
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq04.png",
+                  choices: [
+                    "487,000.00.",
+                    "513,000.00.",
+                    "887,000.00.",
+                    "913,000.00."
+                  ],
+                  correctIndex: 3,
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa04.png"
+                },
+                {
+                  id: "PrQ5",
+                  stem: "With these givens, the closing outstanding deposits are:",
+                  questionImage: "images/IntaccV1C01CashAndCashEquivalentsPq05.png",
+                  choices: [
+                    "398,700.00.",
+                    "398,900.00.",
+                    "898,700.00.",
+                    "898,900.00."
+                  ],
+                  correctIndex: 2,
+                  answerImage: "images/IntaccV1C01CashAndCashEquivalentsPa05.png"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "2": { label: "Volume 2", chapters: {} },
+    "3": { label: "Volume 3", chapters: {} }
+  }
+};
+
+// Populate chapters based on volume
+function populateChapters(volKey){
+  chapterSel.innerHTML = '<option value="">Select chapter</option>';
+  topicSel.innerHTML = '<option value="">Select topic</option>';
+  chapterSel.disabled = true;
+  topicSel.disabled = true;
+  qtypeSel.value = "";
+  qtypeSel.disabled = true;
+  submitBtn.disabled = true;
+  resetBtn.disabled = false;
+
+  const vol = DATA.volumes[volKey];
+  if(!vol) return;
+
+  const chapters = vol.chapters || {};
+  Object.keys(chapters).forEach(chKey=>{
+    const opt = document.createElement('option');
+    opt.value = chKey;
+    opt.textContent = chapters[chKey].label || `Chapter ${chKey}`;
+    chapterSel.appendChild(opt);
+  });
+  chapterSel.disabled = Object.keys(chapters).length === 0;
+}
+
+// Populate topics based on chapter
+function populateTopics(volKey, chKey){
+  topicSel.innerHTML = '<option value="">Select topic</option>';
+  topicSel.disabled = true;
+  qtypeSel.value = "";
+  qtypeSel.disabled = true;
+  submitBtn.disabled = true;
+
+  const ch = DATA.volumes?.[volKey]?.chapters?.[chKey];
+  if(!ch) return;
+
+  const topics = ch.topics || {};
+  Object.keys(topics).forEach(tk=>{
+    const opt = document.createElement('option');
+    opt.value = tk;
+    opt.textContent = topics[tk].label || `Topic ${tk}`;
+    topicSel.appendChild(opt);
+  });
+  topicSel.disabled = Object.keys(topics).length === 0;
+}
+
+// Render questions based on selection
+function renderQuestions(){
+  clearUI();
+
+  const topicObj = DATA.volumes?.[state.volume]?.chapters?.[state.chapter]?.topics?.[state.topic];
+  if(!topicObj){
+    contentEl.innerHTML = '<p class="muted">No questions available for this selection yet.</p>';
+    return;
+  }
+
+  const showTheory = state.qtype === 'theory' || state.qtype === 'both';
+  const showPractice = state.qtype === 'practice' || state.qtype === 'both';
+  const blocks = [];
+
+  if(showTheory && Array.isArray(topicObj.theory) && topicObj.theory.length){
+    blocks.push(renderTheorySection(topicObj.theory));
+  }
+  if(showPractice && Array.isArray(topicObj.practice) && topicObj.practice.length){
+    blocks.push(renderPracticeSection(topicObj.practice));
+  }
+
+  if(blocks.length === 0){
+    contentEl.innerHTML = '<p class="muted">No questions available for this selection.</p>';
+  } else {
+    contentEl.append(...blocks);
+  }
+
+  const hasQuestions = contentEl.querySelectorAll('.q').length > 0;
+  submitBtn.disabled = !hasQuestions;
+  resetBtn.disabled = false;
+}
+
+// Render theory section
+function renderTheorySection(items){
+  const wrap = document.createElement('div');
+  const h = document.createElement('h3');
+  h.className = 'section-heading';
+  h.textContent = 'Theory questions';
+  wrap.appendChild(h);
+
+  items.forEach((q, idx)=>{
+    const qEl = renderTheoryQuestion(q, idx+1);
+    wrap.appendChild(qEl);
+  });
+
+  return wrap;
+}
+
+// Render practice section
+function renderPracticeSection(items){
+  const wrap = document.createElement('div');
+  const h = document.createElement('h3');
+  h.className = 'section-heading';
+  h.textContent = 'Practice questions';
+  wrap.appendChild(h);
+
+  items.forEach((q, idx)=>{
+    const qEl = renderPracticeQuestion(q, idx+1);
+    wrap.appendChild(qEl);
+  });
+
+  return wrap;
+}
+
+// Render a single theory question
+function renderTheoryQuestion(q, number){
+  const qId = q.id || `ThQ_${number}`;
+  const qWrap = document.createElement('div');
+  qWrap.className = 'q';
+  qWrap.dataset.qid = qId;
+  qWrap.dataset.kind = 'theory';
+  qWrap.innerHTML = `
+    <div class="q-meta">Theory Question ${number}</div>
+    <h4 class="q-stem">${escapeHtml(q.stem)}</h4>
+    <div class="choices" role="radiogroup" aria-label="Theory Question ${number} choices">
+      ${q.choices.map((c, i)=> `
+        <label class="choice">
+          <input type="radio" name="${qId}" value="${i}" />
+          <span class="letter">${String.fromCharCode(65+i)}.</span>
+          <span>${escapeHtml(c)}</span>
+        </label>
+      `).join('')}
+    </div>
+    <div class="feedback hidden" aria-live="polite"></div>
+    <div class="reveals hidden"></div>
+  `;
+  return qWrap;
+}
+
+// Render a single practice question
+function renderPracticeQuestion(q, number){
+  const qId = q.id || `PrQ_${number}`;
+  const qWrap = document.createElement('div');
+  qWrap.className = 'q';
+  qWrap.dataset.qid = qId;
+  qWrap.dataset.kind = 'practice';
+  qWrap.innerHTML = `
+    <div class="q-meta">Practice Question ${number}</div>
+    <h4 class="q-stem">${escapeHtml(q.stem)}</h4>
+    <div class="q-media">
+      <figure>
+        <img src="${escapeAttr(q.questionImage)}" alt="Practice Question ${number} image" />
+        <figcaption>Question exhibit</figcaption>
+      </figure>
+    </div>
+    <div class="choices" role="radiogroup" aria-label="Practice Question ${number} choices">
+      ${q.choices.map((c, i)=> `
+        <label class="choice">
+          <input type="radio" name="${qId}" value="${i}" />
+          <span class="letter">${String.fromCharCode(65+i)}.</span>
+          <span>${escapeHtml(c)}</span>
+        </label>
+      `).join('')}
+    </div>
+    <div class="feedback hidden" aria-live="polite"></div>
+    <div class="reveals hidden"></div>
+  `;
+  return qWrap;
+}
+
+// Utility functions
+function escapeHtml(s){
+  return String(s)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
+}
+function escapeAttr(s){
+  return escapeHtml(s);
+}
+</script>
+
+<script>
+// ==========================
+// Batch 3: Submit / Reveal / Score
+// ==========================
+
+// Find a question object by its ID
+function findQuestionById(qid){
+  const t = DATA.volumes?.[state.volume]?.chapters?.[state.chapter]?.topics?.[state.topic];
+  if(!t) return null;
+  const all = [
+    ...(t.theory || []),
+    ...(t.practice || [])
+  ];
+  return all.find(x => x.id === qid) || null;
+}
+
+// Handle submit
+function onSubmit(){
+  const qNodes = Array.from(contentEl.querySelectorAll('.q'));
+  if(!qNodes.length) return;
+
+  let total = 0;
+  let correct = 0;
+
+  qNodes.forEach(qn=>{
+    const kind = qn.dataset.kind;
+    const qid = qn.dataset.qid;
+    const radios = qn.querySelectorAll('input[type="radio"]');
+    const selected = Array.from(radios).find(r => r.checked);
+    const reveal = qn.querySelector('.reveals');
+    const feedback = qn.querySelector('.feedback');
+
+    const qData = findQuestionById(qid);
+    if(!qData) return;
+
+    total += 1;
+    const userIndex = selected ? parseInt(selected.value,10) : -1;
+    const isCorrect = userIndex === qData.correctIndex;
+
+    // Feedback
+    feedback.classList.remove('hidden', 'correct', 'incorrect');
+    feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+    feedback.innerHTML = `
+      <span class="status">${isCorrect ? 'Correct' : 'Incorrect'}</span>
+      ${selected ? '' : '<span class="muted"> (no answer selected)</span>'}
+    `;
+
+    // Reveal correct answer
+    const correctLetter = String.fromCharCode(65 + qData.correctIndex);
+    const correctText = qData.choices[qData.correctIndex];
+
+    reveal.classList.remove('hidden');
+    reveal.innerHTML = `
+      <div><span class="tag">Answer</span> ${correctLetter}. ${escapeHtml(correctText)}</div>
+    `;
+
+    // If practice, show answer image
+    if(kind === 'practice' && qData.answerImage){
+      const am = document.createElement('div');
+      am.className = 'answer-media';
+      am.innerHTML = `
+        <figure>
+          <img src="${escapeAttr(qData.answerImage)}" alt="Practice answer image for ${qid}" />
+          <figcaption>Answer exhibit</figcaption>
+        </figure>
+      `;
+      reveal.appendChild(am);
+    }
+
+    // Lock choices
+    radios.forEach(r => r.disabled = true);
+
+    if(isCorrect) correct += 1;
+  });
+
+  // Scoreboard
+  const pct = total ? Math.round((correct/total)*100) : 0;
+  rawScoreEl.textContent = `${correct} / ${total}`;
+  pctScoreEl.textContent = `${pct}%`;
+  scoreboard.classList.remove('hidden');
+
+  state.submitted = true;
+}
+
+// Wire up submit to render logic
+submitBtn.addEventListener('click', onSubmit);
+
+// When qtype changes, render questions
+qtypeSel.addEventListener('change', ()=>{
+  state.qtype = qtypeSel.value;
+  if(state.qtype){
+    renderQuestions();
+  } else {
+    clearUI();
+    submitBtn.disabled = true;
+  }
+});
+</script>
