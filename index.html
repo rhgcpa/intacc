@@ -25,6 +25,11 @@
       font-family: Bahnschrift, 'Segoe UI', 'Arial', sans-serif;
     }
 
+    /* Exception: enforce Perpetua font for repository title */
+    #repo-title {
+      font-family: 'Perpetua', 'Georgia', serif;
+    }
+
     nav {
       background: #2c3e50;
       padding: 10px;
@@ -88,7 +93,7 @@
 <body>
 
   <header>
-    <h1>EXCELlent Intermediate Accounting</h1>
+    <h1><span id="repo-title">EXCELlent Intermediate Accounting</span></h1>
     <p>Empowering students with free, multimedia-rich resources</p>
   </header>
 
