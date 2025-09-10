@@ -1,832 +1,953 @@
+<!-- quizzes.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-app="quizzes">
 <head>
-  <meta charset="UTF-8" />
-  <title>Quizzes — EXCELlent AccounTax</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
+  <title>Quizzes | Learning Hub</title>
+
+  <!-- INSERTION: shared-head-start -->
+  <!-- All visual styling comes from your global style.css -->
+  <link rel="stylesheet" href="./css/style.css" />
+  <!-- INSERTION: shared-head-end -->
+
+  <!-- Minimal layout safety for fixed layers (relies on classes defined in style.css).
+       If style.css already defines these, this block is harmless. -->
   <style>
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: #fff;
-      border-bottom: 1px solid #ccc;
-    }
-    .tabs {
-      display: flex;
-      gap: 1rem;
-      padding: 0.5rem 1rem;
-    }
-    .tab {
-      text-decoration: none;
-      color: #333;
-      padding: 0.25rem 0.5rem;
-    }
-    .tab.active {
-      font-weight: bold;
-      border-bottom: 2px solid #0078d4;
-    }
-    .actionbar {
-      position: sticky;
-      top: 2.5rem;
-      z-index: 999;
-      background: #f9f9f9;
-      border-bottom: 1px solid #ccc;
-      padding: 0.5rem 1rem;
-    }
-    .actionbar-inner {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: flex-end;
-    }
-    .select label {
-      display: block;
-      font-size: 0.85rem;
-      margin-bottom: 0.25rem;
-    }
-    .select select {
-      min-width: 150px;
-    }
-    .actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .btn {
-      padding: 0.4rem 0.8rem;
-      cursor: pointer;
-    }
-    .btn[disabled] {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .container {
-      padding: 1rem;
-    }
-    .section-heading {
-      margin-top: 1.5rem;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 0.25rem;
-    }
-    .q {
-      border: 1px solid #ddd;
-      padding: 0.75rem;
-      margin-top: 1rem;
-      border-radius: 4px;
-      background: #fff;
-    }
-    .q-meta {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 0.25rem;
-    }
-    .choices {
-      margin-top: 0.5rem;
-    }
-    .choice {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.25rem;
-    }
-    .letter {
-      font-weight: bold;
-    }
-    .feedback.correct {
-      color: green;
-    }
-    .feedback.incorrect {
-      color: red;
-    }
-    .feedback.hidden,
-    .reveals.hidden {
-      display: none;
-    }
-    .scoreboard {
-      margin-top: 1.5rem;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      background: #f0f0f0;
-      display: flex;
-      gap: 2rem;
-    }
-    .scoreboard.hidden {
-      display: none;
-    }
-    .score label {
-      display: block;
-      font-size: 0.85rem;
-      color: #555;
-    }
-    .score strong {
-      font-size: 1.2rem;
+    /* Layout safety (not visual styling): ensure toolbar is always on top and clickable */
+    .layer-fixed { position: fixed; left: 0; right: 0; z-index: 9999; }
+    .layer-top    { top: 0; }
+    .layer-under  { top: var(--topbar-height, 56px); }
+    .spacer-topbar { height: calc(var(--topbar-height, 56px) + var(--toolbar-height, 64px)); }
+    .click-through-guard { pointer-events: auto; }
+    .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; border: 0 !important; }
+    @media print {
+      .layer-fixed, .toolbar-fixed { position: static !important; }
+      .spacer-topbar { height: 0 !important; }
     }
   </style>
 </head>
-<body>
 
-<header class="topbar" role="navigation" aria-label="Primary">
-  <nav class="tabs">
-    <a class="tab" href="#home" data-tab="home">Home</a>
-    <a class="tab" href="#glossary" data-tab="glossary">Glossary</a>
-    <a class="tab active" href="#quizzes" data-tab="quizzes">Quizzes</a>
-    <a class="tab" href="#references" data-tab="references">References</a>
-    <a class="tab" href="#visuals" data-tab="visuals">Visuals</a>
-    <a class="tab" href="#tools" data-tab="tools">Tools</a>
-  </nav>
-</header>
+<body class="page-quizzes">
 
-<div class="actionbar" role="region" aria-label="Quiz filters and actions">
-  <div class="actionbar-inner">
-    <div class="select">
-      <label for="volume">Volume</label>
-      <select id="volume">
-        <option value="">Select volume</option>
-        <option value="1">Volume 1</option>
-        <option value="2">Volume 2</option>
-        <option value="3">Volume 3</option>
-      </select>
-    </div>
+  <!-- Accessible live region for dynamic feedback -->
+  <div id="live-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
-    <div class="select">
-      <label for="chapter">Chapter</label>
-      <select id="chapter" disabled>
-        <option value="">Select chapter</option>
-      </select>
-    </div>
+  <!-- INSERTION: shared-nav -->
+  <header id="site-header" class="topbar layer-fixed layer-top click-through-guard" role="banner" aria-label="Primary">
+    <nav class="nav primary-nav" role="navigation" aria-label="Primary tabs">
+      <ul class="nav-list">
+        <li><a href="./index.html" class="nav-link" data-tab="home">Home</a></li>
+        <li><a href="./glossary.html" class="nav-link" data-tab="glossary">Glossary</a></li>
+        <li><a href="./quizzes.html" class="nav-link is-active" aria-current="page" data-tab="quizzes">Quizzes</a></li>
+        <li><a href="./references.html" class="nav-link" data-tab="references">References</a></li>
+        <li><a href="./visuals.html" class="nav-link" data-tab="visuals">Visuals</a></li>
+        <li><a href="./tools.html" class="nav-link" data-tab="tools">Tools</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <div class="select">
-      <label for="topic">Topic</label>
-      <select id="topic" disabled>
-        <option value="">Select topic</option>
-      </select>
-    </div>
+  <!-- Always-on-top filters + actions toolbar -->
+  <div id="quiz-toolbar" class="toolbar layer-fixed layer-under click-through-guard" role="region" aria-label="Quiz filters and actions">
+    <form id="controls-form" class="controls-grid" autocomplete="off">
+      <!-- Filters -->
+      <div class="controls filters" role="group" aria-label="Filters">
 
-    <div class="select">
-      <label for="qtype">Question type</label>
-      <select id="qtype" disabled>
-        <option value="">Select type</option>
-        <option value="theory">Theory</option>
-        <option value="practice">Practice</option>
-        <option value="both">Both</option>
-      </select>
-    </div>
+        <label for="sel-volume" class="control-label">Volume</label>
+        <select id="sel-volume" name="volume" class="control-input" aria-describedby="help-volume">
+          <!-- Dynamic options -->
+        </select>
+        <span id="help-volume" class="control-help">Choose Volume 1, 2, or 3.</span>
 
-    <div class="actions">
-      <button id="submitBtn" class="btn primary" disabled>Submit</button>
-      <button id="resetBtn" class="btn secondary" disabled>Reset</button>
-    </div>
+        <label for="sel-chapter" class="control-label">Chapter</label>
+        <select id="sel-chapter" name="chapter" class="control-input" aria-describedby="help-chapter" disabled>
+          <!-- Dynamic options -->
+        </select>
+        <span id="help-chapter" class="control-help">Chapters depend on selected volume.</span>
+
+        <label for="sel-topic" class="control-label">Topic</label>
+        <select id="sel-topic" name="topic" class="control-input" aria-describedby="help-topic" disabled>
+          <!-- Dynamic options -->
+        </select>
+        <span id="help-topic" class="control-help">Topics depend on selected chapter.</span>
+
+        <label for="sel-type" class="control-label">Type</label>
+        <select id="sel-type" name="type" class="control-input" aria-describedby="help-type" disabled>
+          <!-- Dynamic options -->
+        </select>
+        <span id="help-type" class="control-help">Theory, Practice, or Both (if available).</span>
+      </div>
+
+      <!-- Actions -->
+      <div class="controls actions" role="group" aria-label="Actions">
+        <button id="btn-submit" type="button" class="btn primary" disabled>Submit</button>
+        <button id="btn-reset" type="button" class="btn secondary">Reset</button>
+      </div>
+    </form>
   </div>
-</div>
 
-<main class="container">
-  <section id="quizzesPanel" class="panel">
-    <p class="filters-note">
-      Use the selectors above to load questions. Tabs and controls remain clickable even when you scroll.
-    </p>
+  <!-- Spacer to prevent content from hiding under fixed layers -->
+  <div class="spacer-topbar" aria-hidden="true"></div>
 
-    <div id="content"></div>
+  <main id="main" class="container" role="main" aria-labelledby="page-title">
+    <h1 id="page-title" class="page-title">Quizzes</h1>
 
-    <div id="scoreboard" class="scoreboard hidden" aria-live="polite">
-      <div class="score">
-        <label>Raw score</label>
-        <strong id="rawScore">0 / 0</strong>
+    <!-- Global stats and utilities -->
+    <section id="global-stats" class="panel" aria-label="Your quiz stats">
+      <div class="stats-row">
+        <div class="stat-item"><strong class="stat-label">Attempts:</strong> <span id="stat-attempts">0</span></div>
+        <div class="stat-item"><strong class="stat-label">Average:</strong> <span id="stat-average">—</span></div>
+        <div class="stat-item"><strong class="stat-label">Best:</strong> <span id="stat-best">—</span></div>
+        <div class="stat-item"><strong class="stat-label">Last:</strong> <span id="stat-last">—</span></div>
       </div>
-      <div class="score">
-        <label>Percentage</label>
-        <strong id="pctScore">0%</strong>
+      <div class="util-row">
+        <button id="btn-print" class="btn ghost" type="button">Print</button>
+        <button id="btn-export" class="btn ghost" type="button">Export CSV</button>
+        <button id="btn-clear" class="btn danger ghost" type="button">Clear Saved Data</button>
       </div>
-    </div>
-  </section>
-</main>
+    </section>
 
-<script>
-// ==========================
-// State & Elements
-// ==========================
-const state = {
-  volume: "",
-  chapter: "",
-  topic: "",
-  qtype: "",
-  submitted: false
-};
+    <!-- Dynamic quiz host -->
+    <section id="quiz-host" class="card" aria-live="polite" aria-busy="false" aria-label="Quiz content">
+      <!-- Runtime-rendered content -->
+      <div class="placeholder">
+        <p>Select Volume, Chapter, Topic, and Type to begin.</p>
+      </div>
+    </section>
 
-const volumeSel = document.getElementById('volume');
-const chapterSel = document.getElementById('chapter');
-const topicSel = document.getElementById('topic');
-const qtypeSel = document.getElementById('qtype');
-const contentEl = document.getElementById('content');
-const submitBtn = document.getElementById('submitBtn');
-const resetBtn = document.getElementById('resetBtn');
-const scoreboard = document.getElementById('scoreboard');
-const rawScoreEl = document.getElementById('rawScore');
-const pctScoreEl = document.getElementById('pctScore');
+    <!-- Review & score -->
+    <section id="scoreboard" class="panel" aria-label="Scoreboard" hidden>
+      <div class="score-row">
+        <div class="score-item"><strong class="score-label">Raw score:</strong> <span id="score-raw">0</span></div>
+        <div class="score-item"><strong class="score-label">Percentage:</strong> <span id="score-perc">0%</span></div>
+        <div class="score-item"><strong class="score-label">Status:</strong> <span id="score-status">—</span></div>
+      </div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+    </section>
 
-// ==========================
-// Data (Batch 1)
-// ==========================
-const DATA = {
-  volumes: {
-    "1": {
-      label: "Volume 1",
-      chapters: {
-        "1": {
-          label: "Cash and Cash Equivalents",
-          topics: {
-            "1.1": {
-              label: "Cash and Cash Equivalents",
-              theory: [
+    <!-- Attempts history (optional, collapsible) -->
+    <section id="attempts" class="panel" aria-label="Attempts history" hidden>
+      <details id="attempts-details">
+        <summary>Attempts history</summary>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date/time</th>
+                <th>Volume</th>
+                <th>Chapter</th>
+                <th>Topic</th>
+                <th>Type</th>
+                <th>Raw</th>
+                <th>Total</th>
+                <th>Percentage</th>
+              </tr>
+            </thead>
+            <tbody id="attempts-body"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <!-- Templates: structure aligns with style.css classes; content filled by JS -->
+  <template id="tpl-question-theory">
+    <article class="quiz-block quiz-theory" data-kind="theory">
+      <header class="quiz-header">
+        <h2 class="quiz-title">Theory</h2>
+        <p class="quiz-subtitle" data-meta></p>
+      </header>
+      <div class="quiz-body">
+        <p class="quiz-question" data-question></p>
+        <fieldset class="choices" role="radiogroup" aria-label="Choices (single answer)">
+          <!-- Four radio options -->
+          <label class="choice">
+            <input type="radio" name="choice-theory" value="A" /> <span data-choice="A"></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="choice-theory" value="B" /> <span data-choice="B"></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="choice-theory" value="C" /> <span data-choice="C"></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="choice-theory" value="D" /> <span data-choice="D"></span>
+          </label>
+        </fieldset>
+        <div class="answer reveal" data-answer-theory hidden>
+          <p><strong>Correct answer:</strong> <span data-correct></span></p>
+          <p class="explain" data-explain></p>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <template id="tpl-question-practice">
+    <article class="quiz-block quiz-practice" data-kind="practice">
+      <header class="quiz-header">
+        <h2 class="quiz-title">Practice</h2>
+        <p class="quiz-subtitle" data-meta></p>
+      </header>
+      <div class="quiz-body">
+        <p class="quiz-question" data-question></p>
+
+        <figure class="quiz-image">
+          <img data-practice-q-img alt="Practice question image (Excel range screenshot)" />
+          <figcaption class="caption">Question data (Excel screenshot)</figcaption>
+        </figure>
+
+        <fieldset class="choices" role="radiogroup" aria-label="Choices (single answer)">
+          <!-- Four radio options -->
+          <label class="choice">
+            <input type="radio" name="choice-practice" value="A" /> <span data-choice="A"></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="choice-practice" value="B" /> <span data-choice="B"></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="choice-practice" value="C" /> <span data-choice="C"></span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="choice-practice" value="D" /> <span data-choice="D"></span>
+          </label>
+        </fieldset>
+
+        <div class="answer reveal" data-answer-practice hidden>
+          <p><strong>Correct answer:</strong> <span data-correct></span></p>
+          <figure class="quiz-image">
+            <img data-practice-a-img alt="Practice answer image (Excel range screenshot)" />
+            <figcaption class="caption">Answer solution (Excel screenshot)</figcaption>
+          </figure>
+          <p class="explain" data-explain></p>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <!-- Scripts -->
+  <script>
+    // ===== App version and keys =====
+    const APP = {
+      name: 'Quizzes',
+      version: '1.0.0',
+      storageKey: 'quizzes_state_v1',
+      attemptsKey: 'quizzes_attempts_v1'
+    };
+
+    // ===== Data registry (placeholders; expand safely) =====
+    // Structure supports dynamic Volume → Chapter → Topic → Types.
+    // Each topic may have theory and/or practice blocks, each one question with 4 choices.
+    const REGISTRY = {
+      volumes: [
+        {
+          id: 'v1', title: 'Volume 1',
+          chapters: [
+            {
+              id: 'v1c1', title: 'Chapter 1',
+              topics: [
                 {
-                  id: "V1C1T1Q1",
-                  stem: "Cash on hand includes:",
-                  choices: [
-                    "Checks dated less than 6 months after today.",
-                    "Checks dated less than 6 months before today.",
-                    "Checks dated more than 6 months after today.",
-                    "Checks dated more than 6 months before today."
-                  ],
-                  correctIndex: 1
+                  id: 'v1c1t1', title: 'Topic 1',
+                  types: ['Theory', 'Practice', 'Both'],
+                  theory: {
+                    question: 'In accounting, which statement best describes assets?',
+                    choices: { A: 'Owner’s equity', B: 'Resources owned by an entity', C: 'Liabilities', D: 'Revenue streams' },
+                    correct: 'B',
+                    explain: 'Assets are resources controlled by the entity expected to yield future benefits.'
+                  },
+                  practice: {
+                    question: 'Compute ending inventory based on the provided table.',
+                    choices: { A: '1,500', B: '1,750', C: '2,000', D: '2,250' },
+                    correct: 'C',
+                    explain: 'Using FIFO per the table, the remaining units sum to 2,000.',
+                    // Placeholders for Excel range screenshots (replace with real paths)
+                    qImg: './img/placeholders/v1c1t1-practice-question.png',
+                    aImg: './img/placeholders/v1c1t1-practice-answer.png'
+                  }
                 },
                 {
-                  id: "V1C1T1Q2",
-                  stem: "In defining cash equivalents, known maturity value denotes:",
-                  choices: [
-                    "Maturity date is determinable on acquisition date.",
-                    "Maturity value is determinable on acquisition date.",
-                    "Maturity value will be determined on maturity date.",
-                    "Maturity value will be known on maturity date."
-                  ],
-                  correctIndex: 1
+                  id: 'v1c1t2', title: 'Topic 2',
+                  types: ['Theory'],
+                  theory: {
+                    question: 'Which principle requires expenses to be matched with revenues?',
+                    choices: { A: 'Conservatism', B: 'Matching', C: 'Consistency', D: 'Materiality' },
+                    correct: 'B',
+                    explain: 'The matching principle aligns expenses with the revenues they generate.'
+                  }
                 },
                 {
-                  id: "V1C1T1Q3",
-                  stem: "Which are excluded from cash equivalents?",
-                  choices: [
-                    "Credit cards receivable.",
-                    "Debit cards receivable.",
-                    "Time deposits downgraded lower than savings accounts when pre-terminated.",
-                    "Time deposits downgraded not lower than savings accounts when pre-terminated."
-                  ],
-                  correctIndex: 2
-                },
-                {
-                  id: "V1C1T1Q4",
-                  stem: "Which are classified as restricted cash, and presented as noncurrent assets?",
-                  choices: [
-                    "Currency usable for at least 12 months after the reporting period.",
-                    "Currency usable for less than 12 months after the reporting period.",
-                    "Currency usable for more than 12 months after the reporting period.",
-                    "Currency usable within 12 months after the reporting period."
-                  ],
-                  correctIndex: 0
-                },
-                {
-                  id: "V1C1T1Q5",
-                  stem: "Which are classified as short-term investments, and presented as current assets?",
-                  choices: [
-                    "Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.",
-                    "Bank deposits withdrawable with significant penalty and usable for more than 12 months.",
-                    "Bank deposits withdrawable with significant penalty and usable within 12 months.",
-                    "Bank deposits withdrawable without penalty and usable for less than 12 months."
-                  ],
-                  correctIndex: 2
-                },
-                {
-                  id: "V1C1T1Q6",
-                  stem: "These describe a bank overdraft, except:",
-                  choices: [
-                    "It is allowed only if caused by normal bank changes or other incidental handling fees.",
-                    "It is disallowed in the Philippines.",
-                    "It is known as temporary overdrawing in the Philippines.",
-                    "It is the negative (or overdrawn) balance in a demand deposit account."
-                  ],
-                  correctIndex: 1
-                },
-                {
-                  id: "V1C1T1Q7",
-                  stem: "Check withdrawals are recorded as:",
-                  choices: [
-                    "Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.",
-                    "Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.",
-                    "Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.",
-                    "Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity."
-                  ],
-                  correctIndex: 3
-                },
-                {
-                  id: "V1C1T1Q8",
-                  stem: "Timing differences for Deposit Liabilities of financial institution comprise:",
-                  choices: [
-                    "Credit memos and debit memos.",
-                    "Outstanding checks and debit memos.",
-                    "Outstanding deposits and credit memos.",
-                    "Outstanding deposits and outstanding checks."
-                  ],
-                  correctIndex: 3
-                },
-                {
-                  id: "V1C1T1Q9",
-                  stem: "Which describe debit memos?",
-                  choices: [
-                    "They are already credited to Demand Deposits but not yet debited to Deposit Liabilities.",
-                    "They are already credited to Deposit Liabilities but not yet debited to Demand Deposits.",
-                    "They are already debited to Demand Deposits but not yet credited to Deposit Liabilities.",
-                    "They are already debited to Deposit Liabilities but not yet credited to Demand Deposits."
-                  ],
-                  correctIndex: 3
-                },
-                {
-                  id: "V1C1T1Q10",
-                  stem: "Before replenishment, the adjusted balance of Petty Cash Fund equals:",
-                  choices: [
-                    "Currency in the custody of the Petty Cash Custodian.",
-                    "Established amount.",
-                    "Minimum threshold.",
-                    "Total of Petty Cash Vouchers."
-                  ],
-                  correctIndex: 0
+                  id: 'v1c1t3', title: 'Topic 3',
+                  types: ['Practice'],
+                  practice: {
+                    question: 'Identify the correct depreciation expense from the schedule.',
+                    choices: { A: '8,000', B: '10,000', C: '12,000', D: '14,000' },
+                    correct: 'B',
+                    explain: 'Straight-line depreciation yields 10,000 per the schedule.',
+                    qImg: './img/placeholders/v1c1t3-practice-question.png',
+                    aImg: './img/placeholders/v1c1t3-practice-answer.png'
+                  }
                 }
-              ],
-practice: [
-  {
-    id: "V1C1T1P1Q1",
-    stem: "With these givens, the closing outstanding checks are:",
-    choices: [
-      "₱289,000.00",
-      "₱311,000.00",
-      "₱489,000.00",
-      "₱511,000.00"
-    ],
-    correctIndex: 1,
-    questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ1.png",
-    answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA1.png"
-  },
-  {
-    id: "V1C1T1P1Q2",
-    stem: "With these givens, the opening outstanding checks are:",
-    choices: [
-      "₱289,000.00",
-      "₱311,000.00",
-      "₱489,000.00",
-      "₱511,000.00"
-    ],
-    correctIndex: 1,
-    questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ2.png",
-    answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA2.png"
-  },
-  {
-    id: "V1C1T1P1Q3",
-    stem: "With these givens, the closing book balance is:",
-    choices: [
-      "₱2,496,000.00",
-      "₱2,499,800.00",
-      "₱2,500,200.00",
-      "₱2,504,000.00"
-    ],
-    correctIndex: 1,
-    questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ3.png",
-    answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA3.png"
-  },
-  {
-    id: "V1C1T1P1Q4",
-    stem: "With these givens, the closing outstanding deposits are:",
-    choices: [
-      "₱487,000.00",
-      "₱513,000.00",
-      "₱887,000.00",
-      "₱913,000.00"
-    ],
-    correctIndex: 3,
-    questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ4.png",
-    answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA4.png"
-  },
-  {
-    id: "V1C1T1P1Q5",
-    stem: "With these givens, the adjusted closing balance is:",
-    choices: [
-      "₱2,496,000.00",
-      "₱2,499,800.00",
-      "₱2,500,200.00",
-      "₱2,504,000.00"
-    ],
-    correctIndex: 1,
-    questionImage: "images/IntaccV1C01CashAndCashEquivalentsPrQ5.png",
-    answerImage: "images/IntaccV1C01CashAndCashEquivalentsPrA5.png"
-  }
-]
+              ]
+            },
+            {
+              id: 'v1c2', title: 'Chapter 2',
+              topics: [
+                {
+                  id: 'v1c2t1', title: 'Topic 1',
+                  types: ['Theory', 'Practice', 'Both'],
+                  theory: {
+                    question: 'Which statement is true about liabilities?',
+                    choices: { A: 'They are future benefits', B: 'They represent obligations', C: 'They equal revenue', D: 'They reduce assets always' },
+                    correct: 'B',
+                    explain: 'Liabilities are present obligations of the entity.'
+                  },
+                  practice: {
+                    question: 'Select the correct payable balance from the ledger extract.',
+                    choices: { A: '25,000', B: '30,000', C: '35,000', D: '40,000' },
+                    correct: 'A',
+                    explain: 'Summing debits and credits yields a 25,000 balance.',
+                    qImg: './img/placeholders/v1c2t1-practice-question.png',
+                    aImg: './img/placeholders/v1c2t1-practice-answer.png'
+                  }
+                }
+              ]
+            },
+            {
+              id: 'v1c3', title: 'Chapter 3',
+              topics: [
+                {
+                  id: 'v1c3t1', title: 'Topic 1',
+                  types: ['Theory'],
+                  theory: {
+                    question: 'The going concern assumption implies:',
+                    choices: { A: 'Immediate liquidation', B: 'Short-term operations', C: 'Continuity of operations', D: 'No depreciation' },
+                    correct: 'C',
+                    explain: 'Going concern presumes the entity will continue in the foreseeable future.'
+                  }
+                }
+              ]
             }
+          ]
+        },
+        {
+          id: 'v2', title: 'Volume 2',
+          chapters: [
+            {
+              id: 'v2c1', title: 'Chapter 1',
+              topics: [
+                {
+                  id: 'v2c1t1', title: 'Topic 1',
+                  types: ['Practice'],
+                  practice: {
+                    question: 'Determine cash balance after adjustments.',
+                    choices: { A: '5,500', B: '6,000', C: '6,500', D: '7,000' },
+                    correct: 'B',
+                    explain: 'Bank reconciliation adjustments produce 6,000.',
+                    qImg: './img/placeholders/v2c1t1-practice-question.png',
+                    aImg: './img/placeholders/v2c1t1-practice-answer.png'
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'v3', title: 'Volume 3',
+          chapters: [
+            {
+              id: 'v3c1', title: 'Chapter 1',
+              topics: [
+                {
+                  id: 'v3c1t1', title: 'Topic 1',
+                  types: ['Theory', 'Practice', 'Both'],
+                  theory: {
+                    question: 'Which is not a qualitative characteristic?',
+                    choices: { A: 'Relevance', B: 'Reliability', C: 'Comparability', D: 'Inventory' },
+                    correct: 'D',
+                    explain: 'Inventory is an account, not a qualitative characteristic.'
+                  },
+                  practice: {
+                    question: 'From the worksheet, compute gross profit.',
+                    choices: { A: '15,000', B: '18,000', C: '20,000', D: '22,000' },
+                    correct: 'C',
+                    explain: 'Sales minus COGS from the worksheet equals 20,000.',
+                    qImg: './img/placeholders/v3c1t1-practice-question.png',
+                    aImg: './img/placeholders/v3c1t1-practice-answer.png'
+                  }
+                },
+                {
+                  id: 'v3c1t2', title: 'Topic 2',
+                  types: ['Theory'],
+                  theory: {
+                    question: 'Materiality allows:',
+                    choices: { A: 'Ignoring GAAP', B: 'Omitting trivial items', C: 'Changing methods arbitrarily', D: 'Combining assets and liabilities' },
+                    correct: 'B',
+                    explain: 'Immaterial items may be simplified without misleading users.'
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    // ===== DOM elements =====
+    const els = {
+      volume: document.getElementById('sel-volume'),
+      chapter: document.getElementById('sel-chapter'),
+      topic: document.getElementById('sel-topic'),
+      type: document.getElementById('sel-type'),
+      submit: document.getElementById('btn-submit'),
+      reset: document.getElementById('btn-reset'),
+      print: document.getElementById('btn-print'),
+      export: document.getElementById('btn-export'),
+      clear: document.getElementById('btn-clear'),
+      host: document.getElementById('quiz-host'),
+      scoreboard: document.getElementById('scoreboard'),
+      feedback: document.getElementById('feedback'),
+      scoreRaw: document.getElementById('score-raw'),
+      scorePerc: document.getElementById('score-perc'),
+      scoreStatus: document.getElementById('score-status'),
+      attemptsWrap: document.getElementById('attempts'),
+      attemptsBody: document.getElementById('attempts-body'),
+      attemptsDetails: document.getElementById('attempts-details'),
+      statAttempts: document.getElementById('stat-attempts'),
+      statAverage: document.getElementById('stat-average'),
+      statBest: document.getElementById('stat-best'),
+      statLast: document.getElementById('stat-last'),
+      live: document.getElementById('live-region')
+    };
+
+    // ===== Utilities =====
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+    const announce = (msg) => { els.live.textContent = ''; setTimeout(() => { els.live.textContent = msg; }, 10); };
+    const fmtPct = (n) => `${(n * 100).toFixed(0)}%`;
+    const nowISO = () => new Date().toISOString();
+
+    // Storage helpers with version guard
+    const saveState = (state) => localStorage.setItem(APP.storageKey, JSON.stringify({ v: APP.version, state }));
+    const loadState = () => {
+      try {
+        const raw = localStorage.getItem(APP.storageKey);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return parsed.v === APP.version ? parsed.state : null;
+      } catch { return null; }
+    };
+    const saveAttempts = (arr) => localStorage.setItem(APP.attemptsKey, JSON.stringify({ v: APP.version, arr }));
+    const loadAttempts = () => {
+      try {
+        const raw = localStorage.getItem(APP.attemptsKey);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return parsed.v === APP.version ? parsed.arr : [];
+      } catch { return []; }
+    };
+
+    // ===== Dynamic dropdown population =====
+    function populateVolumes() {
+      clearOptions(els.volume);
+      addPlaceholder(els.volume, 'Select volume');
+      REGISTRY.volumes.forEach(v => {
+        const opt = new Option(v.title, v.id);
+        els.volume.add(opt);
+      });
+      els.volume.disabled = false;
+    }
+
+    function populateChapters(volId) {
+      clearOptions(els.chapter); addPlaceholder(els.chapter, 'Select chapter');
+      clearOptions(els.topic); addPlaceholder(els.topic, 'Select topic');
+      clearOptions(els.type); addPlaceholder(els.type, 'Select type');
+      els.topic.disabled = true; els.type.disabled = true;
+
+      const vol = REGISTRY.volumes.find(v => v.id === volId);
+      if (!vol) { els.chapter.disabled = true; return; }
+      vol.chapters.forEach(ch => els.chapter.add(new Option(ch.title, ch.id)));
+      els.chapter.disabled = false;
+    }
+
+    function populateTopics(volId, chId) {
+      clearOptions(els.topic); addPlaceholder(els.topic, 'Select topic');
+      clearOptions(els.type); addPlaceholder(els.type, 'Select type');
+      els.type.disabled = true;
+
+      const ch = getChapter(volId, chId);
+      if (!ch) { els.topic.disabled = true; return; }
+      ch.topics.forEach(t => els.topic.add(new Option(t.title, t.id)));
+      els.topic.disabled = false;
+    }
+
+    function populateTypes(volId, chId, tId) {
+      clearOptions(els.type); addPlaceholder(els.type, 'Select type');
+
+      const topic = getTopic(volId, chId, tId);
+      if (!topic) { els.type.disabled = true; return; }
+      topic.types.forEach(tp => els.type.add(new Option(tp, tp)));
+      els.type.disabled = false;
+    }
+
+    function clearOptions(sel) {
+      while (sel.options.length) sel.remove(0);
+    }
+    function addPlaceholder(sel, text) {
+      sel.add(new Option(text, '', true, false));
+    }
+
+    function getVolume(volId) { return REGISTRY.volumes.find(v => v.id === volId); }
+    function getChapter(volId, chId) {
+      const vol = getVolume(volId); if (!vol) return null;
+      return vol.chapters.find(c => c.id === chId) || null;
+    }
+    function getTopic(volId, chId, tId) {
+      const ch = getChapter(volId, chId); if (!ch) return null;
+      return ch.topics.find(t => t.id === tId) || null;
+    }
+
+    // ===== Rendering =====
+    function renderQuiz(volId, chId, tId, type) {
+      els.host.setAttribute('aria-busy', 'true');
+      els.host.innerHTML = '';
+      els.scoreboard.hidden = true;
+      els.feedback.innerHTML = '';
+
+      const topic = getTopic(volId, chId, tId);
+      if (!topic) {
+        els.host.innerHTML = '<div class="notice error">No topic found.</div>';
+        els.host.setAttribute('aria-busy', 'false');
+        return;
+      }
+
+      const blocks = [];
+      if (type === 'Theory' || type === 'Both') {
+        if (topic.theory) blocks.push(makeTheoryBlock(topic));
+      }
+      if (type === 'Practice' || type === 'Both') {
+        if (topic.practice) blocks.push(makePracticeBlock(topic));
+      }
+      if (!blocks.length) {
+        els.host.innerHTML = '<div class="notice">Selected type not available for this topic.</div>';
+        els.host.setAttribute('aria-busy', 'false');
+        return;
+      }
+
+      blocks.forEach(b => els.host.appendChild(b));
+      els.host.setAttribute('aria-busy', 'false');
+
+      // Enable submit after rendering
+      els.submit.disabled = false;
+
+      // Focus first choice for accessibility
+      const firstInput = els.host.querySelector('input[type="radio"]');
+      if (firstInput) firstInput.focus();
+    }
+
+    function makeTheoryBlock(topic) {
+      const tpl = document.getElementById('tpl-question-theory');
+      const node = tpl.content.cloneNode(true);
+      $('[data-meta]', node).textContent = breadcrumbString(topic, 'Theory');
+
+      $('[data-question]', node).textContent = topic.theory.question;
+      $$('[data-choice]', node).forEach(span => {
+        const key = span.getAttribute('data-choice');
+        span.textContent = topic.theory.choices[key];
+      });
+
+      // Store answer meta on container
+      const article = $('article.quiz-theory', node);
+      article.dataset.correct = topic.theory.correct;
+      $('[data-explain]', node).textContent = topic.theory.explain || '';
+
+      return node;
+    }
+
+    function makePracticeBlock(topic) {
+      const tpl = document.getElementById('tpl-question-practice');
+      const node = tpl.content.cloneNode(true);
+      $('[data-meta]', node).textContent = breadcrumbString(topic, 'Practice');
+
+      $('[data-question]', node).textContent = topic.practice.question;
+      $$('[data-choice]', node).forEach(span => {
+        const key = span.getAttribute('data-choice');
+        span.textContent = topic.practice.choices[key];
+      });
+
+      const qImg = $('[data-practice-q-img]', node);
+      qImg.src = topic.practice.qImg || '';
+      const aImg = $('[data-practice-a-img]', node);
+      aImg.src = topic.practice.aImg || '';
+
+      const article = $('article.quiz-practice', node);
+      article.dataset.correct = topic.practice.correct;
+      $('[data-explain]', node).textContent = topic.practice.explain || '';
+
+      return node;
+    }
+
+    function breadcrumbString(topic, type) {
+      const vol = REGISTRY.volumes.find(v => v.chapters.some(c => c.topics.some(t => t.id === topic.id)));
+      const ch = vol.chapters.find(c => c.topics.some(t => t.id === topic.id));
+      return `${vol.title} • ${ch.title} • ${topic.title} • ${type}`;
+    }
+
+    // ===== Evaluation =====
+    function evaluateCurrent() {
+      const blocks = $$('#quiz-host article.quiz-block');
+      if (!blocks.length) { announce('Nothing to submit yet.'); return; }
+
+      let total = 0, got = 0;
+      const feedbackParts = [];
+
+      blocks.forEach(block => {
+        total += 1;
+        const kind = block.dataset.kind; // 'theory' or 'practice'
+        const selected = block.querySelector('input[type="radio"]:checked');
+        const correct = block.dataset.correct;
+        const group = kind === 'theory' ? 'choice-theory' : 'choice-practice';
+        const selectedVal = selected ? selected.value : null;
+
+        // Reveal correct answers
+        const revealSel = kind === 'theory' ? '[data-answer-theory]' : '[data-answer-practice]';
+        const reveal = block.querySelector(revealSel);
+        if (reveal) {
+          reveal.hidden = false;
+          const correctSpan = reveal.querySelector('[data-correct]');
+          if (correctSpan) correctSpan.textContent = `${correct} — ${labelFor(block, group, correct)}`;
+        }
+
+        // Mark states
+        $$('input[type="radio"]', block).forEach(input => {
+          input.disabled = true;
+          const parent = input.closest('label.choice');
+          parent.classList.remove('is-correct', 'is-incorrect', 'is-selected');
+          if (input.value === correct) parent.classList.add('is-correct');
+          if (selected && input === selected) parent.classList.add('is-selected');
+        });
+
+        const ok = selectedVal === correct;
+        if (ok) got += 1;
+
+        feedbackParts.push(renderFeedbackLine(kind, selectedVal, correct));
+      });
+
+      const pct = total ? got / total : 0;
+      els.scoreRaw.textContent = `${got} / ${total}`;
+      els.scorePerc.textContent = fmtPct(pct);
+      els.scoreStatus.textContent = pct >= 0.5 ? 'Pass' : 'Try again';
+      els.scoreboard.hidden = false;
+
+      // Attempts/history
+      recordAttempt({
+        volume: els.volume.value,
+        chapter: els.chapter.value,
+        topic: els.topic.value,
+        type: els.type.value,
+        raw: got,
+        total,
+        pct,
+        at: nowISO()
+      });
+
+      els.feedback.innerHTML = `<ul class="feedback-list">${feedbackParts.join('')}</ul>`;
+      announce(`Submitted. Score ${got} out of ${total}. ${Math.round(pct*100)} percent.`);
+
+      // Disable submit until a new render/reset
+      els.submit.disabled = true;
+
+      // Analytics hook
+      onEvent('quiz:submitted', {
+        selection: currentSelection(),
+        score: { got, total, pct }
+      });
+    }
+
+    function labelFor(block, groupName, val) {
+      const input = block.querySelector(`input[name="${groupName}"][value="${val}"]`);
+      if (!input) return '';
+      const span = input.closest('label').querySelector('span[data-choice]');
+      return span ? span.textContent : '';
+    }
+
+    function renderFeedbackLine(kind, selected, correct) {
+      const kindLabel = kind === 'theory' ? 'Theory' : 'Practice';
+      const sel = selected ? selected : '—';
+      return `<li><strong>${kindLabel}:</strong> Your answer: <code>${sel}</code> • Correct: <code>${correct}</code></li>`;
+    }
+
+    // ===== Attempts, stats, export =====
+    function recordAttempt(entry) {
+      const arr = loadAttempts();
+      arr.push(entry);
+      saveAttempts(arr);
+      renderAttempts(arr);
+      renderStats(arr);
+    }
+
+    function renderAttempts(arr) {
+      els.attemptsBody.innerHTML = '';
+      arr.slice().reverse().forEach(a => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${new Date(a.at).toLocaleString()}</td>
+          <td>${titleFor('volume', a.volume)}</td>
+          <td>${titleFor('chapter', a.chapter)}</td>
+          <td>${titleFor('topic', a.topic)}</td>
+          <td>${a.type}</td>
+          <td>${a.raw}</td>
+          <td>${a.total}</td>
+          <td>${fmtPct(a.pct)}</td>
+        `;
+        els.attemptsBody.appendChild(tr);
+      });
+      els.attempts.hidden = arr.length === 0;
+    }
+
+    function renderStats(arr) {
+      const n = arr.length;
+      els.statAttempts.textContent = String(n);
+      if (!n) {
+        els.statAverage.textContent = '—';
+        els.statBest.textContent = '—';
+        els.statLast.textContent = '—';
+        return;
+      }
+      const avg = arr.reduce((s, a) => s + a.pct, 0) / n;
+      const best = Math.max(...arr.map(a => a.pct));
+      const last = arr[arr.length - 1].pct;
+      els.statAverage.textContent = fmtPct(avg);
+      els.statBest.textContent = fmtPct(best);
+      els.statLast.textContent = fmtPct(last);
+    }
+
+    function titleFor(kind, id) {
+      if (!id) return '—';
+      if (kind === 'volume') {
+        return REGISTRY.volumes.find(v => v.id === id)?.title ?? id;
+      }
+      if (kind === 'chapter') {
+        for (const v of REGISTRY.volumes) {
+          const c = v.chapters.find(c => c.id === id);
+          if (c) return c.title;
+        }
+        return id;
+      }
+      if (kind === 'topic') {
+        for (const v of REGISTRY.volumes) {
+          for (const c of v.chapters) {
+            const t = c.topics.find(t => t.id === id);
+            if (t) return t.title;
+          }
+        }
+        return id;
+      }
+      return id;
+    }
+
+    function exportCSV() {
+      const arr = loadAttempts();
+      if (!arr.length) { announce('No attempts to export.'); return; }
+      const header = ['date_time','volume','chapter','topic','type','raw','total','percentage'];
+      const rows = arr.map(a => [
+        new Date(a.at).toISOString(),
+        titleFor('volume', a.volume),
+        titleFor('chapter', a.chapter),
+        titleFor('topic', a.topic),
+        a.type,
+        a.raw,
+        a.total,
+        (a.pct * 100).toFixed(0) + '%'
+      ]);
+      const csv = [header, ...rows].map(r => r.map(csvEscape).join(',')).join('\r\n');
+      downloadBlob(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), 'quiz_attempts.csv');
+      onEvent('export:csv', { count: arr.length });
+    }
+
+    function csvEscape(v) {
+      const s = String(v ?? '');
+      if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+      return s;
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
+    }
+
+    // ===== Controls, reset, persistence =====
+    function resetAll(hard = false) {
+      // Clear host and scoreboard
+      els.host.innerHTML = '<div class="placeholder"><p>Select Volume, Chapter, Topic, and Type to begin.</p></div>';
+      els.scoreboard.hidden = true;
+      els.feedback.innerHTML = '';
+      els.submit.disabled = true;
+
+      // Reset selects
+      els.volume.value = '';
+      populateChapters('');
+      els.chapter.value = '';
+      els.topic.value = '';
+      els.type.value = '';
+      els.chapter.disabled = true;
+      els.topic.disabled = true;
+      els.type.disabled = true;
+
+      // Persist or clear
+      if (hard) {
+        localStorage.removeItem(APP.storageKey);
+        onEvent('storage:cleared');
+      } else {
+        saveState({ volume: '', chapter: '', topic: '', type: '' });
+      }
+
+      announce('Selections reset. You can choose again.');
+    }
+
+    function currentSelection() {
+      return {
+        volume: els.volume.value,
+        chapter: els.chapter.value,
+        topic: els.topic.value,
+        type: els.type.value
+      };
+    }
+
+    function persistSelection() {
+      const sel = currentSelection();
+      saveState(sel);
+    }
+
+    // ===== Event wiring =====
+    function wireEvents() {
+      // Tabs remain clickable (default anchors). No extra JS needed.
+
+      els.volume.addEventListener('change', () => {
+        const vol = els.volume.value;
+        populateChapters(vol);
+        persistSelection();
+      });
+
+      els.chapter.addEventListener('change', () => {
+        const vol = els.volume.value;
+        const ch = els.chapter.value;
+        populateTopics(vol, ch);
+        persistSelection();
+      });
+
+      els.topic.addEventListener('change', () => {
+        const vol = els.volume.value;
+        const ch = els.chapter.value;
+        const t = els.topic.value;
+        populateTypes(vol, ch, t);
+        persistSelection();
+      });
+
+      els.type.addEventListener('change', () => {
+        persistSelection();
+        const sel = currentSelection();
+        if (sel.volume && sel.chapter && sel.topic && sel.type) {
+          renderQuiz(sel.volume, sel.chapter, sel.topic, sel.type);
+        }
+      });
+
+      els.submit.addEventListener('click', () => {
+        evaluateCurrent();
+      });
+
+      els.reset.addEventListener('click', () => {
+        resetAll(false);
+      });
+
+      els.clear.addEventListener('click', () => {
+        if (confirm('Clear all saved quiz data (selections and attempts)?')) {
+          localStorage.removeItem(APP.storageKey);
+          localStorage.removeItem(APP.attemptsKey);
+          resetAll(true);
+          renderAttempts(loadAttempts());
+          renderStats(loadAttempts());
+        }
+      });
+
+      els.export.addEventListener('click', exportCSV);
+
+      els.print.addEventListener('click', () => {
+        window.print();
+        onEvent('print');
+      });
+
+      // Keyboard helpers
+      document.addEventListener('keydown', (e) => {
+        // Enter on Submit if focused in content
+        if (e.key === 'Enter' && !e.repeat) {
+          const active = document.activeElement;
+          const withinQuiz = active && active.closest && active.closest('#quiz-host');
+          if (withinQuiz && !els.submit.disabled) {
+            e.preventDefault();
+            els.submit.click();
+          }
+        }
+        // R to reset (with Ctrl/Cmd)
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'r') {
+          e.preventDefault();
+          els.reset.click();
+        }
+      });
+    }
+
+    // ===== Initialization =====
+    function init() {
+      populateVolumes();
+
+      // Restore state
+      const state = loadState();
+      if (state) {
+        // Volume
+        if (state.volume) {
+          els.volume.value = state.volume;
+          populateChapters(state.volume);
+        }
+        // Chapter
+        if (state.chapter) {
+          els.chapter.value = state.chapter;
+          populateTopics(state.volume, state.chapter);
+        }
+        // Topic
+        if (state.topic) {
+          els.topic.value = state.topic;
+          populateTypes(state.volume, state.chapter, state.topic);
+        }
+        // Type
+        if (state.type) {
+          els.type.value = state.type;
+          if (state.volume && state.chapter && state.topic && state.type) {
+            renderQuiz(state.volume, state.chapter, state.topic, state.type);
           }
         }
       }
-    }
-  }
-};
 
-"2": {
-  label: "Other Financial Assets",
-  topics: {
-    "2.10.1": {
-      label: "Definition and Classification of Financial Assets",
-      theory: [
-        {
-          id: "V1C2T2.10.1Q1",
-          stem: "These describe a contract, except:",
-          choices: [
-            "It has clear economic consequences.",
-            "It is an agreement between two or more parties.",
-            "It is unavoidable by the parties.",
-            "It must be in writing."
-          ],
-          correctIndex: 3
-        },
-        {
-          id: "V1C2T2.10.1Q2",
-          stem: "The entity’s own equity instruments include:",
-          choices: [
-            "Contracts for future delivery of the entity’s own equity instruments.",
-            "Equity instruments to deliver prorate share in net assets to another entity, upon liquidation.",
-            "Puttable financial instruments classified as equity instruments.",
-            "The entity’s own ordinary shares."
-          ],
-          correctIndex: 3
-        },
-        {
-          id: "V1C2T2.10.1Q3",
-          stem: "Which describes a debt instrument measured at FVOCI?",
-          choices: [
-            "It is held for trading.",
-            "It is held to collect contractual cash flows over its life and realize its fair value through sale.",
-            "It is irrevocably designated as measured at FVOCI upon initial recognition.",
-            "It is managed on fair value basis."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2T2.10.1Q4",
-          stem: "These describe a debt instrument measured at FVOCI, except:",
-          choices: [
-            "It is held to collect contractual cash flows over its life and realize its fair value through sale.",
-            "It is irrevocably designated as measured at FVOCI upon initial recognition.",
-            "It is not irrevocably designated as measured at FVPL upon initial recognition.",
-            "Its contractual cash flows are solely payments of principal and interest on outstanding principal."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2T2.10.1Q5",
-          stem: "These describe the business model for a debt instrument, except:",
-          choices: [
-            "It is assessed upon initial recognition of the financial asset.",
-            "It is based on best-case, average-case, and worst-case scenarios.",
-            "It is determined by the key management personnel.",
-            "It is the manner of generating cash flows from the financial asset."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2T2.10.1Q6",
-          stem: "These are irrelevant in assessing the business model for a debt instrument, except:",
-          choices: [
-            "Credit-impairment of the debt instrument.",
-            "Intent of the entity.",
-            "Reasonably expected scenarios.",
-            "Requirement of a third party."
-          ],
-          correctIndex: 2
-        },
-        {
-          id: "V1C2T2.10.1Q7",
-          stem: "When the business model for a portfolio of debt instruments changes:",
-          choices: [
-            "Old and new instruments are classified under new and old models, respectively.",
-            "Old and new instruments are classified under old and new models, respectively.",
-            "Old and new instruments continue to be classified under new model.",
-            "Old and new instruments start to be classified under new model."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2T2.10.1Q8",
-          stem: "Sales of debt instruments are consistent with the hold to collect business model, if close to:",
-          choices: [
-            "Initial recognition, with proceeds approximating the remaining contractual cash flows.",
-            "Initial recognition, with proceeds exceeding the remaining contractual cash flows.",
-            "Maturity, with proceeds approximating the remaining contractual cash flows.",
-            "Maturity, with proceeds exceeding the remaining contractual cash flows."
-          ],
-          correctIndex: 2
-        },
-        {
-          id: "V1C2T2.10.1Q9",
-          stem: "Cash flows on loans with capped interest rates are solely payments of principal and interest, if:",
-          choices: [
-            "Interest equals the maximum market interest rate.",
-            "Interest is below the maximum market interest rate.",
-            "Interest is limited to the maximum market interest rate.",
-            "Interest reflects compensation in a basic lending arrangement."
-          ],
-          correctIndex: 3
-        },
-        {
-          id: "V1C2T2.10.1Q10",
-          stem: "Cash flows on debt instruments are solely payments of principal and interest, if:",
-          choices: [
-            "Difference between undiscounted contractual and benchmark cash flows is insignificant.",
-            "Difference between undiscounted contractual and benchmark cash flows is significant.",
-            "Tenor of interest rate is longer than frequency of interest reset.",
-            "Tenor of interest rate is shorter than frequency of interest reset."
-          ],
-          correctIndex: 0
-        },
-        {
-          id: "V1C2T2.10.1Q11",
-          stem: "Cash flows on debt instruments are solely payments of principal and interest, if:",
-          choices: [
-            "Acquired at a discount on principal, but prepayable at par.",
-            "Acquired at a premium on principal, but prepayable at par.",
-            "Fair value of prepayment feature is insignificant.",
-            "Fair value of prepayment feature is significant."
-          ],
-          correctIndex: 2
-        },
-        {
-          id: "V1C2T2.10.1Q12",
-          stem: "Cash flows on debt instruments are not solely payments of principal and interest, if:",
-          choices: [
-            "Interest rate equals higher between minimum rate and market rate.",
-            "Interest rate equals lower between maximum rate and market rate.",
-            "Interest rate equals market rate minus fixed rate.",
-            "Interest rate equals market rate plus fixed rate."
-          ],
-          correctIndex: 2
-        },
-        {
-          id: "V1C2T2.10.1Q13",
-          stem: "Reclassification of all debt instruments within a portfolio may be required, when:",
-          choices: [
-            "A business activity commences or ceases to be implemented.",
-            "A particular market for the debt instruments within the portfolio disappears.",
-            "The debt instruments are transferred between divisions of the entity.",
-            "The debt instruments cease to fulfill the requirements for internal credit quality."
-          ],
-          correctIndex: 0
-        },
-        {
-          id: "V1C2T2.10.1Q14",
-          stem: "Reclassification of all debt instruments within a portfolio is disallowed, when:",
-          choices: [
-            "A business activity commences or ceases to be implemented.",
-            "Changes in regulatory requirements occur.",
-            "The change in business activity is demonstrable to external parties.",
-            "The change in business activity is significant to the operations of the entity."
-          ],
-          correctIndex: 1
-        },
-        {
-          id: "V1C2T2.10.1Q15",
-          stem: "If the business activity changed on March 9 this year, and interim statements are not presented:",
-          choices: [
-            "All debt instruments within the portfolio are reclassified on April 1 this year.",
-            "All debt instruments within the portfolio are reclassified on January 1 next year.",
-            "All debt instruments within the portfolio are reclassified on July 1 this year.",
-            "All debt instruments within the portfolio are reclassified on October 1 this year."
-          ],
-          correctIndex: 1
-        }
-      ],
-      practice: []
-    }
-  },
-}
+      // Attempts
+      const attempts = loadAttempts();
+      renderAttempts(attempts);
+      renderStats(attempts);
 
-</script>
+      wireEvents();
 
-<script>
-// ==========================
-// Tab switching
-// ==========================
-function activateTab(name) {
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.tab === name);
-  });
-  document.querySelectorAll('.panel').forEach(panel => {
-    panel.style.display = panel.id === name + 'Panel' ? 'block' : 'none';
-  });
-}
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', e => {
-    e.preventDefault();
-    activateTab(tab.dataset.tab);
-  });
-});
-
-// ==========================
-// Clear UI
-// ==========================
-function clearUI() {
-  contentEl.innerHTML = '';
-  scoreboard.classList.add('hidden');
-  rawScoreEl.textContent = '0 / 0';
-  pctScoreEl.textContent = '0%';
-  state.submitted = false;
-}
-
-// ==========================
-// Populate selectors
-// ==========================
-volumeSel.addEventListener('change', () => {
-  state.volume = volumeSel.value;
-  chapterSel.innerHTML = '<option value="">Select chapter</option>';
-  topicSel.innerHTML = '<option value="">Select topic</option>';
-  qtypeSel.value = '';
-  chapterSel.disabled = !state.volume;
-  topicSel.disabled = true;
-  qtypeSel.disabled = true;
-  clearUI();
-
-  if (state.volume) {
-    const chapters = DATA.volumes[state.volume].chapters;
-    Object.keys(chapters).forEach(chKey => {
-      const opt = document.createElement('option');
-      opt.value = chKey;
-      opt.textContent = chapters[chKey].label;
-      chapterSel.appendChild(opt);
-    });
-  }
-});
-
-chapterSel.addEventListener('change', () => {
-  state.chapter = chapterSel.value;
-  topicSel.innerHTML = '<option value="">Select topic</option>';
-  qtypeSel.value = '';
-  topicSel.disabled = !state.chapter;
-  qtypeSel.disabled = true;
-  clearUI();
-
-  if (state.chapter) {
-    const topics = DATA.volumes[state.volume].chapters[state.chapter].topics;
-    Object.keys(topics).forEach(tKey => {
-      const opt = document.createElement('option');
-      opt.value = tKey;
-      opt.textContent = topics[tKey].label;
-      topicSel.appendChild(opt);
-    });
-  }
-});
-
-topicSel.addEventListener('change', () => {
-  state.topic = topicSel.value;
-  qtypeSel.value = '';
-  qtypeSel.disabled = !state.topic;
-  clearUI();
-});
-
-qtypeSel.addEventListener('change', () => {
-  state.qtype = qtypeSel.value;
-  clearUI();
-  if (state.qtype) {
-    renderQuestions();
-    submitBtn.disabled = false;
-    resetBtn.disabled = false;
-  } else {
-    submitBtn.disabled = true;
-    resetBtn.disabled = true;
-  }
-});
-
-// ==========================
-// Render questions
-// ==========================
-function renderQuestions() {
-  const topicObj = DATA.volumes[state.volume].chapters[state.chapter].topics[state.topic];
-  let questions = [];
-
-  if (state.qtype === 'theory' || state.qtype === 'both') {
-    questions = questions.concat(topicObj.theory);
-  }
-  if (state.qtype === 'practice' || state.qtype === 'both') {
-    questions = questions.concat(topicObj.practice);
-  }
-
-  contentEl.innerHTML = '';
-  questions.forEach((q, idx) => {
-    const qDiv = document.createElement('div');
-    qDiv.className = 'q';
-    qDiv.dataset.qid = q.id;
-
-    const meta = document.createElement('div');
-    meta.className = 'q-meta';
-    meta.textContent = `Q${idx + 1}`;
-    qDiv.appendChild(meta);
-
-    const stem = document.createElement('div');
-    stem.className = 'stem';
-    stem.textContent = q.stem;
-    qDiv.appendChild(stem);
-
-    if (q.questionImage) {
-      const img = document.createElement('img');
-      img.src = q.questionImage;
-      img.alt = 'Question image';
-      img.style.maxWidth = '100%';
-      qDiv.appendChild(img);
+      // Announce readiness
+      announce('Quizzes ready. Tabs, filters, and actions are always available at the top.');
     }
 
-    const choicesDiv = document.createElement('div');
-    choicesDiv.className = 'choices';
-    q.choices.forEach((choice, cIdx) => {
-      const choiceDiv = document.createElement('label');
-      choiceDiv.className = 'choice';
-      const radio = document.createElement('input');
-      radio.type = 'radio';
-      radio.name = q.id;
-      radio.value = cIdx;
-      const letter = document.createElement('span');
-      letter.className = 'letter';
-      letter.textContent = String.fromCharCode(65 + cIdx) + '.';
-      const text = document.createElement('span');
-      text.textContent = choice;
-      choiceDiv.appendChild(radio);
-      choiceDiv.appendChild(letter);
-      choiceDiv.appendChild(text);
-      choicesDiv.appendChild(choiceDiv);
-    });
-    qDiv.appendChild(choicesDiv);
-
-    const feedback = document.createElement('div');
-    feedback.className = 'feedback hidden';
-    qDiv.appendChild(feedback);
-
-    if (q.answerImage) {
-      const reveals = document.createElement('div');
-      reveals.className = 'reveals hidden';
-      const ansImg = document.createElement('img');
-      ansImg.src = q.answerImage;
-      ansImg.alt = 'Answer image';
-      ansImg.style.maxWidth = '100%';
-      reveals.appendChild(ansImg);
-      qDiv.appendChild(reveals);
+    // ===== Analytics hook (placeholder) =====
+    function onEvent(name, payload = {}) {
+      // Placeholder for future analytics wiring.
+      // console.debug('[analytics]', name, payload);
     }
 
-    contentEl.appendChild(qDiv);
-  });
-}
-
-// ==========================
-// Submit & score
-// ==========================
-submitBtn.addEventListener('click', () => {
-  if (state.submitted) return;
-  const topicObj = DATA.volumes[state.volume].chapters[state.chapter].topics[state.topic];
-  let questions = [];
-  if (state.qtype === 'theory' || state.qtype === 'both') {
-    questions = questions.concat(topicObj.theory);
-  }
-  if (state.qtype === 'practice' || state.qtype === 'both') {
-    questions = questions.concat(topicObj.practice);
-  }
-
-  let score = 0;
-  questions.forEach(q => {
-    const selected = document.querySelector(`input[name="${q.id}"]:checked`);
-    const qDiv = document.querySelector(`.q[data-qid="${q.id}"]`);
-    const feedback = qDiv.querySelector('.feedback');
-    if (selected) {
-      if (parseInt(selected.value, 10) === q.correctIndex) {
-        score++;
-        feedback.textContent = 'Correct';
-        feedback.classList.add('correct');
-      } else {
-        feedback.textContent = `Incorrect. Correct answer: ${String.fromCharCode(65 + q.correctIndex)}`;
-        feedback.classList.add('incorrect');
-      }
-    } else {
-      feedback.textContent = `No answer. Correct answer: ${String.fromCharCode(65 + q.correctIndex)}`;
-      feedback.classList.add('incorrect');
-    }
-    feedback.classList.remove('hidden');
-
-    const reveals = qDiv.querySelector('.reveals');
-    if (reveals) reveals.classList.remove('hidden');
-  });
-
-  rawScoreEl.textContent = `${score} / ${questions.length}`;
-  pctScoreEl.textContent = `${((score / questions.length) * 100).toFixed(0)}%`;
-  scoreboard.classList.remove('hidden');
-  state.submitted = true;
-});
-
-// ==========================
-// Reset
-// ==========================
-resetBtn.addEventListener('click', () => {
-  clearUI();
-  if (state.qtype) {
-    renderQuestions();
-  }
-});
-</script>
+    // Boot
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
 </body>
 </html>
+```
