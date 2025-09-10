@@ -1023,64 +1023,58 @@ function renderQuiz(volId, chId, tId, type) {
     }
 
     // ===== Event wiring =====
-    function wireEvents() {
-      // Tabs remain clickable (default anchors). No extra JS needed.
+/* ===== FIX: wireEvents to attach all dropdown and button actions ===== */
+function wireEvents() {
+  els.volume.addEventListener('change', () => {
+    const vol = els.volume.value;
+    populateChapters(vol);
+    persistSelection();
+  });
 
-/* ===== FIX: Event listeners for dynamic dropdown chain ===== */
-els.volume.addEventListener('change', () => {
-  const vol = els.volume.value;
-  populateChapters(vol);
-  persistSelection();
-});
+  els.chapter.addEventListener('change', () => {
+    const vol = els.volume.value;
+    const ch = els.chapter.value;
+    populateTopics(vol, ch);
+    persistSelection();
+  });
 
-els.chapter.addEventListener('change', () => {
-  const vol = els.volume.value;
-  const ch = els.chapter.value;
-  populateTopics(vol, ch);
-  persistSelection();
-});
+  els.topic.addEventListener('change', () => {
+    const vol = els.volume.value;
+    const ch = els.chapter.value;
+    const t = els.topic.value;
+    populateTypes(vol, ch, t);
+    persistSelection();
+  });
 
-els.topic.addEventListener('change', () => {
-  const vol = els.volume.value;
-  const ch = els.chapter.value;
-  const t = els.topic.value;
-  populateTypes(vol, ch, t);
-  persistSelection();
-});
+  els.type.addEventListener('change', () => {
+    persistSelection();
+    const sel = currentSelection();
+    if (sel.volume && sel.chapter && sel.topic && sel.type) {
+      renderQuiz(sel.volume, sel.chapter, sel.topic, sel.type);
+    }
+  });
 
-els.type.addEventListener('change', () => {
-  persistSelection();
-  const sel = currentSelection();
-  if (sel.volume && sel.chapter && sel.topic && sel.type) {
-    renderQuiz(sel.volume, sel.chapter, sel.topic, sel.type);
-  }
-});
+  els.submit.addEventListener('click', () => {
+    evaluateCurrent();
+  });
+
+  els.reset.addEventListener('click', () => {
+    resetAll();
+  });
+
+  els.clearData.addEventListener('click', () => {
+    clearSavedData();
+  });
+
+  els.exportCSV.addEventListener('click', () => {
+    exportAttemptsCSV();
+  });
+
+  els.print.addEventListener('click', () => {
+    window.print();
+  });
+}
 /* ===== END FIX ===== */
-
-      els.submit.addEventListener('click', () => {
-        evaluateCurrent();
-      });
-
-      els.reset.addEventListener('click', () => {
-        resetAll(false);
-      });
-
-      els.clear.addEventListener('click', () => {
-        if (confirm('Clear all saved quiz data (selections and attempts)?')) {
-          localStorage.removeItem(APP.storageKey);
-          localStorage.removeItem(APP.attemptsKey);
-          resetAll(true);
-          renderAttempts(loadAttempts());
-          renderStats(loadAttempts());
-        }
-      });
-
-      els.export.addEventListener('click', exportCSV);
-
-      els.print.addEventListener('click', () => {
-        window.print();
-        onEvent('print');
-      });
 
       // Keyboard helpers
       document.addEventListener('keydown', (e) => {
