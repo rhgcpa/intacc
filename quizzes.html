@@ -239,31 +239,216 @@
     // Each topic may have theory and/or practice blocks, each one question with 4 choices.
     const REGISTRY = {
       volumes: [
-        {
-          id: 'v1', title: 'Volume 1',
-          chapters: [
-            {
-              id: 'v1c1', title: 'Chapter 1',
-              topics: [
-                {
-                  id: 'v1c1t1', title: 'Topic 1',
-                  types: ['Theory', 'Practice', 'Both'],
-                  theory: {
-                    question: 'In accounting, which statement best describes assets?',
-                    choices: { A: 'Owner’s equity', B: 'Resources owned by an entity', C: 'Liabilities', D: 'Revenue streams' },
-                    correct: 'B',
-                    explain: 'Assets are resources controlled by the entity expected to yield future benefits.'
-                  },
-                  practice: {
-                    question: 'Compute ending inventory based on the provided table.',
-                    choices: { A: '1,500', B: '1,750', C: '2,000', D: '2,250' },
-                    correct: 'C',
-                    explain: 'Using FIFO per the table, the remaining units sum to 2,000.',
-                    // Placeholders for Excel range screenshots (replace with real paths)
-                    qImg: './img/placeholders/v1c1t1-practice-question.png',
-                    aImg: './img/placeholders/v1c1t1-practice-answer.png'
-                  }
-                },
+/* ===== INSERTION POINT (REGISTRY): Replace existing Topic 1 object in Volume 1 → Chapter 1 → topics ===== */
+{
+  id: 'v1c1t1',
+  title: 'Topic 1',
+  types: ['Theory', 'Practice', 'Both'],
+
+  // Single-item fields unused when sets exist (kept for compatibility)
+  theory: null,
+  practice: null,
+
+  // Theory questions (complete)
+  theorySet: [
+    {
+      qid: 'v1c1t1-th-q1',
+      question: 'Cash on hand includes:',
+      choices: {
+        A: 'Checks dated less than 6 months after today.',
+        B: 'Checks dated less than 6 months before today.',
+        C: 'Checks dated more than 6 months after today.',
+        D: 'Checks dated more than 6 months before today.'
+      },
+      correct: 'B',
+      explain: 'Cash on hand includes checks dated less than 6 months before today.'
+    },
+    {
+      qid: 'v1c1t1-th-q2',
+      question: 'In defining cash equivalents, known maturity value denotes:',
+      choices: {
+        A: 'Maturity date is determinable on acquisition date.',
+        B: 'Maturity value is determinable on acquisition date.',
+        C: 'Maturity value will be determined on maturity date.',
+        D: 'Maturity value will be known on maturity date.'
+      },
+      correct: 'B',
+      explain: 'Known maturity value means the maturity value is determinable on acquisition date.'
+    },
+    {
+      qid: 'v1c1t1-th-q3',
+      question: 'Which are excluded from cash equivalents?',
+      choices: {
+        A: 'Credit cards receivable.',
+        B: 'Debit cards receivable.',
+        C: 'Time deposits downgraded lower than savings accounts when pre-terminated.',
+        D: 'Time deposits downgraded not lower than savings accounts when pre-terminated.'
+      },
+      correct: 'C',
+      explain: 'If downgraded below savings when pre-terminated, the change is significant, so exclude from cash equivalents.'
+    },
+    {
+      qid: 'v1c1t1-th-q4',
+      question: 'Which are classified as restricted cash, and presented as noncurrent assets?',
+      choices: {
+        A: 'Currency usable for at least 12 months after the reporting period.',
+        B: 'Currency usable for less than 12 months after the reporting period.',
+        C: 'Currency usable for more than 12 months after the reporting period.',
+        D: 'Currency usable within 12 months after the reporting period.'
+      },
+      correct: 'A',
+      explain: 'Amounts restricted for use beyond 12 months are noncurrent restricted cash.'
+    },
+    {
+      qid: 'v1c1t1-th-q5',
+      question: 'Which are classified as short-term investments, and presented as current assets?',
+      choices: {
+        A: 'Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.',
+        B: 'Bank deposits withdrawable with significant penalty and usable for more than 12 months.',
+        C: 'Bank deposits withdrawable with significant penalty and usable within 12 months.',
+        D: 'Bank deposits withdrawable without penalty and usable for less than 12 months.'
+      },
+      correct: 'C',
+      explain: 'If withdrawable with significant penalty and usable within 12 months, classify as short-term investments.'
+    },
+    {
+      qid: 'v1c1t1-th-q6',
+      question: 'These describe a bank overdraft, except:',
+      choices: {
+        A: 'It is allowed only if caused by normal bank charges or incidental handling fees.',
+        B: 'It is disallowed in the Philippines.',
+        C: 'It is known as temporary overdrawing in the Philippines.',
+        D: 'It is the negative (or overdrawn) balance in a demand deposit account.'
+      },
+      correct: 'B',
+      explain: 'A bank overdraft is allowed in the Philippines when caused by routine bank charges.'
+    },
+    {
+      qid: 'v1c1t1-th-q7',
+      question: 'Check withdrawals are recorded as:',
+      choices: {
+        A: 'Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.',
+        B: 'Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.',
+        C: 'Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.',
+        D: 'Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity.'
+      },
+      correct: 'D',
+      explain: 'Check withdrawals: debit bank’s Deposit Liabilities and credit the entity’s Demand Deposits.'
+    },
+    {
+      qid: 'v1c1t1-th-q8',
+      question: 'Timing differences for Deposit Liabilities of financial institution comprise:',
+      choices: {
+        A: 'Credit memos and debit memos.',
+        B: 'Outstanding checks and debit memos.',
+        C: 'Outstanding deposits and credit memos.',
+        D: 'Outstanding deposits and outstanding checks.'
+      },
+      correct: 'D',
+      explain: 'Outstanding deposits and outstanding checks are timing differences.'
+    },
+    {
+      qid: 'v1c1t1-th-q9',
+      question: 'Which describe debit memos?',
+      choices: {
+        A: 'Already credited to Demand Deposits but not yet debited to Deposit Liabilities.',
+        B: 'Already credited to Deposit Liabilities but not yet debited to Demand Deposits.',
+        C: 'Already debited to Demand Deposits but not yet credited to Deposit Liabilities.',
+        D: 'Already debited to Deposit Liabilities but not yet credited to Demand Deposits.'
+      },
+      correct: 'D',
+      explain: 'Debited to bank’s Deposit Liabilities; not yet credited to entity’s Demand Deposits.'
+    },
+    {
+      qid: 'v1c1t1-th-q10',
+      question: 'Before replenishment, the adjusted balance of Petty Cash Fund equals:',
+      choices: {
+        A: 'Currency in the custody of the Petty Cash Custodian.',
+        B: 'Established amount.',
+        C: 'Minimum threshold.',
+        D: 'Total of Petty Cash Vouchers.'
+      },
+      correct: 'A',
+      explain: 'Before replenishment, the adjusted PCF balance equals the cash on hand with the custodian.'
+    }
+  ],
+
+  // Practice questions (complete; with image hooks)
+  practiceSet: [
+    {
+      qid: 'v1c1t1-pr-q1',
+      question: 'With these givens, the closing outstanding checks are:',
+      choices: {
+        A: '289,000.00',
+        B: '311,000.00',
+        C: '489,000.00',
+        D: '511,000.00'
+      },
+      correct: 'B',
+      explain: 'Reconciling checks issued vs. paid and timing differences yields 311,000.00.',
+      qImg: './img/batch1/v1c1t1-pr-q1-question.png',
+      aImg: './img/batch1/v1c1t1-pr-q1-answer.png'
+    },
+    {
+      qid: 'v1c1t1-pr-q2',
+      question: 'With these givens, the opening outstanding checks are:',
+      choices: {
+        A: '289,000.00',
+        B: '311,000.00',
+        C: '489,000.00',
+        D: '511,000.00'
+      },
+      correct: 'B',
+      explain: 'Opening outstanding checks balance with the prior reconciliation.',
+      qImg: './img/batch1/v1c1t1-pr-q2-question.png',
+      aImg: './img/batch1/v1c1t1-pr-q2-answer.png'
+    },
+    {
+      qid: 'v1c1t1-pr-q3',
+      question: 'With these givens, the closing book balance is:',
+      choices: {
+        A: '2,496,000.00',
+        B: '2,499,800.00',
+        C: '2,500,200.00',
+        D: '2,504,000.00'
+      },
+      correct: 'B',
+      explain: 'Adjusted closing balance ± memos yields 2,499,800.00.',
+      qImg: './img/batch1/v1c1t1-pr-q3-question.png',
+      aImg: './img/batch1/v1c1t1-pr-q3-answer.png'
+    },
+    {
+      qid: 'v1c1t1-pr-q4',
+      question: 'With these givens, the closing outstanding deposits are:',
+      choices: {
+        A: '487,000.00',
+        B: '513,000.00',
+        C: '887,000.00',
+        D: '913,000.00'
+      },
+      correct: 'D',
+      explain: 'Bank vs. book reconciliation indicates 913,000.00 outstanding deposits.',
+      qImg: './img/batch1/v1c1t1-pr-q4-question.png',
+      aImg: './img/batch1/v1c1t1-pr-q4-answer.png'
+    },
+    {
+      qid: 'v1c1t1-pr-q5',
+      question: 'With these givens, the closing outstanding deposits are:',
+      choices: {
+        A: '398,700.00',
+        B: '398,900.00',
+        C: '898,700.00',
+        D: '898,900.00'
+      },
+      correct: 'C',
+      explain: 'Receipts vs. cleared deposits plus credit memos yield 898,700.00.',
+      qImg: './img/batch1/v1c1t1-pr-q5-question.png',
+      aImg: './img/batch1/v1c1t1-pr-q5-answer.png'
+    }
+  ]
+}
+/* ===== END INSERTION (REGISTRY) for Topic 1, Volume 1, Chapter 1 ===== */
+
                 {
                   id: 'v1c1t2', title: 'Topic 2',
                   types: ['Theory'],
@@ -506,42 +691,59 @@
     }
 
     // ===== Rendering =====
-    function renderQuiz(volId, chId, tId, type) {
-      els.host.setAttribute('aria-busy', 'true');
-      els.host.innerHTML = '';
-      els.scoreboard.hidden = true;
-      els.feedback.innerHTML = '';
+/* ===== INSERTION POINT (JS): Upgrade renderQuiz to support theorySet/practiceSet ===== */
+function renderQuiz(volId, chId, tId, type) {
+  els.host.setAttribute('aria-busy', 'true');
+  els.host.innerHTML = '';
+  els.scoreboard.hidden = true;
+  els.feedback.innerHTML = '';
 
-      const topic = getTopic(volId, chId, tId);
-      if (!topic) {
-        els.host.innerHTML = '<div class="notice error">No topic found.</div>';
-        els.host.setAttribute('aria-busy', 'false');
-        return;
-      }
+  const topic = getTopic(volId, chId, tId);
+  if (!topic) {
+    els.host.innerHTML = '<div class="notice error">No topic found.</div>';
+    els.host.setAttribute('aria-busy', 'false');
+    return;
+  }
 
-      const blocks = [];
-      if (type === 'Theory' || type === 'Both') {
-        if (topic.theory) blocks.push(makeTheoryBlock(topic));
-      }
-      if (type === 'Practice' || type === 'Both') {
-        if (topic.practice) blocks.push(makePracticeBlock(topic));
-      }
-      if (!blocks.length) {
-        els.host.innerHTML = '<div class="notice">Selected type not available for this topic.</div>';
-        els.host.setAttribute('aria-busy', 'false');
-        return;
-      }
+  const blocks = [];
 
-      blocks.forEach(b => els.host.appendChild(b));
-      els.host.setAttribute('aria-busy', 'false');
-
-      // Enable submit after rendering
-      els.submit.disabled = false;
-
-      // Focus first choice for accessibility
-      const firstInput = els.host.querySelector('input[type="radio"]');
-      if (firstInput) firstInput.focus();
+  // Helper to push single or multiple blocks for a given type
+  const pushTheory = () => {
+    if (Array.isArray(topic.theorySet) && topic.theorySet.length) {
+      topic.theorySet.forEach(item => blocks.push(makeTheoryBlock({ ...topic, theory: item })));
+    } else if (topic.theory) {
+      blocks.push(makeTheoryBlock(topic));
     }
+  };
+  const pushPractice = () => {
+    if (Array.isArray(topic.practiceSet) && topic.practiceSet.length) {
+      topic.practiceSet.forEach(item => blocks.push(makePracticeBlock({ ...topic, practice: item })));
+    } else if (topic.practice) {
+      blocks.push(makePracticeBlock(topic));
+    }
+  };
+
+  if (type === 'Theory') pushTheory();
+  if (type === 'Practice') pushPractice();
+  if (type === 'Both') { pushTheory(); pushPractice(); }
+
+  if (!blocks.length) {
+    els.host.innerHTML = '<div class="notice">Selected type not available for this topic.</div>';
+    els.host.setAttribute('aria-busy', 'false');
+    return;
+  }
+
+  blocks.forEach(b => els.host.appendChild(b));
+  els.host.setAttribute('aria-busy', 'false');
+
+  // Enable submit after rendering
+  els.submit.disabled = false;
+
+  // Focus first choice for accessibility
+  const firstInput = els.host.querySelector('input[type="radio"]');
+  if (firstInput) firstInput.focus();
+}
+/* ===== END INSERTION (JS) renderQuiz upgrade ===== */
 
     function makeTheoryBlock(topic) {
       const tpl = document.getElementById('tpl-question-theory');
