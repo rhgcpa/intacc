@@ -1074,28 +1074,17 @@ function wireEvents() {
     window.print();
   });
 }
-/* ===== END FIX ===== */
 
-      // Keyboard helpers
-      document.addEventListener('keydown', (e) => {
-        // Enter on Submit if focused in content
-        if (e.key === 'Enter' && !e.repeat) {
-          const active = document.activeElement;
-          const withinQuiz = active && active.closest && active.closest('#quiz-host');
-          if (withinQuiz && !els.submit.disabled) {
-            e.preventDefault();
-            els.submit.click();
-          }
-        }
-        // R to reset (with Ctrl/Cmd)
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'r') {
-          e.preventDefault();
-          els.reset.click();
-        }
-      });
-    }
+/* ===== STARTUP ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    init();
+  } catch (err) {
+    console.error('Error during initialization:', err);
+    alert('An error occurred while starting the quizzes. Please check the console for details.');
+  }
+});
 
-    // ===== Initialization =====
 /* ===== FIX: Ensure dropdowns initialize and events are wired ===== */
 function init() {
   // Populate the Volume dropdown on page load
@@ -1135,7 +1124,6 @@ function init() {
   // Announce readiness
   announce('Quizzes ready. Tabs, filters, and actions are always available at the top.');
 }
-/* ===== END FIX ===== */
 
     // ===== Analytics hook (placeholder) =====
     function onEvent(name, payload = {}) {
