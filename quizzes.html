@@ -1102,46 +1102,46 @@ els.type.addEventListener('change', () => {
     }
 
     // ===== Initialization =====
-    function init() {
-      populateVolumes();
+/* ===== FIX: Ensure dropdowns initialize and events are wired ===== */
+function init() {
+  // Populate the Volume dropdown on page load
+  populateVolumes();
 
-      // Restore state
-      const state = loadState();
-      if (state) {
-        // Volume
-        if (state.volume) {
-          els.volume.value = state.volume;
-          populateChapters(state.volume);
-        }
-        // Chapter
-        if (state.chapter) {
-          els.chapter.value = state.chapter;
-          populateTopics(state.volume, state.chapter);
-        }
-        // Topic
-        if (state.topic) {
-          els.topic.value = state.topic;
-          populateTypes(state.volume, state.chapter, state.topic);
-        }
-        // Type
-        if (state.type) {
-          els.type.value = state.type;
-          if (state.volume && state.chapter && state.topic && state.type) {
-            renderQuiz(state.volume, state.chapter, state.topic, state.type);
-          }
-        }
-      }
-
-      // Attempts
-      const attempts = loadAttempts();
-      renderAttempts(attempts);
-      renderStats(attempts);
-
-      wireEvents();
-
-      // Announce readiness
-      announce('Quizzes ready. Tabs, filters, and actions are always available at the top.');
+  // Restore saved state if available
+  const state = loadState();
+  if (state) {
+    if (state.volume) {
+      els.volume.value = state.volume;
+      populateChapters(state.volume);
     }
+    if (state.chapter) {
+      els.chapter.value = state.chapter;
+      populateTopics(state.volume, state.chapter);
+    }
+    if (state.topic) {
+      els.topic.value = state.topic;
+      populateTypes(state.volume, state.chapter, state.topic);
+    }
+    if (state.type) {
+      els.type.value = state.type;
+      if (state.volume && state.chapter && state.topic && state.type) {
+        renderQuiz(state.volume, state.chapter, state.topic, state.type);
+      }
+    }
+  }
+
+  // Load attempts history and stats
+  const attempts = loadAttempts();
+  renderAttempts(attempts);
+  renderStats(attempts);
+
+  // Wire up all dropdown and button events
+  wireEvents();
+
+  // Announce readiness
+  announce('Quizzes ready. Tabs, filters, and actions are always available at the top.');
+}
+/* ===== END FIX ===== */
 
     // ===== Analytics hook (placeholder) =====
     function onEvent(name, payload = {}) {
