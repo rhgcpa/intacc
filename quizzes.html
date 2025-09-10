@@ -1026,34 +1026,36 @@ function renderQuiz(volId, chId, tId, type) {
     function wireEvents() {
       // Tabs remain clickable (default anchors). No extra JS needed.
 
-      els.volume.addEventListener('change', () => {
-        const vol = els.volume.value;
-        populateChapters(vol);
-        persistSelection();
-      });
+/* ===== FIX: Event listeners for dynamic dropdown chain ===== */
+els.volume.addEventListener('change', () => {
+  const vol = els.volume.value;
+  populateChapters(vol);
+  persistSelection();
+});
 
-      els.chapter.addEventListener('change', () => {
-        const vol = els.volume.value;
-        const ch = els.chapter.value;
-        populateTopics(vol, ch);
-        persistSelection();
-      });
+els.chapter.addEventListener('change', () => {
+  const vol = els.volume.value;
+  const ch = els.chapter.value;
+  populateTopics(vol, ch);
+  persistSelection();
+});
 
-      els.topic.addEventListener('change', () => {
-        const vol = els.volume.value;
-        const ch = els.chapter.value;
-        const t = els.topic.value;
-        populateTypes(vol, ch, t);
-        persistSelection();
-      });
+els.topic.addEventListener('change', () => {
+  const vol = els.volume.value;
+  const ch = els.chapter.value;
+  const t = els.topic.value;
+  populateTypes(vol, ch, t);
+  persistSelection();
+});
 
-      els.type.addEventListener('change', () => {
-        persistSelection();
-        const sel = currentSelection();
-        if (sel.volume && sel.chapter && sel.topic && sel.type) {
-          renderQuiz(sel.volume, sel.chapter, sel.topic, sel.type);
-        }
-      });
+els.type.addEventListener('change', () => {
+  persistSelection();
+  const sel = currentSelection();
+  if (sel.volume && sel.chapter && sel.topic && sel.type) {
+    renderQuiz(sel.volume, sel.chapter, sel.topic, sel.type);
+  }
+});
+/* ===== END FIX ===== */
 
       els.submit.addEventListener('click', () => {
         evaluateCurrent();
