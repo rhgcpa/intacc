@@ -92,37 +92,914 @@
     };
 
     // 📁 REPLACEABLE BLOCK: Questions per Topic and Type
-    const questions = {
-      topic1: {
-        Theory: [
-          {
-            question: "What is the capital of France?",
-            choices: ["Berlin", "Madrid", "Paris", "Rome"],
-            answer: 2
-          }
+const questions = {
+  topic1_chap1_vol1: {
+    Theory: [
+      {
+        question: "1. Cash on hand includes:",
+        choices: [
+          "Checks dated less than 6 months after today.",
+          "Checks dated less than 6 months before today.",
+          "Checks dated more than 6 months after today.",
+          "Checks dated more than 6 months before today."
         ],
-        Practice: [
-          {
-            question: "Identify the correct Excel formula for summing A1:A10.",
-            imageQ: "practice_q_topic1.png",
-            choices: ["=SUM(A1:A10)", "=TOTAL(A1:A10)", "=ADD(A1:A10)", "=AGGREGATE(A1:A10)"],
-            answer: 0,
-            imageA: "practice_a_topic1.png"
-          }
-        ]
+        answer: 1
       },
-      topic2: {
-        Practice: [
-          {
-            question: "Which Excel function returns the current date?",
-            imageQ: "practice_q_topic2.png",
-            choices: ["=TODAY()", "=NOW()", "=DATE()", "=CURRENT()"],
-            answer: 0,
-            imageA: "practice_a_topic2.png"
-          }
-        ]
+      {
+        question: "2. In defining cash equivalents, known maturity value denotes:",
+        choices: [
+          "Maturity date is determinable on acquisition date.",
+          "Maturity value is determinable on acquisition date.",
+          "Maturity value will be determined on maturity date.",
+          "Maturity value will be known on maturity date."
+        ],
+        answer: 1
+      },
+      {
+        question: "3. Which are excluded from cash equivalents?",
+        choices: [
+          "Credit cards receivable.",
+          "Debit cards receivable.",
+          "Time deposits downgraded lower than savings accounts when pre-terminated.",
+          "Time deposits downgraded not lower than savings accounts when pre-terminated."
+        ],
+        answer: 2
+      },
+      {
+        question: "4. Which are classified as restricted cash, and presented as noncurrent assets?",
+        choices: [
+          "Currency usable for at least 12 months after the reporting period.",
+          "Currency usable for less than 12 months after the reporting period.",
+          "Currency usable for more than 12 months after the reporting period.",
+          "Currency usable within 12 months after the reporting period."
+        ],
+        answer: 0
+      },
+      {
+        question: "5. Which are classified as short-term investments, and presented as current assets?",
+        choices: [
+          "Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.",
+          "Bank deposits withdrawable with significant penalty and usable for more than 12 months.",
+          "Bank deposits withdrawable with significant penalty and usable within 12 months.",
+          "Bank deposits withdrawable without penalty and usable for less than 12 months."
+        ],
+        answer: 2
+      },
+      {
+        question: "6. These describe a bank overdraft, except:",
+        choices: [
+          "It is allowed only if caused by normal bank charges or other incidental handling fees.",
+          "It is disallowed in the Philippines.",
+          "It is known as temporary overdrawing in the Philippines.",
+          "It is the negative (or overdrawn) balance in a demand deposit account."
+        ],
+        answer: 1
+      },
+      {
+        question: "7. Check withdrawals are recorded as:",
+        choices: [
+          "Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.",
+          "Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.",
+          "Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.",
+          "Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity."
+        ],
+        answer: 3
+      },
+      {
+        question: "8. Timing differences for Deposit Liabilities of financial institution comprise:",
+        choices: [
+          "Credit memos and debit memos.",
+          "Outstanding checks and debit memos.",
+          "Outstanding deposits and credit memos.",
+          "Outstanding deposits and outstanding checks."
+        ],
+        answer: 3
+      },
+      {
+        question: "9. Which describe debit memos?",
+        choices: [
+          "They are already credited to Demand Deposits but not yet debited to Deposit Liabilities.",
+          "They are already credited to Deposit Liabilities but not yet debited to Demand Deposits.",
+          "They are already debited to Demand Deposits but not yet credited to Deposit Liabilities.",
+          "They are already debited to Deposit Liabilities but not yet credited to Demand Deposits."
+        ],
+        answer: 3
+      },
+      {
+        question: "10. Before replenishment, the adjusted balance of Petty Cash Fund equals:",
+        choices: [
+          "Currency in the custody of the Petty Cash Custodian.",
+          "Established amount.",
+          "Minimum threshold.",
+          "Total of Petty Cash Vouchers."
+        ],
+        answer: 0
+      },
+      {
+        question: "11. Which of the following is true about cash equivalents?",
+        choices: [
+          "They must be equity instruments with high liquidity.",
+          "They must be convertible to cash within 3 months from acquisition.",
+          "They must be convertible to cash within 3 months from reporting date.",
+          "They must be convertible to cash within 12 months from acquisition."
+        ],
+        answer: 1
+      },
+      {
+        question: "12. Which of the following is not considered cash?",
+        choices: [
+          "Undeposited checks.",
+          "Postdated checks.",
+          "Money orders.",
+          "Bank drafts."
+        ],
+        answer: 1
+      },
+      {
+        question: "13. Which of the following is considered a cash equivalent?",
+        choices: [
+          "Equity securities.",
+          "Accounts receivable.",
+          "Treasury bills maturing in 2 months.",
+          "Inventory."
+        ],
+        answer: 2
+      },
+      {
+        question: "14. Which of the following is true about restricted cash?",
+        choices: [
+          "It is always classified as a current asset.",
+          "It is excluded from cash and cash equivalents.",
+          "It is included in petty cash.",
+          "It is always classified as a noncurrent asset."
+        ],
+        answer: 1
+      },
+      {
+        question: "15. Which of the following is true about compensating balances?",
+        choices: [
+          "They are always included in cash equivalents.",
+          "They are always excluded from cash equivalents.",
+          "They are included in cash if not legally restricted.",
+          "They are included in cash if legally restricted."
+        ],
+        answer: 2
       }
-    };
+    ],
+    Practice: [
+      {
+        question: "1. With these givens, the closing outstanding checks are:",
+        imageQ: "practice_q_topic1_1.png",
+        choices: [
+          "289,000.00",
+          "311,000.00",
+          "489,000.00",
+          "511,000.00"
+        ],
+        answer: 1,
+        imageA: "practice_a_topic1_1.png"
+      },
+      {
+        question: "2. With these givens, the opening outstanding checks are:",
+        imageQ: "practice_q_topic1_2.png",
+        choices: [
+          "289,000.00",
+          "311,000.00",
+          "489,000.00",
+          "511,000.00"
+        ],
+        answer: 1,
+        imageA: "practice_a_topic1_2.png"
+      },
+      {
+        question: "3. With these givens, the closing book balance is:",
+        imageQ: "practice_q_topic1_3.png",
+        choices: [
+          "2,496,000.00",
+          "2,499,800.00",
+          "2,500,200.00",
+          "2,504,000.00"
+        ],
+        answer: 1,
+        imageA: "practice_a_topic1_3.png"
+      },
+      {
+        question: "4. With these givens, the closing outstanding deposits are:",
+        imageQ: "practice_q_topic1_4.png",
+        choices: [
+          "487,000.00",
+          "513,000.00",
+          "887,000.00",
+          "913,000.00"
+        ],
+        answer: 3,
+        imageA: "practice_a_topic1_4.png"
+      },
+      {
+        question: "5. With these givens, the closing outstanding deposits are:",
+        imageQ: "practice_q_topic1_5.png",
+        choices: [
+          "398,700.00",
+          "398,900.00",
+          "898,700.00",
+          "898,900.00"
+        ],
+        answer: 2,
+        imageA: "practice_a_topic1_5.png"
+      }
+    ]
+  },
+  topic1_chap2_vol1: {
+    Theory: [
+      {
+        question: "1. These describe a contract, except:",
+        choices: [
+          "It has clear economic consequences.",
+          "It is an agreement between two or more parties.",
+          "It is unavoidable by the parties.",
+          "It must be in writing."
+        ],
+        answer: 3
+      },
+      {
+        question: "2. The entity’s own equity instruments include:",
+        choices: [
+          "Contracts for future delivery of the entity’s own equity instruments.",
+          "Equity instruments to deliver prorate share in net assets to another entity, upon liquidation.",
+          "Puttable financial instruments classified as equity instruments.",
+          "The entity’s own ordinary shares."
+        ],
+        answer: 3
+      },
+      {
+        question: "3. Which describes a debt instrument measured at FVOCI?",
+        choices: [
+          "It is held for trading.",
+          "It is held to collect contractual cash flows over its life and realize its fair value through sale.",
+          "It is irrevocably designated as measured at FVOCI upon initial recognition.",
+          "It is managed on fair value basis."
+        ],
+        answer: 1
+      },
+      {
+        question: "4. These describe a debt instrument measured at FVOCI, except:",
+        choices: [
+          "It is held to collect contractual cash flows over its life and realize its fair value through sale.",
+          "It is irrevocably designated as measured at FVOCI upon initial recognition.",
+          "It is not irrevocably designated as measured at FVPL upon initial recognition.",
+          "Its contractual cash flows are solely payments of principal and interest on outstanding principal."
+        ],
+        answer: 1
+      },
+      {
+        question: "5. These describe the business model for a debt instrument, except:",
+        choices: [
+          "It is assessed upon initial recognition of the financial asset.",
+          "It is based on best-case, average-case, and worst-case scenarios.",
+          "It is determined by the key management personnel.",
+          "It is the manner of generating cash flows from the financial asset."
+        ],
+        answer: 1
+      },
+      {
+        question: "6. These are irrelevant in assessing the business model for a debt instrument, except:",
+        choices: [
+          "Credit-impairment of the debt instrument.",
+          "Intent of the entity.",
+          "Reasonably expected scenarios.",
+          "Requirement of a third party."
+        ],
+        answer: 2
+      },
+      {
+        question: "7. When the business model for a portfolio of debt instruments changes:",
+        choices: [
+          "Old and new instruments are classified under new and old models, respectively.",
+          "Old and new instruments are classified under old and new models, respectively.",
+          "Old and new instruments continue to be classified under new model.",
+          "Old and new instruments start to be classified under new model."
+        ],
+        answer: 1
+      },
+      {
+        question: "8. Sales of debt instruments are consistent with the hold-to-collect business model, if close to:",
+        choices: [
+          "Initial recognition, with proceeds approximating the remaining contractual cash flows.",
+          "Initial recognition, with proceeds exceeding the remaining contractual cash flows.",
+          "Maturity, with proceeds approximating the remaining contractual cash flows.",
+          "Maturity, with proceeds exceeding the remaining contractual cash flows."
+        ],
+        answer: 2
+      },
+      {
+        question: "9. Cash flows on loans with capped interest rates are solely payments of principal and interest, if:",
+        choices: [
+          "Interest equals the maximum market interest rate.",
+          "Interest is below the maximum market interest rate.",
+          "Interest is limited to the maximum market interest rate.",
+          "Interest reflects compensation in a basic lending arrangement."
+        ],
+        answer: 3
+      },
+      {
+        question: "10. Cash flows on debt instruments are solely payments of principal and interest, if:",
+        choices: [
+          "Difference between undiscounted contractual and benchmark cash flows is insignificant.",
+          "Difference between undiscounted contractual and benchmark cash flows is significant.",
+          "Tenor of interest rate is longer than frequency of interest reset.",
+          "Tenor of interest rate is shorter than frequency of interest reset."
+        ],
+        answer: 0
+      },
+      {
+        question: "11. Cash flows on debt instruments are solely payments of principal and interest, if:",
+        choices: [
+          "Acquired at a discount on principal, but prepayable at par.",
+          "Acquired at a premium on principal, but prepayable at par.",
+          "Fair value of prepayment feature is insignificant.",
+          "Fair value of prepayment feature is significant."
+        ],
+        answer: 2
+      },
+      {
+        question: "12. Cash flows on debt instruments are not solely payments of principal and interest, if:",
+        choices: [
+          "Interest rate equals higher between minimum rate and market rate.",
+          "Interest rate equals lower between maximum rate and market rate.",
+          "Interest rate equals market rate minus fixed rate.",
+          "Interest rate equals market rate plus fixed rate."
+        ],
+        answer: 2
+      },
+      {
+        question: "13. Reclassification of all debt instruments within a portfolio may be required, when:",
+        choices: [
+          "A business activity commences or ceases to be implemented.",
+          "A particular market for the debt instruments within the portfolio disappears.",
+          "The debt instruments are transferred between divisions of the entity.",
+          "The debt instruments cease to fulfill the requirements for internal credit quality."
+        ],
+        answer: 0
+      },
+      {
+        question: "14. Reclassification of all debt instruments within a portfolio is disallowed, when:",
+        choices: [
+          "A business activity commences or ceases to be implemented.",
+          "Changes in regulatory requirements occur.",
+          "The change in business activity is demonstrable to external parties.",
+          "The change in business activity is significant to the operations of the entity."
+        ],
+        answer: 1
+      },
+      {
+        question: "15. If the business activity changed on March 9 this year, and interim statements are not presented:",
+        choices: [
+          "All debt instruments within the portfolio are reclassified on April 1 this year.",
+          "All debt instruments within the portfolio are reclassified on January 1 next year.",
+          "All debt instruments within the portfolio are reclassified on July 1 this year.",
+          "All debt instruments within the portfolio are reclassified on October 1 this year."
+        ],
+        answer: 1
+      }
+    ]
+  },
+  topic2_chap2_vol1: {
+    Theory: [
+      {
+        question: "1. When the firm order is received, these firm commitments are recognized as financial assets, except:",
+        choices: [
+          "Those settled net, and are deemed as if they were derivatives.",
+          "Those irrevocably designated as measured at FVPL upon initial recognition.",
+          "Those designated as hedge items in fair value hedges.",
+          "Those to be delivered for ordered goods, or to be rendered for ordered services."
+        ],
+        answer: 3
+      },
+      {
+        question: "2. Under trade date accounting, the regular way transaction is recorded when:",
+        choices: [
+          "The contract allows settlement beyond the established time frame.",
+          "The contract requires net settlement (instead of delivery) of the financial asset.",
+          "The entity commits to purchase (or sell) the financial asset.",
+          "The financial asset is delivered to (or by) the entity."
+        ],
+        answer: 2
+      },
+      {
+        question: "3. In a regular way purchase under settlement date accounting, the financial asset:",
+        choices: [
+          "Along with any change in fair value, are recognized on the settlement date based on the classification thereof.",
+          "Along with the consideration payable, are recognized on the settlement date.",
+          "Is derecognized, and the consideration receivable and any disposal gain (or loss) are recognized on the settlement date.",
+          "Is derecognized, and the consideration received and any disposal gain (or loss) are recognized on the settlement date."
+        ],
+        answer: 0
+      },
+      {
+        question: "4. Noninterest-bearing short-term receivables are initially measured at:",
+        choices: [
+          "Fair value minus fee received (or plus fee paid).",
+          "Fair value.",
+          "Transaction price.",
+          "Undiscounted invoice amount."
+        ],
+        answer: 3
+      },
+      {
+        question: "5. Transaction costs on equity instruments at FVOCI are:",
+        choices: [
+          "Included in amortized cost, upon initial recognition.",
+          "Included in fair value, upon initial recognition.",
+          "Recognized in other comprehensive income.",
+          "Recognized in profit or loss."
+        ],
+        answer: 1
+      }
+    ],
+    Practice: [
+      {
+        question: "1. With these givens, financial assets at FVPL are recognized on April 4 at:",
+        imageQ: "practice_q_topic2_1.png",
+        choices: [
+          "0.00",
+          "1,300,000.00",
+          "1,600,000.00",
+          "2,000,000.00"
+        ],
+        answer: 3,
+        imageA: "practice_a_topic2_1.png"
+      },
+      {
+        question: "2. With these givens, disposal gain on debt instruments at amortized cost is recognized on March 28 at:",
+        imageQ: "practice_q_topic2_2.png",
+        choices: [
+          "0.00",
+          "200,000.00",
+          "300,000.00",
+          "400,000.00"
+        ],
+        answer: 1,
+        imageA: "practice_a_topic2_2.png"
+      },
+      {
+        question: "3. With these givens, fair value gain on financial assets at FVPL is recognized on March 28 at:",
+        imageQ: "practice_q_topic2_3.png",
+        choices: [
+          "0.00",
+          "200,000.00",
+          "300,000.00",
+          "400,000.00"
+        ],
+        answer: 1,
+        imageA: "practice_a_topic2_3.png"
+      },
+      {
+        question: "4. With these givens, disposal gain on debt instruments at FVOCI cost is recognized on April 4 at:",
+        imageQ: "practice_q_topic2_4.png",
+        choices: [
+          "0.00",
+          "200,000.00",
+          "300,000.00",
+          "400,000.00"
+        ],
+        answer: 1,
+        imageA: "practice_a_topic2_4.png"
+      },
+      {
+        question: "5. With these givens, financial assets at FVPL are initially measured at:",
+        imageQ: "practice_q_topic2_5.png",
+        choices: [
+          "1,100,000.00",
+          "1,116,000.00",
+          "1,230,000.00",
+          "1,246,000.00"
+        ],
+        answer: 0,
+        imageA: "practice_a_topic2_5.png"
+      }
+    ]
+  },
+  topic3_chap2_vol1: {
+    Theory: [
+      {
+        question: "1. For debt instruments measured at amortized cost, dividend income is:",
+        choices: [
+          "Not applicable.",
+          "Recognized in other comprehensive income, at the amount received (or receivable).",
+          "Recognized in profit or loss, at the amount received (or receivable).",
+          "Recognized in profit or loss, unless it represents partial recovery of investment cost."
+        ],
+        answer: 0
+      },
+      {
+        question: "2. For equity instruments measured at FVPL, dividend income is:",
+        choices: [
+          "Not applicable.",
+          "Recognized in other comprehensive income, at the amount received (or receivable).",
+          "Recognized in profit or loss, at the amount received (or receivable).",
+          "Recognized in profit or loss, unless it represents partial recovery of investment cost."
+        ],
+        answer: 2
+      },
+      {
+        question: "3. For debt instruments measured at FVOCI, foreign exchange gain (or loss) is:",
+        choices: [
+          "Not applicable.",
+          "Recognized in other comprehensive income, and reclassified to profit or loss, upon derecognition.",
+          "Recognized in other comprehensive income, and reclassified to retained earnings, upon derecognition.",
+          "Recognized in profit or loss, at the amount of change in exchange rate."
+        ],
+        answer: 3
+      },
+      {
+        question: "4. For equity instruments measured at FVOCI, foreign exchange gain (or loss) is:",
+        choices: [
+          "Not applicable.",
+          "Recognized in other comprehensive income, and reclassified to profit or loss, upon derecognition.",
+          "Recognized in other comprehensive income, and reclassified to retained earnings, upon derecognition.",
+          "Recognized in profit or loss, at the amount of change in exchange rate."
+        ],
+        answer: 2
+      },
+      {
+        question: "5. For debt instruments measured at FVPL, impairment gain (or loss) is:",
+        choices: [
+          "Not applicable.",
+          "Recognized in other comprehensive income, and reclassified to profit or loss, upon derecognition.",
+          "Recognized in other comprehensive income, and reclassified to retained earnings, upon derecognition.",
+          "Recognized in profit or loss, at the amount of change in allowance for expected credit losses."
+        ],
+        answer: 0
+      },
+      {
+        question: "6. For debt instruments measured at amortized cost, fair value gain (or loss) is:",
+        choices: [
+          "Not applicable.",
+          "Recognized in other comprehensive income, and reclassified to profit or loss, upon derecognition.",
+          "Recognized in other comprehensive income, and reclassified to retained earnings, upon derecognition.",
+          "Recognized in profit or loss, at the amount of change in fair value."
+        ],
+        answer: 0
+      },
+      {
+        question: "7. For equity instruments measured at FVPL, fair value gain (or loss) is:",
+        choices: [
+          "Not applicable.",
+          "Recognized in other comprehensive income, and reclassified to profit or loss, upon derecognition.",
+          "Recognized in other comprehensive income, and reclassified to retained earnings, upon derecognition.",
+          "Recognized in profit or loss, at the amount of change in fair value."
+        ],
+        answer: 3
+      },
+      {
+        question: "8. Debt instruments measured at FVOCI are measured in the statement of financial position at:",
+        choices: [
+          "Allowance for expected credit losses.",
+          "Amortized cost.",
+          "Fair value.",
+          "Gross carrying amount."
+        ],
+        answer: 2
+      },
+      {
+        question: "9. Equity instruments measured at FVOCI are measured in the statement of financial position at:",
+        choices: [
+          "Allowance for expected credit losses.",
+          "Amortized cost.",
+          "Fair value.",
+          "Gross carrying amount."
+        ],
+        answer: 2
+      },
+      {
+        question: "10. If the estimate of expected life cannot be faithfully represented, the effective interest rate will be based on:",
+        choices: [
+          "Contractual cash flows over contractual term of the debt instrument.",
+          "Contractual cash flows over expected life of the debt instrument.",
+          "Expected cash flows over contractual term of the debt instrument.",
+          "Expected cash flows over expected life of the debt instrument."
+        ],
+        answer: 0
+      },
+      {
+        question: "11. Commitment fees received to originate a loan are recognized as revenue, if:",
+        choices: [
+          "A specific loan will probably be executed by the entity.",
+          "The commitment expires, without a specific loan executed by the entity.",
+          "The commitment fees are integral to the effective interest rate.",
+          "The loan commitment is not a financial liability measured at FVPL."
+        ],
+        answer: 1
+      },
+      {
+        question: "12. Which fees received are not integral to the effective interest rate?",
+        choices: [
+          "Commitment fees for a loan that will probably be executed.",
+          "Fees received for a loan commitment that is not a financial liability measured at FVPL.",
+          "Origination fees received to create (or acquire) a debt instrument.",
+          "Syndication fees received to arrange a loan, wherein the entity retains no part of the loan for itself."
+        ],
+        answer: 3
+      },
+      {
+        question: "13. Cost may represent the best estimate of the fair value of equity instruments, if:",
+        choices: [
+          "The economic environments, wherein the investee operates, significantly changed.",
+          "The operating performance of entities, that are comparable to the investee, significantly changed.",
+          "The range of possible measurements of the fair value is wide.",
+          "The valuation, that is implied by the overall market, significantly changed."
+        ],
+        answer: 2
+      },
+      {
+        question: "14. For reclassification from amortized cost to FVOCI, the effective interest rate:",
+        choices: [
+          "Ceases to apply, from the initial recognition date.",
+          "Ceases to apply, from the reclassification date.",
+          "Is determined, as if the reclassification date, were the initial recognition date.",
+          "On the reclassification date, equals effective interest rate on the initial recognition date."
+        ],
+        answer: 3
+      },
+      {
+        question: "15. For reclassification from FVOCI to amortized cost, any difference between fair value and amortized cost is:",
+        choices: [
+          "Eliminated against the amortized cost on reclassification date.",
+          "Eliminated against the fair value on reclassification date.",
+          "Recognized as fair value gain or loss in profit or loss.",
+          "Recognized in other comprehensive income, and reclassified to profit or loss, upon derecognition."
+        ],
+        answer: 1
+      }
+    ],
+    Practice: [
+      {
+        question: "1. With these givens, interest revenue for Year 2 is:",
+        imageQ: "practice_q_topic3_1.png",
+        choices: [
+          "321,579.26",
+          "341,000.00",
+          "350,603.51",
+          "371,777.08"
+        ],
+        answer: 2,
+        imageA: "practice_a_topic3_1.png"
+      },
+      {
+        question: "2. With these givens, interest revenue for Year 2 is:",
+        imageQ: "practice_q_topic3_2.png",
+        choices: [
+          "4,505.18",
+          "245,478.25",
+          "249,983.43",
+          "561,000.00"
+        ],
+        answer: 2,
+        imageA: "practice_a_topic3_2.png"
+      },
+      {
+        question: "3. With these givens, fair value gain for reclassification from amortized cost to FVOCI is:",
+        imageQ: "practice_q_topic3_3.png",
+        choices: [
+          "0.00",
+          "300,000.00",
+          "1,300,000.00",
+          "1,600,000.00"
+        ],
+        answer: 1,
+        imageA: "practice_a_topic3_3.png"
+      },
+      {
+        question: "4. With these givens, debt instruments at amortized cost reclassified from FVOCI are recognized at:",
+        imageQ: "practice_q_topic3_4.png",
+        choices: [
+          "0.00",
+          "300,000.00",
+          "1,300,000.00",
+          "1,600,000.00"
+        ],
+        answer: 2,
+        imageA: "practice_a_topic3_4.png"
+      },
+      {
+        question: "5. With these givens, debt instruments at FVOCI reclassified from FVPL are recognized at:",
+        imageQ: "practice_q_topic3_5.png",
+        choices: [
+          "0.00",
+          "300,000.00",
+          "1,300,000.00",
+          "1,600,000.00"
+        ],
+        answer: 2,
+        imageA: "practice_a_topic3_5.png"
+      }
+    ]
+  },
+  topic4_chap2_vol1: {
+    Theory: [
+      {
+        question: "1. If the debt instruments are not credit-impaired on the reporting date, then:",
+        choices: [
+          "12-month loss allowance is recognized, and interest revenue is based on credit-adjusted EIR.",
+          "12-month loss allowance is recognized, and interest revenue is based on EIR.",
+          "Lifetime loss allowance is recognized, and interest revenue is based on credit-adjusted EIR.",
+          "Lifetime loss allowance is recognized, and interest revenue is based on EIR."
+        ],
+        answer: 3
+      },
+      {
+        question: "2. These describe recognition of loss allowance and measurement of interest revenue, except:",
+        choices: [
+          "12-month loss allowance is recognized, and interest revenue is based on credit-adjusted EIR.",
+          "12-month loss allowance is recognized, and interest revenue is based on EIR.",
+          "Lifetime loss allowance is recognized, and interest revenue is based on credit-adjusted EIR.",
+          "Lifetime loss allowance is recognized, and interest revenue is based on EIR."
+        ],
+        answer: 0
+      },
+      {
+        question: "3. If the increase in credit risk since initial recognition of the debt instruments is significant, then:",
+        choices: [
+          "12-month loss allowance is recognized, with changes thereto recognized in other comprehensive income.",
+          "12-month loss allowance is recognized, with changes thereto recognized in profit or loss.",
+          "Lifetime loss allowance is recognized, with changes thereto recognized in other comprehensive income.",
+          "Lifetime loss allowance is recognized, with changes thereto recognized in profit or loss."
+        ],
+        answer: 3
+      },
+      {
+        question: "4. Under the general approach to impairment of debt instruments, interest revenue is measured:",
+        choices: [
+          "By multiplying the amortized cost, by the credit-adjusted EIR.",
+          "By multiplying the amortized cost, by the EIR.",
+          "By multiplying the gross carrying amount, by the credit-adjusted EIR.",
+          "By multiplying the gross carrying amount, by the EIR."
+        ],
+        answer: 3
+      },
+      {
+        question: "5. Under the simplified approach to impairment of debt instruments, interest revenue is measured:",
+        choices: [
+          "By multiplying the amortized cost, by the credit-adjusted EIR.",
+          "By multiplying the amortized cost, by the EIR.",
+          "By multiplying the gross carrying amount, by the credit-adjusted EIR.",
+          "By multiplying the gross carrying amount, by the EIR."
+        ],
+        answer: 3
+      },
+      {
+        question: "6. These describe debt instruments that are credit-impaired on the reporting date, except:",
+        choices: [
+          "The general approach may be reverted to when credit impairment ceases to be indicated.",
+          "The increase in their credit risk since initial recognition may become insignificant.",
+          "The increase in their credit risk since initial recognition may become significant.",
+          "They remain credit-impaired until derecognition."
+        ],
+        answer: 3
+      },
+      {
+        question: "7. The unrecoverable portion of a debt instrument is:",
+        choices: [
+          "Recognized as impairment loss, by decreasing the loss allowance.",
+          "Recognized as impairment loss, by increasing the loss allowance.",
+          "Written off, by directly reducing the gross carrying amount.",
+          "Written off, by proratably reducing the amortized cost."
+        ],
+        answer: 2
+      },
+      {
+        question: "8. Indicators of a credit-impaired debt instrument exclude:",
+        choices: [
+          "Acquisition of debt instrument at a deep discount.",
+          "Disappearance of active market for the debt instrument.",
+          "Probability of bankruptcy (or financial reorganization) of the issuer (or borrower).",
+          "Significant increase in credit risk since initial recognition."
+        ],
+        answer: 3
+      },
+      {
+        question: "9. Either the simplified approach or the general approach may be applied to receivables from lessees:",
+        choices: [
+          "Under a contract not classified as a lease.",
+          "Under a finance lease or an operating lease.",
+          "Under a finance lease.",
+          "Under an operating lease."
+        ],
+        answer: 1
+      },
+      {
+        question: "10. These are the criteria for the credit risk on a debt instrument to be deemed low, except:",
+        choices: [
+          "The borrower’s capability to pay is not diminished.",
+          "The borrower’s capability to pay is strong.",
+          "The credit risk of the entity’s operating jurisdiction is insignificant.",
+          "The risk of default on the debt instrument is low."
+        ],
+        answer: 2
+      },
+      {
+        question: "11. The increase in credit risk since initial recognition may be assessed as significant, when:",
+        choices: [
+          "Credit risk approaches the maximum initial credit risk of similar debt instruments within the portfolio.",
+          "Credit risk approximates the maximum initial credit risk of similar debt instruments within the portfolio.",
+          "Credit risk equals the maximum initial credit risk of similar debt instruments within the portfolio.",
+          "Credit risk exceeds the maximum initial credit risk of similar debt instruments within the portfolio."
+        ],
+        answer: 3
+      },
+      {
+        question: "12. Changes in lifetime default risk of a long-term debt instrument must be assessed, when:",
+        choices: [
+          "Changes in credit-related factors are inconspicuous beyond next 12 months.",
+          "Changes in credit-related factors are represented within next 12 months.",
+          "Contractual cash flow obligations are insignificant beyond next 12 months.",
+          "Contractual cash flow obligations are significant beyond next 12 months."
+        ],
+        answer: 3
+      },
+      {
+        question: "13. Which is the use of specific trade receivables, as security for a loan?",
+        choices: [
+          "Assignment of trade receivables.",
+          "Factoring with recourse.",
+          "Factoring without recourse.",
+          "Pledge of trade receivables."
+        ],
+        answer: 0
+      },
+      {
+        question: "14. Which describes the pledge of trade receivables?",
+        choices: [
+          "It is the sale of specific trade receivables, with obligation to repurchase uncollected portion.",
+          "It is the sale of specific trade receivables, without obligation to repurchase uncollected portion.",
+          "It is the use of all trade receivables, as security for a loan.",
+          "It is the use of specific trade receivables, as security for a loan."
+        ],
+        answer: 2
+      },
+      {
+        question: "15. Which describes the factoring of trade receivables with recourse?",
+        choices: [
+          "It is the sale of specific trade receivables, with obligation to repurchase uncollected portion.",
+          "It is the sale of specific trade receivables, without obligation to repurchase uncollected portion.",
+          "It is the use of all trade receivables, as security for a loan.",
+          "It is the use of specific trade receivables, as security for a loan."
+        ],
+        answer: 0
+      },
+      {
+        question: "16. Which describes an associate?",
+        choices: [
+          "It is a joint arrangement whereby joint venturers have rights to the net assets thereof.",
+          "It is a joint arrangement whereby joint venturers have significant influence thereto.",
+          "It is an entity over which the investor has control or joint control.",
+          "It is an entity over which the investor has significant influence."
+        ],
+        answer: 3
+      },
+      {
+        question: "17. Which describes joint control?",
+        choices: [
+          "It is the contractually agreed participation when unanimous consent is required.",
+          "It is the contractually agreed sharing of control when unanimous consent is required.",
+          "It is the power to control the financial and operating decisions of the investee.",
+          "It is the power to participate in the financial and operating decisions of the investee."
+        ],
+        answer: 1
+      },
+      {
+        question: "18. Significant influence is presumed, when the entity holds:",
+        choices: [
+          "At least 20% of the voting power in the investee.",
+          "At most 20% of the voting power in the investee.",
+          "Less than 20% of the voting power in the investee.",
+          "More than 20% of the voting power in the investee."
+        ],
+        answer: 0
+      },
+      {
+        question: "19. Which is a usual proof of significant influence?",
+        choices: [
+          "Appointing power over members of significant committees.",
+          "Representation in board of directors.",
+          "Veto power against significant financial or operating policy decisions.",
+          "Voting power that is larger than those of other shareholders."
+        ],
+        answer: 1
+      },
+      {
+        question: "20. Which describes a joint venture?",
+        choices: [
+          "It is a joint arrangement whereby joint venturers have rights to the net assets thereof.",
+          "It is a joint arrangement whereby joint venturers have rights to the assets thereof.",
+          "It is a joint arrangement whereby joint venturers have obligations for the liabilities thereof.",
+          "It is a joint arrangement whereby joint venturers have rights to the operations thereof."
+        ],
+        answer: 0
+      }
+    ]
+  }
+};
 
     // 🔗 DOM Elements
     const volumeSelect = document.getElementById("volumeSelect");
