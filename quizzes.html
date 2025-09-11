@@ -34,9 +34,8 @@
       <button onclick="resetQuiz()">Reset</button>
     </div>
   </header>
-
-  <main id="quizContainer">
-    <!-- Questions will be dynamically injected here -->
+  <main id="mainContainer">
+    <!-- Tab content or quiz questions will be injected here -->
   </main>
 
   <section id="results" class="hidden">
@@ -73,7 +72,6 @@
   </template>
 
   <script>
-    // ✅ Modular data structure for easy expansion
     const quizData = {
       "1": {
         chapters: {
@@ -141,7 +139,7 @@
 
     function loadQuestions() {
       const type = document.getElementById("typeSelect").value;
-      const container = document.getElementById("quizContainer");
+      const container = document.getElementById("mainContainer");
       container.innerHTML = "";
 
       if (type === "Theory" || type === "Both") {
@@ -173,17 +171,27 @@
       document.getElementById("chapterSelect").innerHTML = '<option value="">Select Chapter</option>';
       document.getElementById("topicSelect").innerHTML = '<option value="">Select Topic</option>';
       document.getElementById("typeSelect").innerHTML = '<option value="">Select Type</option>';
-      document.getElementById("quizContainer").innerHTML = "";
+      document.getElementById("mainContainer").innerHTML = "";
       document.getElementById("results").classList.add("hidden");
       window.scrollTo(0, 0);
     }
 
     function navigateTo(tabName) {
-      const container = document.getElementById("quizContainer");
-      container.innerHTML = `<p>Loading ${tabName} content...</p>`;
+      const container = document.getElementById("mainContainer");
+      fetch(`tabs/${tabName}.html`)
+        .then(response => {
+          if (!response.ok) throw new Error("Tab not found");
+          return response.text();
+        })
+        .then(html => {
+          container.innerHTML = html;
+          window.scrollTo(0, 0);
+        })
+        .catch(() => {
+          container.innerHTML = `<p>Content for "${tabName}" is not yet available.</p>`;
+        });
     }
 
-    // Initialize dropdowns on page load
     window.onload = populateVolumes;
   </script>
 </body>
