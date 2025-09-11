@@ -20,9 +20,6 @@
     <div class="dropdowns">
       <select id="volumeSelect" onchange="updateChapters()">
         <option value="">Select Volume</option>
-        <option value="1">Volume 1</option>
-        <option value="2">Volume 2</option>
-        <option value="3">Volume 3</option>
       </select>
       <select id="chapterSelect" onchange="updateTopics()">
         <option value="">Select Chapter</option>
@@ -39,7 +36,7 @@
   </header>
 
   <main id="quizContainer">
-    <!-- Placeholder for dynamically loaded questions -->
+    <!-- Questions will be dynamically injected here -->
   </main>
 
   <section id="results" class="hidden">
@@ -76,23 +73,45 @@
   </template>
 
   <script>
-    // Placeholder logic for dynamic dropdowns
-    const volumeData = {
-      "1": { chapters: ["1", "2"], topics: { "1": ["1"], "2": ["1", "2", "3", "4"] } },
-      "2": { chapters: ["1", "3"], topics: { "1": ["1"], "3": ["1", "2"] } },
-      "3": { chapters: ["2"], topics: { "2": ["1", "2", "3"] } }
+    // ✅ Modular data structure for easy expansion
+    const quizData = {
+      "1": {
+        chapters: {
+          "1": { topics: { "1": ["Theory", "Practice", "Both"] } },
+          "2": { topics: { "1": ["Theory"], "2": ["Both"], "3": ["Both"], "4": ["Theory"] } }
+        }
+      },
+      "2": {
+        chapters: {
+          "1": { topics: { "1": ["Theory"] } },
+          "3": { topics: { "1": ["Practice"], "2": ["Both"] } }
+        }
+      },
+      "3": {
+        chapters: {
+          "2": { topics: { "1": ["Theory"], "2": ["Practice"], "3": ["Both"] } }
+        }
+      }
     };
+
+    function populateVolumes() {
+      const volumeSelect = document.getElementById("volumeSelect");
+      volumeSelect.innerHTML = '<option value="">Select Volume</option>';
+      Object.keys(quizData).forEach(vol => {
+        volumeSelect.innerHTML += `<option value="${vol}">Volume ${vol}</option>`;
+      });
+    }
 
     function updateChapters() {
       const volume = document.getElementById("volumeSelect").value;
       const chapterSelect = document.getElementById("chapterSelect");
       chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
-      if (volumeData[volume]) {
-        volumeData[volume].chapters.forEach(ch => {
+      if (quizData[volume]) {
+        Object.keys(quizData[volume].chapters).forEach(ch => {
           chapterSelect.innerHTML += `<option value="${ch}">Chapter ${ch}</option>`;
         });
       }
-      updateTopics(); // Reset downstream
+      updateTopics();
     }
 
     function updateTopics() {
@@ -100,26 +119,24 @@
       const chapter = document.getElementById("chapterSelect").value;
       const topicSelect = document.getElementById("topicSelect");
       topicSelect.innerHTML = '<option value="">Select Topic</option>';
-      if (volumeData[volume]?.topics[chapter]) {
-        volumeData[volume].topics[chapter].forEach(t => {
-          topicSelect.innerHTML += `<option value="${t}">Topic ${t}</option>`;
+      if (quizData[volume]?.chapters[chapter]) {
+        Object.keys(quizData[volume].chapters[chapter].topics).forEach(topic => {
+          topicSelect.innerHTML += `<option value="${topic}">Topic ${topic}</option>`;
         });
       }
-      updateTypes(); // Reset downstream
+      updateTypes();
     }
 
     function updateTypes() {
+      const volume = document.getElementById("volumeSelect").value;
+      const chapter = document.getElementById("chapterSelect").value;
       const topic = document.getElementById("topicSelect").value;
       const typeSelect = document.getElementById("typeSelect");
       typeSelect.innerHTML = '<option value="">Select Type</option>';
-      // Placeholder logic: assume Topic 1 and 4 are Theory-only, others are Both
-      if (["1", "4"].includes(topic)) {
-        typeSelect.innerHTML += `<option value="Theory">Theory</option>`;
-      } else {
-        typeSelect.innerHTML += `<option value="Theory">Theory</option>`;
-        typeSelect.innerHTML += `<option value="Practice">Practice</option>`;
-        typeSelect.innerHTML += `<option value="Both">Both</option>`;
-      }
+      const types = quizData[volume]?.chapters[chapter]?.topics[topic] || [];
+      types.forEach(type => {
+        typeSelect.innerHTML += `<option value="${type}">${type}</option>`;
+      });
     }
 
     function loadQuestions() {
@@ -141,9 +158,8 @@
     }
 
     function submitAnswers() {
-      // Placeholder scoring logic
-      const rawScore = 1; // Replace with actual logic
-      const percentage = "100%"; // Replace with actual logic
+      const rawScore = 1; // Placeholder logic
+      const percentage = "100%"; // Placeholder logic
       document.getElementById("rawScore").textContent = rawScore;
       document.getElementById("percentageScore").textContent = percentage;
 
@@ -159,11 +175,16 @@
       document.getElementById("typeSelect").innerHTML = '<option value="">Select Type</option>';
       document.getElementById("quizContainer").innerHTML = "";
       document.getElementById("results").classList.add("hidden");
+      window.scrollTo(0, 0);
     }
 
     function navigateTo(tabName) {
-      alert(`Navigating to ${tabName} tab...`); // Placeholder
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = `<p>Loading ${tabName} content...</p>`;
     }
+
+    // Initialize dropdowns on page load
+    window.onload = populateVolumes;
   </script>
 </body>
 </html>
