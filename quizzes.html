@@ -1099,7 +1099,7 @@ volumeSelect.addEventListener("change", () => {
       submitBtn.disabled = !typeSelect.value;
     });
 
-    // 🚀 Submit Logic (continued)
+// 🚀 Submit Logic
 submitBtn.addEventListener("click", () => {
   const volume = volumeSelect.value;
   const chapter = chapterSelect.value;
@@ -1112,6 +1112,7 @@ submitBtn.addEventListener("click", () => {
   score = 0;
   totalQuestions = 0;
 
+  // 🧠 Render Theory Questions
   if (type === "Theory" || type === "Both") {
     const theoryQs = questions[key]?.Theory || [];
     theoryQs.forEach((q, index) => {
@@ -1129,30 +1130,27 @@ submitBtn.addEventListener("click", () => {
       quizContainer.appendChild(block);
     });
   }
+
+  // 🧪 Render Practice Questions
+  if (type === "Practice" || type === "Both") {
+    const practiceQs = questions[key]?.Practice || [];
+    practiceQs.forEach((q, index) => {
+      totalQuestions++;
+      const block = document.createElement("div");
+      block.className = "quiz-block";
+      block.innerHTML = `
+        <p>${q.question}</p>
+        <img src="${q.imageQ}" alt="Practice Question Image" class="excel-image" />
+        ${q.choices.map((choice, i) => `
+          <label><input type="radio" name="practice${index}" value="${i}"> ${choice}</label><br/>
+        `).join("")}
+        <button onclick="checkPractice('${key}', ${index}, '${q.imageA}')">Reveal Answer</button>
+        <div id="feedback-practice${index}" class="feedback"></div>
+      `;
+      quizContainer.appendChild(block);
+    });
+  }
 });
-
-      // Render Practice Questions
-if (type === "Practice" || type === "Both") {
-  const volume = volumeSelect.value;
-  const chapter = chapterSelect.value;
-  const key = `${topic}_${chapter}_${volume}`;
-  const practiceQs = questions[key]?.Practice || [];
-
-  practiceQs.forEach((q, index) => {
-    totalQuestions++;
-    const block = document.createElement("div");
-    block.className = "quiz-block";
-    block.innerHTML = `
-      <p>${q.question}</p>
-      <img src="${q.imageQ}" alt="Practice Question Image" class="excel-image" />
-      ${q.choices.map((choice, i) => `
-        <label><input type="radio" name="practice${index}" value="${i}"> ${choice}</label><br/>
-      `).join("")}
-      <button onclick="checkPractice('${key}', ${index}, '${q.imageA}')">Reveal Answer</button>
-      <div id="feedback-practice${index}" class="feedback"></div>
-    `;
-    quizContainer.appendChild(block);
-  });
 
     // ✅ Reset Logic
     resetBtn.addEventListener("click", () => {
