@@ -10,7 +10,7 @@
 <body>
   <header class="sticky-header">
     <nav class="tab-bar">
-      <button onclick="navigateTo('home')">Home</button>
+      <button onclick="navigateTo('index')">Home</button>
       <button onclick="navigateTo('glossary')">Glossary</button>
       <button onclick="navigateTo('quizzes')">Quizzes</button>
       <button onclick="navigateTo('references')">References</button>
@@ -76,18 +76,18 @@
       "1": {
         chapters: {
           "1": { topics: { "1": ["Theory", "Practice", "Both"] } },
-          "2": { topics: { "1": ["Theory"], "2": ["Both"], "3": ["Both"], "4": ["Theory"] } }
+          "2": { topics: { "1": ["Theory"], "2": ["Theory", "Practice", "Both"], "3": ["Theory", "Practice", "Both"], "4": ["Theory"] } }
         }
       },
       "2": {
         chapters: {
           "1": { topics: { "1": ["Theory"] } },
-          "3": { topics: { "1": ["Practice"], "2": ["Both"] } }
+          "3": { topics: { "1": ["Practice"], "2": ["Theory", "Practice", "Both"] } }
         }
       },
       "3": {
         chapters: {
-          "2": { topics: { "1": ["Theory"], "2": ["Practice"], "3": ["Both"] } }
+          "2": { topics: { "1": ["Theory"], "2": ["Practice"], "3": ["Theory", "Practice", "Both"] } }
         }
       }
     };
@@ -132,7 +132,7 @@
       const typeSelect = document.getElementById("typeSelect");
       typeSelect.innerHTML = '<option value="">Select Type</option>';
       const types = quizData[volume]?.chapters[chapter]?.topics[topic] || [];
-      types.forEach(type => {
+      [...new Set(types)].forEach(type => {
         typeSelect.innerHTML += `<option value="${type}">${type}</option>`;
       });
     }
