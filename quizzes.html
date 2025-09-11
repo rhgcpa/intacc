@@ -1167,9 +1167,9 @@ window.checkTheory = function(key, index) {
 
     const userAnswer = parseInt(selected.value);
     const correctText = q.choices[q.answer];
-    feedback.innerHTML = userAnswer === q.answer
-      ? `<p>✅ Correct!</p>`
-      : `<p>❌ Incorrect. Correct answer: ${correctText}</p>`;
+feedback.innerHTML = userAnswer === q.answer
+  ? `<p class="correct">✅ Correct!</p>`
+  : `<p class="incorrect">❌ Incorrect. Correct answer: ${correctText}</p>`;
     score++;
     updateScore();
     updateProgressTracker(); // 📈 Update progress after answering
@@ -1186,9 +1186,9 @@ window.checkPractice = function(key, index, imagePath) {
 
     const userAnswer = parseInt(selected.value);
     const correctText = q.choices[q.answer];
-    feedback.innerHTML = userAnswer === q.answer
-      ? `<p>✅ Correct!</p>`
-      : `<p>❌ Incorrect. Correct answer: ${correctText}</p>`;
+feedback.innerHTML = userAnswer === q.answer
+  ? `<p class="correct">✅ Correct!</p>`
+  : `<p class="incorrect">❌ Incorrect. Correct answer: ${correctText}</p>`;
     const answerImage = document.createElement("img");
     answerImage.src = imagePath;
     answerImage.alt = "Practice Answer Image";
