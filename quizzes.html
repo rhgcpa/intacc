@@ -53,7 +53,8 @@
     <p>Percentage: <span id="percentageScore">0%</span></p>
   </footer>
 
-  <script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
     // 📁 REPLACEABLE BLOCK: Volumes, Chapters, Topics, Types
     const quizData = {
       vol1: {
@@ -1260,6 +1261,7 @@ function updateScore() {
   percentageScore.textContent = `${percentage}%`;
   celebrateIfPerfect(); // 🎉 Trigger celebration if perfect score
 }
+});
   </script>
 </body>
 </html>
