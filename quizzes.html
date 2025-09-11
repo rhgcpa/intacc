@@ -5,194 +5,190 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quizzes</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer src="quizzes.js"></script>
 </head>
 <body>
-  <header class="sticky-header">
+  <header id="sticky-header">
     <nav class="tab-bar">
-      <button onclick="navigateTo('index')">Home</button>
-      <button onclick="navigateTo('glossary')">Glossary</button>
-      <button onclick="navigateTo('quizzes')">Quizzes</button>
-      <button onclick="navigateTo('references')">References</button>
-      <button onclick="navigateTo('visuals')">Visuals</button>
-      <button onclick="navigateTo('tools')">Tools</button>
+      <a href="index.html" class="tab">Home</a>
+      <a href="glossary.html" class="tab">Glossary</a>
+      <a href="quizzes.html" class="tab active">Quizzes</a>
+      <a href="references.html" class="tab">References</a>
+      <a href="visuals.html" class="tab">Visuals</a>
+      <a href="tools.html" class="tab">Tools</a>
     </nav>
+
     <div class="dropdowns">
-      <select id="volumeSelect" onchange="updateChapters()">
+      <select id="volume" onchange="updateChapters()">
         <option value="">Select Volume</option>
+        <option value="vol1">Volume 1</option>
+        <option value="vol2">Volume 2</option>
+        <option value="vol3">Volume 3</option>
       </select>
-      <select id="chapterSelect" onchange="updateTopics()">
+
+      <select id="chapter" onchange="updateTopics()">
         <option value="">Select Chapter</option>
       </select>
-      <select id="topicSelect" onchange="updateTypes()">
+
+      <select id="topic" onchange="updateTypes()">
         <option value="">Select Topic</option>
       </select>
-      <select id="typeSelect" onchange="loadQuestions()">
+
+      <select id="type" onchange="loadQuiz()">
         <option value="">Select Type</option>
       </select>
-      <button onclick="submitAnswers()">Submit</button>
-      <button onclick="resetQuiz()">Reset</button>
+
+      <button id="submitBtn" onclick="submitQuiz()">Submit</button>
+      <button id="resetBtn" onclick="resetQuiz()">Reset</button>
     </div>
   </header>
-  <main id="mainContainer">
-    <!-- Tab content or quiz questions will be injected here -->
+
+  <main id="quiz-container">
+    <!-- Quiz content will be injected here -->
   </main>
 
-  <section id="results" class="hidden">
-    <p>Raw Score: <span id="rawScore">0</span></p>
-    <p>Percentage: <span id="percentageScore">0%</span></p>
-  </section>
-
-  <template id="theoryTemplate">
-    <div class="question-block">
-      <p class="question-text">[Theory Question Placeholder]</p>
-      <ul class="choices">
-        <li><input type="radio" name="q" value="A" /> A. [Choice A]</li>
-        <li><input type="radio" name="q" value="B" /> B. [Choice B]</li>
-        <li><input type="radio" name="q" value="C" /> C. [Choice C]</li>
-        <li><input type="radio" name="q" value="D" /> D. [Choice D]</li>
-      </ul>
-      <p class="correct-answer hidden">Correct Answer: [Correct Choice]</p>
-    </div>
-  </template>
-
-  <template id="practiceTemplate">
-    <div class="question-block">
-      <p class="question-text">[Practice Question Placeholder]</p>
-      <img src="[ExcelQuestionImage.png]" alt="Practice Question Image" class="excel-image" />
-      <ul class="choices">
-        <li><input type="radio" name="q" value="A" /> A. [Choice A]</li>
-        <li><input type="radio" name="q" value="B" /> B. [Choice B]</li>
-        <li><input type="radio" name="q" value="C" /> C. [Choice C]</li>
-        <li><input type="radio" name="q" value="D" /> D. [Choice D]</li>
-      </ul>
-      <p class="correct-answer hidden">Correct Answer: [Correct Choice]</p>
-      <img src="[ExcelAnswerImage.png]" alt="Practice Answer Image" class="excel-image hidden" />
-    </div>
-  </template>
+  <footer>
+    <div id="score-display"></div>
+  </footer>
 
   <script>
-    const quizData = {
-      "1": {
-        chapters: {
-          "1": { topics: { "1": ["Theory", "Practice", "Both"] } },
-          "2": { topics: { "1": ["Theory"], "2": ["Theory", "Practice", "Both"], "3": ["Theory", "Practice", "Both"], "4": ["Theory"] } }
+    const data = {
+      vol1: {
+        chapter1: {
+          topic1: ['Theory', 'Practice'],
+          topic2: ['Theory'],
+          topic3: ['Practice']
+        },
+        chapter2: {
+          topic1: ['Both']
         }
       },
-      "2": {
-        chapters: {
-          "1": { topics: { "1": ["Theory"] } },
-          "3": { topics: { "1": ["Practice"], "2": ["Theory", "Practice", "Both"] } }
+      vol2: {
+        chapter1: {
+          topic1: ['Practice'],
+          topic2: ['Theory']
+        },
+        chapter3: {
+          topic1: ['Theory', 'Practice']
         }
       },
-      "3": {
-        chapters: {
-          "2": { topics: { "1": ["Theory"], "2": ["Practice"], "3": ["Theory", "Practice", "Both"] } }
+      vol3: {
+        chapter2: {
+          topic1: ['Theory', 'Practice']
         }
       }
     };
 
-    function populateVolumes() {
-      const volumeSelect = document.getElementById("volumeSelect");
-      volumeSelect.innerHTML = '<option value="">Select Volume</option>';
-      Object.keys(quizData).forEach(vol => {
-        volumeSelect.innerHTML += `<option value="${vol}">Volume ${vol}</option>`;
-      });
-    }
-
     function updateChapters() {
-      const volume = document.getElementById("volumeSelect").value;
-      const chapterSelect = document.getElementById("chapterSelect");
+      const volume = document.getElementById('volume').value;
+      const chapterSelect = document.getElementById('chapter');
       chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
-      if (quizData[volume]) {
-        Object.keys(quizData[volume].chapters).forEach(ch => {
-          chapterSelect.innerHTML += `<option value="${ch}">Chapter ${ch}</option>`;
+
+      if (volume && data[volume]) {
+        Object.keys(data[volume]).forEach(ch => {
+          const opt = document.createElement('option');
+          opt.value = ch;
+          opt.textContent = ch.replace('chapter', 'Chapter ');
+          chapterSelect.appendChild(opt);
         });
       }
       updateTopics();
     }
 
     function updateTopics() {
-      const volume = document.getElementById("volumeSelect").value;
-      const chapter = document.getElementById("chapterSelect").value;
-      const topicSelect = document.getElementById("topicSelect");
+      const volume = document.getElementById('volume').value;
+      const chapter = document.getElementById('chapter').value;
+      const topicSelect = document.getElementById('topic');
       topicSelect.innerHTML = '<option value="">Select Topic</option>';
-      if (quizData[volume]?.chapters[chapter]) {
-        Object.keys(quizData[volume].chapters[chapter].topics).forEach(topic => {
-          topicSelect.innerHTML += `<option value="${topic}">Topic ${topic}</option>`;
+
+      if (volume && chapter && data[volume][chapter]) {
+        Object.keys(data[volume][chapter]).forEach(tp => {
+          const opt = document.createElement('option');
+          opt.value = tp;
+          opt.textContent = tp.replace('topic', 'Topic ');
+          topicSelect.appendChild(opt);
         });
       }
       updateTypes();
     }
 
     function updateTypes() {
-      const volume = document.getElementById("volumeSelect").value;
-      const chapter = document.getElementById("chapterSelect").value;
-      const topic = document.getElementById("topicSelect").value;
-      const typeSelect = document.getElementById("typeSelect");
+      const volume = document.getElementById('volume').value;
+      const chapter = document.getElementById('chapter').value;
+      const topic = document.getElementById('topic').value;
+      const typeSelect = document.getElementById('type');
       typeSelect.innerHTML = '<option value="">Select Type</option>';
-      const types = quizData[volume]?.chapters[chapter]?.topics[topic] || [];
-      [...new Set(types)].forEach(type => {
-        typeSelect.innerHTML += `<option value="${type}">${type}</option>`;
-      });
+
+      if (volume && chapter && topic && data[volume][chapter][topic]) {
+        data[volume][chapter][topic].forEach(type => {
+          const opt = document.createElement('option');
+          opt.value = type.toLowerCase();
+          opt.textContent = type;
+          typeSelect.appendChild(opt);
+        });
+      }
     }
 
-    function loadQuestions() {
-      const type = document.getElementById("typeSelect").value;
-      const container = document.getElementById("mainContainer");
-      container.innerHTML = "";
+    function loadQuiz() {
+      const type = document.getElementById('type').value;
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = '';
 
-      if (type === "Theory" || type === "Both") {
-        const theory = document.getElementById("theoryTemplate").content.cloneNode(true);
-        container.appendChild(theory);
+      if (type === 'theory') {
+        container.innerHTML = `
+          <div class="quiz-block">
+            <p class="question">[Theory Question Placeholder]</p>
+            <ul class="choices">
+              <li><input type="radio" name="answer" value="A" /> A. Choice A</li>
+              <li><input type="radio" name="answer" value="B" /> B. Choice B</li>
+              <li><input type="radio" name="answer" value="C" /> C. Choice C</li>
+              <li><input type="radio" name="answer" value="D" /> D. Choice D</li>
+            </ul>
+            <div class="correct-answer hidden">Correct Answer: [Placeholder]</div>
+          </div>
+        `;
+      } else if (type === 'practice') {
+        container.innerHTML = `
+          <div class="quiz-block">
+            <p class="question">[Practice Question Placeholder]</p>
+            <img src="images/practice-question-placeholder.png" alt="Practice Question Image" />
+            <ul class="choices">
+              <li><input type="radio" name="answer" value="A" /> A. Choice A</li>
+              <li><input type="radio" name="answer" value="B" /> B. Choice B</li>
+              <li><input type="radio" name="answer" value="C" /> C. Choice C</li>
+              <li><input type="radio" name="answer" value="D" /> D. Choice D</li>
+            </ul>
+            <div class="correct-answer hidden">
+              Correct Answer: [Placeholder]<br />
+              <img src="images/practice-answer-placeholder.png" alt="Practice Answer Image" />
+            </div>
+          </div>
+        `;
       }
-
-      if (type === "Practice" || type === "Both") {
-        const practice = document.getElementById("practiceTemplate").content.cloneNode(true);
-        container.appendChild(practice);
-      }
-
-      document.getElementById("results").classList.add("hidden");
     }
 
-    function submitAnswers() {
-      const rawScore = 1; // Placeholder logic
-      const percentage = "100%"; // Placeholder logic
-      document.getElementById("rawScore").textContent = rawScore;
-      document.getElementById("percentageScore").textContent = percentage;
+    function submitQuiz() {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      const correctBlock = document.querySelector('.correct-answer');
+      const scoreDisplay = document.getElementById('score-display');
 
-      document.querySelectorAll(".correct-answer").forEach(el => el.classList.remove("hidden"));
-      document.querySelectorAll(".excel-image.hidden").forEach(img => img.classList.remove("hidden"));
-      document.getElementById("results").classList.remove("hidden");
+      if (selected && correctBlock) {
+        correctBlock.classList.remove('hidden');
+        const isCorrect = selected.value === 'A'; // Placeholder logic
+        scoreDisplay.innerHTML = `
+          <p>Raw Score: ${isCorrect ? 1 : 0} / 1</p>
+          <p>Percentage: ${isCorrect ? '100%' : '0%'}</p>
+        `;
+      }
     }
 
     function resetQuiz() {
-      document.getElementById("volumeSelect").value = "";
-      document.getElementById("chapterSelect").innerHTML = '<option value="">Select Chapter</option>';
-      document.getElementById("topicSelect").innerHTML = '<option value="">Select Topic</option>';
-      document.getElementById("typeSelect").innerHTML = '<option value="">Select Type</option>';
-      document.getElementById("mainContainer").innerHTML = "";
-      document.getElementById("results").classList.add("hidden");
-      window.scrollTo(0, 0);
+      document.getElementById('volume').value = '';
+      document.getElementById('chapter').innerHTML = '<option value="">Select Chapter</option>';
+      document.getElementById('topic').innerHTML = '<option value="">Select Topic</option>';
+      document.getElementById('type').innerHTML = '<option value="">Select Type</option>';
+      document.getElementById('quiz-container').innerHTML = '';
+      document.getElementById('score-display').innerHTML = '';
     }
-
-    function navigateTo(tabName) {
-      const container = document.getElementById("mainContainer");
-      fetch(`tabs/${tabName}.html`)
-        .then(response => {
-          if (!response.ok) throw new Error("Tab not found");
-          return response.text();
-        })
-        .then(html => {
-          container.innerHTML = html;
-          window.scrollTo(0, 0);
-        })
-        .catch(() => {
-          container.innerHTML = `<p>Content for "${tabName}" is not yet available.</p>`;
-        });
-    }
-
-    window.onload = populateVolumes;
   </script>
 </body>
 </html>
