@@ -1082,52 +1082,61 @@ const questions = {
     });
 
     // 🚀 Submit Logic (continued)
-    submitBtn.addEventListener("click", () => {
-      const topic = topicSelect.value;
-      const type = typeSelect.value;
-      quizContainer.innerHTML = "";
-      scoreDisplay.classList.remove("hidden");
-      score = 0;
-      totalQuestions = 0;
+submitBtn.addEventListener("click", () => {
+  const volume = volumeSelect.value;
+  const chapter = chapterSelect.value;
+  const topic = topicSelect.value;
+  const type = typeSelect.value;
+  const key = `${topic}_${chapter}_${volume}`;
 
-      // Render Theory Questions
-      if (type === "Theory" || type === "Both") {
-        const theoryQs = questions[topic]?.Theory || [];
-        theoryQs.forEach((q, index) => {
-          totalQuestions++;
-          const block = document.createElement("div");
-          block.className = "quiz-block";
-          block.innerHTML = `
-            <p>${q.question}</p>
-            ${q.choices.map((choice, i) => `
-              <label><input type="radio" name="theory${index}" value="${i}"> ${choice}</label><br/>
-            `).join("")}
-            <button onclick="checkTheory('${topic}', ${index})">Reveal Answer</button>
-            <div id="feedback-theory${index}" class="feedback"></div>
-          `;
-          quizContainer.appendChild(block);
-        });
+  quizContainer.innerHTML = "";
+  scoreDisplay.classList.remove("hidden");
+  score = 0;
+  totalQuestions = 0;
+
+  if (type === "Theory" || type === "Both") {
+    const theoryQs = questions[key]?.Theory || [];
+    theoryQs.forEach((q, index) => {
+      totalQuestions++;
+      const block = document.createElement("div");
+      block.className = "quiz-block";
+      block.innerHTML = `
+        <p>${q.question}</p>
+        ${q.choices.map((choice, i) => `
+          <label><input type="radio" name="theory${index}" value="${i}"> ${choice}</label><br/>
+        `).join("")}
+        <button onclick="checkTheory('${key}', ${index})">Reveal Answer</button>
+        <div id="feedback-theory${index}" class="feedback"></div>
+      `;
+      quizContainer.appendChild(block);
+    });
+  }
+});
       }
 
       // Render Practice Questions
-      if (type === "Practice" || type === "Both") {
-        const practiceQs = questions[topic]?.Practice || [];
-        practiceQs.forEach((q, index) => {
-          totalQuestions++;
-          const block = document.createElement("div");
-          block.className = "quiz-block";
-          block.innerHTML = `
-            <p>${q.question}</p>
-            <img src="${q.imageQ}" alt="Practice Question Image" class="excel-image" />
-            ${q.choices.map((choice, i) => `
-              <label><input type="radio" name="practice${index}" value="${i}"> ${choice}</label><br/>
-            `).join("")}
-            <button onclick="checkPractice('${topic}', ${index}, '${q.imageA}')">Reveal Answer</button>
-            <div id="feedback-practice${index}" class="feedback"></div>
-          `;
-          quizContainer.appendChild(block);
-        });
-      }
+if (type === "Practice" || type === "Both") {
+  const volume = volumeSelect.value;
+  const chapter = chapterSelect.value;
+  const key = `${topic}_${chapter}_${volume}`;
+  const practiceQs = questions[key]?.Practice || [];
+
+  practiceQs.forEach((q, index) => {
+    totalQuestions++;
+    const block = document.createElement("div");
+    block.className = "quiz-block";
+    block.innerHTML = `
+      <p>${q.question}</p>
+      <img src="${q.imageQ}" alt="Practice Question Image" class="excel-image" />
+      ${q.choices.map((choice, i) => `
+        <label><input type="radio" name="practice${index}" value="${i}"> ${choice}</label><br/>
+      `).join("")}
+      <button onclick="checkPractice('${key}', ${index}, '${q.imageA}')">Reveal Answer</button>
+      <div id="feedback-practice${index}" class="feedback"></div>
+    `;
+    quizContainer.appendChild(block);
+  });
+}
     });
 
     // ✅ Reset Logic
@@ -1149,49 +1158,111 @@ const questions = {
     });
 
     // 🧠 Answer Checkers
-    window.checkTheory = function(topic, index) {
-      const selected = document.querySelector(`input[name="theory${index}"]:checked`);
-      const feedback = document.getElementById(`feedback-theory${index}`);
-      if (selected && feedback.innerHTML === "") {
-        const q = questions[topic].Theory[index];
-        const userAnswer = parseInt(selected.value);
-        const correctText = q.choices[q.answer];
-        feedback.innerHTML = userAnswer === q.answer
-          ? `<p>✅ Correct!</p>`
-          : `<p>❌ Incorrect. Correct answer: ${correctText}</p>`;
-        score++;
-        updateScore();
-        selected.closest(".quiz-block").scrollIntoView({ behavior: "smooth" });
-      }
-    };
+window.checkTheory = function(key, index) {
+  const selected = document.querySelector(`input[name="theory${index}"]:checked`);
+  const feedback = document.getElementById(`feedback-theory${index}`);
+  if (selected && feedback.innerHTML === "") {
+    const q = safeGetQuestion(key, "Theory", index);
+    if (!q) return;
 
-    window.checkPractice = function(topic, index, imagePath) {
-      const selected = document.querySelector(`input[name="practice${index}"]:checked`);
-      const feedback = document.getElementById(`feedback-practice${index}`);
-      if (selected && feedback.innerHTML === "") {
-        const q = questions[topic].Practice[index];
-        const userAnswer = parseInt(selected.value);
-        const correctText = q.choices[q.answer];
-        feedback.innerHTML = userAnswer === q.answer
-          ? `<p>✅ Correct!</p>`
-          : `<p>❌ Incorrect. Correct answer: ${correctText}</p>`;
-        const answerImage = document.createElement("img");
-        answerImage.src = imagePath;
-        answerImage.alt = "Practice Answer Image";
-        answerImage.className = "excel-image";
-        feedback.appendChild(answerImage);
-        score++;
-        updateScore();
-        selected.closest(".quiz-block").scrollIntoView({ behavior: "smooth" });
-      }
-    };
+    const userAnswer = parseInt(selected.value);
+    const correctText = q.choices[q.answer];
+    feedback.innerHTML = userAnswer === q.answer
+      ? `<p>✅ Correct!</p>`
+      : `<p>❌ Incorrect. Correct answer: ${correctText}</p>`;
+    score++;
+    updateScore();
+    updateProgressTracker(); // 📈 Update progress after answering
+    selected.closest(".quiz-block").scrollIntoView({ behavior: "smooth" });
+  }
+};
 
-    // 📊 Score Updater
-    function updateScore() {
-      rawScore.textContent = score;
-      const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
-      percentageScore.textContent = `${percentage}%`;
+window.checkPractice = function(key, index, imagePath) {
+  const selected = document.querySelector(`input[name="practice${index}"]:checked`);
+  const feedback = document.getElementById(`feedback-practice${index}`);
+  if (selected && feedback.innerHTML === "") {
+    const q = safeGetQuestion(key, "Practice", index);
+    if (!q) return;
+
+    const userAnswer = parseInt(selected.value);
+    const correctText = q.choices[q.answer];
+    feedback.innerHTML = userAnswer === q.answer
+      ? `<p>✅ Correct!</p>`
+      : `<p>❌ Incorrect. Correct answer: ${correctText}</p>`;
+    const answerImage = document.createElement("img");
+    answerImage.src = imagePath;
+    answerImage.alt = "Practice Answer Image";
+    answerImage.className = "excel-image";
+    feedback.appendChild(answerImage);
+    score++;
+    updateScore();
+    updateProgressTracker(); // 📈 Update progress after answering
+    selected.closest(".quiz-block").scrollIntoView({ behavior: "smooth" });
+  }
+};
+
+// 🎉 Perfect Score Celebration
+function celebrateIfPerfect() {
+  if (score === totalQuestions && totalQuestions > 0) {
+    const banner = document.createElement("div");
+    banner.className = "celebration-banner";
+    banner.innerHTML = `
+      <h2>🎉 Perfect Score Celebration 🎉</h2>
+      <p>You answered all ${totalQuestions} questions correctly. This is summit-grade mastery.</p>
+    `;
+    quizContainer.prepend(banner);
+  }
+}
+
+// 📈 Progress Tracker
+function updateProgressTracker() {
+  const tracker = document.getElementById("progressTracker");
+  if (!tracker) {
+    const newTracker = document.createElement("div");
+    newTracker.id = "progressTracker";
+    newTracker.className = "progress-tracker";
+    scoreDisplay.insertAdjacentElement("beforebegin", newTracker);
+  }
+  const answered = document.querySelectorAll(".feedback p").length;
+  document.getElementById("progressTracker").innerHTML = `
+    <p>Progress: ${answered} of ${totalQuestions} questions answered</p>
+  `;
+}
+
+// 📥 Batch Feedback Export
+function exportFeedbackLog() {
+  const logs = [];
+  for (let i = 0; i < totalQuestions; i++) {
+    const theoryFeedback = document.getElementById(`feedback-theory${i}`);
+    const practiceFeedback = document.getElementById(`feedback-practice${i}`);
+    if (theoryFeedback && theoryFeedback.innerText) {
+      logs.push(`Theory ${i + 1}: ${theoryFeedback.innerText}`);
     }
+    if (practiceFeedback && practiceFeedback.innerText) {
+      logs.push(`Practice ${i + 1}: ${practiceFeedback.innerText}`);
+    }
+  }
+  console.log("📤 Feedback Log Export:");
+  logs.forEach(log => console.log(log));
+}
+
+// 🛡️ Error-Proofing for Question Access
+function safeGetQuestion(key, type, index) {
+  try {
+    return questions[key]?.[type]?.[index] || null;
+  } catch (e) {
+    console.warn(`⚠️ Failed to access ${type} question at index ${index} in block ${key}`);
+    return null;
+  }
+}
+
+// 📊 Score Updater
+function updateScore() {
+  rawScore.textContent = score;
+  const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+  percentageScore.textContent = `${percentage}%`;
+  celebrateIfPerfect(); // 🎉 Trigger celebration if perfect score
+}
   </script>
 </body>
 </html>
