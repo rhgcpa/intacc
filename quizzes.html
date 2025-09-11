@@ -1,1139 +1,169 @@
-<!-- quizzes.html -->
 <!DOCTYPE html>
-<html lang="en" data-app="quizzes">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quizzes | Learning Hub</title>
-
-  <!-- INSERTION: shared-head-start -->
-  <!-- All visual styling comes from your global style.css -->
-  <link rel="stylesheet" href="./css/style.css" />
-  <!-- INSERTION: shared-head-end -->
-
-  <!-- Minimal layout safety for fixed layers (relies on classes defined in style.css).
-       If style.css already defines these, this block is harmless. -->
-  <style>
-    /* Layout safety (not visual styling): ensure toolbar is always on top and clickable */
-    .layer-fixed { position: fixed; left: 0; right: 0; z-index: 9999; }
-    .layer-top    { top: 0; }
-    .layer-under  { top: var(--topbar-height, 56px); }
-    .spacer-topbar { height: calc(var(--topbar-height, 56px) + var(--toolbar-height, 64px)); }
-    .click-through-guard { pointer-events: auto; }
-    .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; border: 0 !important; }
-    @media print {
-      .layer-fixed, .toolbar-fixed { position: static !important; }
-      .spacer-topbar { height: 0 !important; }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quizzes</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="quizzes.js"></script>
 </head>
-
-<body class="page-quizzes">
-
-  <!-- Accessible live region for dynamic feedback -->
-  <div id="live-region" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
-
-  <!-- INSERTION: shared-nav -->
-  <header id="site-header" class="topbar layer-fixed layer-top click-through-guard" role="banner" aria-label="Primary">
-    <nav class="nav primary-nav" role="navigation" aria-label="Primary tabs">
-      <ul class="nav-list">
-        <li><a href="./index.html" class="nav-link" data-tab="home">Home</a></li>
-        <li><a href="./glossary.html" class="nav-link" data-tab="glossary">Glossary</a></li>
-        <li><a href="./quizzes.html" class="nav-link is-active" aria-current="page" data-tab="quizzes">Quizzes</a></li>
-        <li><a href="./references.html" class="nav-link" data-tab="references">References</a></li>
-        <li><a href="./visuals.html" class="nav-link" data-tab="visuals">Visuals</a></li>
-        <li><a href="./tools.html" class="nav-link" data-tab="tools">Tools</a></li>
-      </ul>
+<body>
+  <header class="sticky-header">
+    <nav class="tab-bar">
+      <button onclick="navigateTo('home')">Home</button>
+      <button onclick="navigateTo('glossary')">Glossary</button>
+      <button onclick="navigateTo('quizzes')">Quizzes</button>
+      <button onclick="navigateTo('references')">References</button>
+      <button onclick="navigateTo('visuals')">Visuals</button>
+      <button onclick="navigateTo('tools')">Tools</button>
     </nav>
+    <div class="dropdowns">
+      <select id="volumeSelect" onchange="updateChapters()">
+        <option value="">Select Volume</option>
+        <option value="1">Volume 1</option>
+        <option value="2">Volume 2</option>
+        <option value="3">Volume 3</option>
+      </select>
+      <select id="chapterSelect" onchange="updateTopics()">
+        <option value="">Select Chapter</option>
+      </select>
+      <select id="topicSelect" onchange="updateTypes()">
+        <option value="">Select Topic</option>
+      </select>
+      <select id="typeSelect" onchange="loadQuestions()">
+        <option value="">Select Type</option>
+      </select>
+      <button onclick="submitAnswers()">Submit</button>
+      <button onclick="resetQuiz()">Reset</button>
+    </div>
   </header>
 
-  <!-- Always-on-top filters + actions toolbar -->
-  <div id="quiz-toolbar" class="toolbar layer-fixed layer-under click-through-guard" role="region" aria-label="Quiz filters and actions">
-    <form id="controls-form" class="controls-grid" autocomplete="off">
-      <!-- Filters -->
-      <div class="controls filters" role="group" aria-label="Filters">
-
-        <label for="sel-volume" class="control-label">Volume</label>
-        <select id="sel-volume" name="volume" class="control-input" aria-describedby="help-volume">
-          <!-- Dynamic options -->
-        </select>
-        <span id="help-volume" class="control-help">Choose Volume 1, 2, or 3.</span>
-
-        <label for="sel-chapter" class="control-label">Chapter</label>
-        <select id="sel-chapter" name="chapter" class="control-input" aria-describedby="help-chapter" disabled>
-          <!-- Dynamic options -->
-        </select>
-        <span id="help-chapter" class="control-help">Chapters depend on selected volume.</span>
-
-        <label for="sel-topic" class="control-label">Topic</label>
-        <select id="sel-topic" name="topic" class="control-input" aria-describedby="help-topic" disabled>
-          <!-- Dynamic options -->
-        </select>
-        <span id="help-topic" class="control-help">Topics depend on selected chapter.</span>
-
-        <label for="sel-type" class="control-label">Type</label>
-        <select id="sel-type" name="type" class="control-input" aria-describedby="help-type" disabled>
-          <!-- Dynamic options -->
-        </select>
-        <span id="help-type" class="control-help">Theory, Practice, or Both (if available).</span>
-      </div>
-
-      <!-- Actions -->
-      <div class="controls actions" role="group" aria-label="Actions">
-        <button id="btn-submit" type="button" class="btn primary" disabled>Submit</button>
-        <button id="btn-reset" type="button" class="btn secondary">Reset</button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Spacer to prevent content from hiding under fixed layers -->
-  <div class="spacer-topbar" aria-hidden="true"></div>
-
-  <main id="main" class="container" role="main" aria-labelledby="page-title">
-    <h1 id="page-title" class="page-title">Quizzes</h1>
-
-    <!-- Global stats and utilities -->
-    <section id="global-stats" class="panel" aria-label="Your quiz stats">
-      <div class="stats-row">
-        <div class="stat-item"><strong class="stat-label">Attempts:</strong> <span id="stat-attempts">0</span></div>
-        <div class="stat-item"><strong class="stat-label">Average:</strong> <span id="stat-average">—</span></div>
-        <div class="stat-item"><strong class="stat-label">Best:</strong> <span id="stat-best">—</span></div>
-        <div class="stat-item"><strong class="stat-label">Last:</strong> <span id="stat-last">—</span></div>
-      </div>
-      <div class="util-row">
-        <button id="btn-print" class="btn ghost" type="button">Print</button>
-        <button id="btn-export" class="btn ghost" type="button">Export CSV</button>
-        <button id="btn-clear" class="btn danger ghost" type="button">Clear Saved Data</button>
-      </div>
-    </section>
-
-    <!-- Dynamic quiz host -->
-    <section id="quiz-host" class="card" aria-live="polite" aria-busy="false" aria-label="Quiz content">
-      <!-- Runtime-rendered content -->
-      <div class="placeholder">
-        <p>Select Volume, Chapter, Topic, and Type to begin.</p>
-      </div>
-    </section>
-
-    <!-- Review & score -->
-    <section id="scoreboard" class="panel" aria-label="Scoreboard" hidden>
-      <div class="score-row">
-        <div class="score-item"><strong class="score-label">Raw score:</strong> <span id="score-raw">0</span></div>
-        <div class="score-item"><strong class="score-label">Percentage:</strong> <span id="score-perc">0%</span></div>
-        <div class="score-item"><strong class="score-label">Status:</strong> <span id="score-status">—</span></div>
-      </div>
-      <div id="feedback" class="feedback" aria-live="polite"></div>
-    </section>
-
-    <!-- Attempts history (optional, collapsible) -->
-    <section id="attempts" class="panel" aria-label="Attempts history" hidden>
-      <details id="attempts-details">
-        <summary>Attempts history</summary>
-        <div class="table-wrap">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Date/time</th>
-                <th>Volume</th>
-                <th>Chapter</th>
-                <th>Topic</th>
-                <th>Type</th>
-                <th>Raw</th>
-                <th>Total</th>
-                <th>Percentage</th>
-              </tr>
-            </thead>
-            <tbody id="attempts-body"></tbody>
-          </table>
-        </div>
-      </details>
-    </section>
+  <main id="quizContainer">
+    <!-- Placeholder for dynamically loaded questions -->
   </main>
 
-  <!-- Templates: structure aligns with style.css classes; content filled by JS -->
-  <template id="tpl-question-theory">
-    <article class="quiz-block quiz-theory" data-kind="theory">
-      <header class="quiz-header">
-        <h2 class="quiz-title">Theory</h2>
-        <p class="quiz-subtitle" data-meta></p>
-      </header>
-      <div class="quiz-body">
-        <p class="quiz-question" data-question></p>
-        <fieldset class="choices" role="radiogroup" aria-label="Choices (single answer)">
-          <!-- Four radio options -->
-          <label class="choice">
-            <input type="radio" name="choice-theory" value="A" /> <span data-choice="A"></span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="choice-theory" value="B" /> <span data-choice="B"></span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="choice-theory" value="C" /> <span data-choice="C"></span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="choice-theory" value="D" /> <span data-choice="D"></span>
-          </label>
-        </fieldset>
-        <div class="answer reveal" data-answer-theory hidden>
-          <p><strong>Correct answer:</strong> <span data-correct></span></p>
-          <p class="explain" data-explain></p>
-        </div>
-      </div>
-    </article>
+  <section id="results" class="hidden">
+    <p>Raw Score: <span id="rawScore">0</span></p>
+    <p>Percentage: <span id="percentageScore">0%</span></p>
+  </section>
+
+  <template id="theoryTemplate">
+    <div class="question-block">
+      <p class="question-text">[Theory Question Placeholder]</p>
+      <ul class="choices">
+        <li><input type="radio" name="q" value="A" /> A. [Choice A]</li>
+        <li><input type="radio" name="q" value="B" /> B. [Choice B]</li>
+        <li><input type="radio" name="q" value="C" /> C. [Choice C]</li>
+        <li><input type="radio" name="q" value="D" /> D. [Choice D]</li>
+      </ul>
+      <p class="correct-answer hidden">Correct Answer: [Correct Choice]</p>
+    </div>
   </template>
 
-  <template id="tpl-question-practice">
-    <article class="quiz-block quiz-practice" data-kind="practice">
-      <header class="quiz-header">
-        <h2 class="quiz-title">Practice</h2>
-        <p class="quiz-subtitle" data-meta></p>
-      </header>
-      <div class="quiz-body">
-        <p class="quiz-question" data-question></p>
-
-        <figure class="quiz-image">
-          <img data-practice-q-img alt="Practice question image (Excel range screenshot)" />
-          <figcaption class="caption">Question data (Excel screenshot)</figcaption>
-        </figure>
-
-        <fieldset class="choices" role="radiogroup" aria-label="Choices (single answer)">
-          <!-- Four radio options -->
-          <label class="choice">
-            <input type="radio" name="choice-practice" value="A" /> <span data-choice="A"></span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="choice-practice" value="B" /> <span data-choice="B"></span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="choice-practice" value="C" /> <span data-choice="C"></span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="choice-practice" value="D" /> <span data-choice="D"></span>
-          </label>
-        </fieldset>
-
-        <div class="answer reveal" data-answer-practice hidden>
-          <p><strong>Correct answer:</strong> <span data-correct></span></p>
-          <figure class="quiz-image">
-            <img data-practice-a-img alt="Practice answer image (Excel range screenshot)" />
-            <figcaption class="caption">Answer solution (Excel screenshot)</figcaption>
-          </figure>
-          <p class="explain" data-explain></p>
-        </div>
-      </div>
-    </article>
+  <template id="practiceTemplate">
+    <div class="question-block">
+      <p class="question-text">[Practice Question Placeholder]</p>
+      <img src="[ExcelQuestionImage.png]" alt="Practice Question Image" class="excel-image" />
+      <ul class="choices">
+        <li><input type="radio" name="q" value="A" /> A. [Choice A]</li>
+        <li><input type="radio" name="q" value="B" /> B. [Choice B]</li>
+        <li><input type="radio" name="q" value="C" /> C. [Choice C]</li>
+        <li><input type="radio" name="q" value="D" /> D. [Choice D]</li>
+      </ul>
+      <p class="correct-answer hidden">Correct Answer: [Correct Choice]</p>
+      <img src="[ExcelAnswerImage.png]" alt="Practice Answer Image" class="excel-image hidden" />
+    </div>
   </template>
 
-  <!-- Scripts -->
   <script>
-    // ===== App version and keys =====
-    const APP = {
-      name: 'Quizzes',
-      version: '1.0.0',
-      storageKey: 'quizzes_state_v1',
-      attemptsKey: 'quizzes_attempts_v1'
+    // Placeholder logic for dynamic dropdowns
+    const volumeData = {
+      "1": { chapters: ["1", "2"], topics: { "1": ["1"], "2": ["1", "2", "3", "4"] } },
+      "2": { chapters: ["1", "3"], topics: { "1": ["1"], "3": ["1", "2"] } },
+      "3": { chapters: ["2"], topics: { "2": ["1", "2", "3"] } }
     };
 
-    // ===== Data registry (placeholders; expand safely) =====
-    // Structure supports dynamic Volume → Chapter → Topic → Types.
-    // Each topic may have theory and/or practice blocks, each one question with 4 choices.
-    const REGISTRY = {
-      volumes: [
-/* ===== INSERTION POINT (REGISTRY): Replace existing Topic 1 object in Volume 1 → Chapter 1 → topics ===== */
-{
-  id: 'v1c1t1',
-  title: 'Topic 1',
-  types: ['Theory', 'Practice', 'Both'],
-
-  // Single-item fields unused when sets exist (kept for compatibility)
-  theory: null,
-  practice: null,
-
-  // Theory questions (complete)
-  theorySet: [
-    {
-      qid: 'v1c1t1-th-q1',
-      question: 'Cash on hand includes:',
-      choices: {
-        A: 'Checks dated less than 6 months after today.',
-        B: 'Checks dated less than 6 months before today.',
-        C: 'Checks dated more than 6 months after today.',
-        D: 'Checks dated more than 6 months before today.'
-      },
-      correct: 'B',
-      explain: 'Cash on hand includes checks dated less than 6 months before today.'
-    },
-    {
-      qid: 'v1c1t1-th-q2',
-      question: 'In defining cash equivalents, known maturity value denotes:',
-      choices: {
-        A: 'Maturity date is determinable on acquisition date.',
-        B: 'Maturity value is determinable on acquisition date.',
-        C: 'Maturity value will be determined on maturity date.',
-        D: 'Maturity value will be known on maturity date.'
-      },
-      correct: 'B',
-      explain: 'Known maturity value means the maturity value is determinable on acquisition date.'
-    },
-    {
-      qid: 'v1c1t1-th-q3',
-      question: 'Which are excluded from cash equivalents?',
-      choices: {
-        A: 'Credit cards receivable.',
-        B: 'Debit cards receivable.',
-        C: 'Time deposits downgraded lower than savings accounts when pre-terminated.',
-        D: 'Time deposits downgraded not lower than savings accounts when pre-terminated.'
-      },
-      correct: 'C',
-      explain: 'If downgraded below savings when pre-terminated, the change is significant, so exclude from cash equivalents.'
-    },
-    {
-      qid: 'v1c1t1-th-q4',
-      question: 'Which are classified as restricted cash, and presented as noncurrent assets?',
-      choices: {
-        A: 'Currency usable for at least 12 months after the reporting period.',
-        B: 'Currency usable for less than 12 months after the reporting period.',
-        C: 'Currency usable for more than 12 months after the reporting period.',
-        D: 'Currency usable within 12 months after the reporting period.'
-      },
-      correct: 'A',
-      explain: 'Amounts restricted for use beyond 12 months are noncurrent restricted cash.'
-    },
-    {
-      qid: 'v1c1t1-th-q5',
-      question: 'Which are classified as short-term investments, and presented as current assets?',
-      choices: {
-        A: 'Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.',
-        B: 'Bank deposits withdrawable with significant penalty and usable for more than 12 months.',
-        C: 'Bank deposits withdrawable with significant penalty and usable within 12 months.',
-        D: 'Bank deposits withdrawable without penalty and usable for less than 12 months.'
-      },
-      correct: 'C',
-      explain: 'If withdrawable with significant penalty and usable within 12 months, classify as short-term investments.'
-    },
-    {
-      qid: 'v1c1t1-th-q6',
-      question: 'These describe a bank overdraft, except:',
-      choices: {
-        A: 'It is allowed only if caused by normal bank charges or incidental handling fees.',
-        B: 'It is disallowed in the Philippines.',
-        C: 'It is known as temporary overdrawing in the Philippines.',
-        D: 'It is the negative (or overdrawn) balance in a demand deposit account.'
-      },
-      correct: 'B',
-      explain: 'A bank overdraft is allowed in the Philippines when caused by routine bank charges.'
-    },
-    {
-      qid: 'v1c1t1-th-q7',
-      question: 'Check withdrawals are recorded as:',
-      choices: {
-        A: 'Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.',
-        B: 'Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.',
-        C: 'Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.',
-        D: 'Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity.'
-      },
-      correct: 'D',
-      explain: 'Check withdrawals: debit bank’s Deposit Liabilities and credit the entity’s Demand Deposits.'
-    },
-    {
-      qid: 'v1c1t1-th-q8',
-      question: 'Timing differences for Deposit Liabilities of financial institution comprise:',
-      choices: {
-        A: 'Credit memos and debit memos.',
-        B: 'Outstanding checks and debit memos.',
-        C: 'Outstanding deposits and credit memos.',
-        D: 'Outstanding deposits and outstanding checks.'
-      },
-      correct: 'D',
-      explain: 'Outstanding deposits and outstanding checks are timing differences.'
-    },
-    {
-      qid: 'v1c1t1-th-q9',
-      question: 'Which describe debit memos?',
-      choices: {
-        A: 'Already credited to Demand Deposits but not yet debited to Deposit Liabilities.',
-        B: 'Already credited to Deposit Liabilities but not yet debited to Demand Deposits.',
-        C: 'Already debited to Demand Deposits but not yet credited to Deposit Liabilities.',
-        D: 'Already debited to Deposit Liabilities but not yet credited to Demand Deposits.'
-      },
-      correct: 'D',
-      explain: 'Debited to bank’s Deposit Liabilities; not yet credited to entity’s Demand Deposits.'
-    },
-    {
-      qid: 'v1c1t1-th-q10',
-      question: 'Before replenishment, the adjusted balance of Petty Cash Fund equals:',
-      choices: {
-        A: 'Currency in the custody of the Petty Cash Custodian.',
-        B: 'Established amount.',
-        C: 'Minimum threshold.',
-        D: 'Total of Petty Cash Vouchers.'
-      },
-      correct: 'A',
-      explain: 'Before replenishment, the adjusted PCF balance equals the cash on hand with the custodian.'
-    }
-  ],
-
-  // Practice questions (complete; with image hooks)
-  practiceSet: [
-    {
-      qid: 'v1c1t1-pr-q1',
-      question: 'With these givens, the closing outstanding checks are:',
-      choices: {
-        A: '289,000.00',
-        B: '311,000.00',
-        C: '489,000.00',
-        D: '511,000.00'
-      },
-      correct: 'B',
-      explain: 'Reconciling checks issued vs. paid and timing differences yields 311,000.00.',
-      qImg: './img/batch1/v1c1t1-pr-q1-question.png',
-      aImg: './img/batch1/v1c1t1-pr-q1-answer.png'
-    },
-    {
-      qid: 'v1c1t1-pr-q2',
-      question: 'With these givens, the opening outstanding checks are:',
-      choices: {
-        A: '289,000.00',
-        B: '311,000.00',
-        C: '489,000.00',
-        D: '511,000.00'
-      },
-      correct: 'B',
-      explain: 'Opening outstanding checks balance with the prior reconciliation.',
-      qImg: './img/batch1/v1c1t1-pr-q2-question.png',
-      aImg: './img/batch1/v1c1t1-pr-q2-answer.png'
-    },
-    {
-      qid: 'v1c1t1-pr-q3',
-      question: 'With these givens, the closing book balance is:',
-      choices: {
-        A: '2,496,000.00',
-        B: '2,499,800.00',
-        C: '2,500,200.00',
-        D: '2,504,000.00'
-      },
-      correct: 'B',
-      explain: 'Adjusted closing balance ± memos yields 2,499,800.00.',
-      qImg: './img/batch1/v1c1t1-pr-q3-question.png',
-      aImg: './img/batch1/v1c1t1-pr-q3-answer.png'
-    },
-    {
-      qid: 'v1c1t1-pr-q4',
-      question: 'With these givens, the closing outstanding deposits are:',
-      choices: {
-        A: '487,000.00',
-        B: '513,000.00',
-        C: '887,000.00',
-        D: '913,000.00'
-      },
-      correct: 'D',
-      explain: 'Bank vs. book reconciliation indicates 913,000.00 outstanding deposits.',
-      qImg: './img/batch1/v1c1t1-pr-q4-question.png',
-      aImg: './img/batch1/v1c1t1-pr-q4-answer.png'
-    },
-    {
-      qid: 'v1c1t1-pr-q5',
-      question: 'With these givens, the closing outstanding deposits are:',
-      choices: {
-        A: '398,700.00',
-        B: '398,900.00',
-        C: '898,700.00',
-        D: '898,900.00'
-      },
-      correct: 'C',
-      explain: 'Receipts vs. cleared deposits plus credit memos yield 898,700.00.',
-      qImg: './img/batch1/v1c1t1-pr-q5-question.png',
-      aImg: './img/batch1/v1c1t1-pr-q5-answer.png'
-    }
-  ]
-}
-/* ===== END INSERTION (REGISTRY) for Topic 1, Volume 1, Chapter 1 ===== */
-
-                {
-                  id: 'v1c1t2', title: 'Topic 2',
-                  types: ['Theory'],
-                  theory: {
-                    question: 'Which principle requires expenses to be matched with revenues?',
-                    choices: { A: 'Conservatism', B: 'Matching', C: 'Consistency', D: 'Materiality' },
-                    correct: 'B',
-                    explain: 'The matching principle aligns expenses with the revenues they generate.'
-                  }
-                },
-                {
-                  id: 'v1c1t3', title: 'Topic 3',
-                  types: ['Practice'],
-                  practice: {
-                    question: 'Identify the correct depreciation expense from the schedule.',
-                    choices: { A: '8,000', B: '10,000', C: '12,000', D: '14,000' },
-                    correct: 'B',
-                    explain: 'Straight-line depreciation yields 10,000 per the schedule.',
-                    qImg: './img/placeholders/v1c1t3-practice-question.png',
-                    aImg: './img/placeholders/v1c1t3-practice-answer.png'
-                  }
-                }
-              ]
-            },
-            {
-              id: 'v1c2', title: 'Chapter 2',
-              topics: [
-                {
-                  id: 'v1c2t1', title: 'Topic 1',
-                  types: ['Theory', 'Practice', 'Both'],
-                  theory: {
-                    question: 'Which statement is true about liabilities?',
-                    choices: { A: 'They are future benefits', B: 'They represent obligations', C: 'They equal revenue', D: 'They reduce assets always' },
-                    correct: 'B',
-                    explain: 'Liabilities are present obligations of the entity.'
-                  },
-                  practice: {
-                    question: 'Select the correct payable balance from the ledger extract.',
-                    choices: { A: '25,000', B: '30,000', C: '35,000', D: '40,000' },
-                    correct: 'A',
-                    explain: 'Summing debits and credits yields a 25,000 balance.',
-                    qImg: './img/placeholders/v1c2t1-practice-question.png',
-                    aImg: './img/placeholders/v1c2t1-practice-answer.png'
-                  }
-                }
-              ]
-            },
-            {
-              id: 'v1c3', title: 'Chapter 3',
-              topics: [
-                {
-                  id: 'v1c3t1', title: 'Topic 1',
-                  types: ['Theory'],
-                  theory: {
-                    question: 'The going concern assumption implies:',
-                    choices: { A: 'Immediate liquidation', B: 'Short-term operations', C: 'Continuity of operations', D: 'No depreciation' },
-                    correct: 'C',
-                    explain: 'Going concern presumes the entity will continue in the foreseeable future.'
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: 'v2', title: 'Volume 2',
-          chapters: [
-            {
-              id: 'v2c1', title: 'Chapter 1',
-              topics: [
-                {
-                  id: 'v2c1t1', title: 'Topic 1',
-                  types: ['Practice'],
-                  practice: {
-                    question: 'Determine cash balance after adjustments.',
-                    choices: { A: '5,500', B: '6,000', C: '6,500', D: '7,000' },
-                    correct: 'B',
-                    explain: 'Bank reconciliation adjustments produce 6,000.',
-                    qImg: './img/placeholders/v2c1t1-practice-question.png',
-                    aImg: './img/placeholders/v2c1t1-practice-answer.png'
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: 'v3', title: 'Volume 3',
-          chapters: [
-            {
-              id: 'v3c1', title: 'Chapter 1',
-              topics: [
-                {
-                  id: 'v3c1t1', title: 'Topic 1',
-                  types: ['Theory', 'Practice', 'Both'],
-                  theory: {
-                    question: 'Which is not a qualitative characteristic?',
-                    choices: { A: 'Relevance', B: 'Reliability', C: 'Comparability', D: 'Inventory' },
-                    correct: 'D',
-                    explain: 'Inventory is an account, not a qualitative characteristic.'
-                  },
-                  practice: {
-                    question: 'From the worksheet, compute gross profit.',
-                    choices: { A: '15,000', B: '18,000', C: '20,000', D: '22,000' },
-                    correct: 'C',
-                    explain: 'Sales minus COGS from the worksheet equals 20,000.',
-                    qImg: './img/placeholders/v3c1t1-practice-question.png',
-                    aImg: './img/placeholders/v3c1t1-practice-answer.png'
-                  }
-                },
-                {
-                  id: 'v3c1t2', title: 'Topic 2',
-                  types: ['Theory'],
-                  theory: {
-                    question: 'Materiality allows:',
-                    choices: { A: 'Ignoring GAAP', B: 'Omitting trivial items', C: 'Changing methods arbitrarily', D: 'Combining assets and liabilities' },
-                    correct: 'B',
-                    explain: 'Immaterial items may be simplified without misleading users.'
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    };
-
-    // ===== DOM elements =====
-    const els = {
-      volume: document.getElementById('sel-volume'),
-      chapter: document.getElementById('sel-chapter'),
-      topic: document.getElementById('sel-topic'),
-      type: document.getElementById('sel-type'),
-      submit: document.getElementById('btn-submit'),
-      reset: document.getElementById('btn-reset'),
-      print: document.getElementById('btn-print'),
-      export: document.getElementById('btn-export'),
-      clear: document.getElementById('btn-clear'),
-      host: document.getElementById('quiz-host'),
-      scoreboard: document.getElementById('scoreboard'),
-      feedback: document.getElementById('feedback'),
-      scoreRaw: document.getElementById('score-raw'),
-      scorePerc: document.getElementById('score-perc'),
-      scoreStatus: document.getElementById('score-status'),
-      attemptsWrap: document.getElementById('attempts'),
-      attemptsBody: document.getElementById('attempts-body'),
-      attemptsDetails: document.getElementById('attempts-details'),
-      statAttempts: document.getElementById('stat-attempts'),
-      statAverage: document.getElementById('stat-average'),
-      statBest: document.getElementById('stat-best'),
-      statLast: document.getElementById('stat-last'),
-      live: document.getElementById('live-region')
-    };
-
-    // ===== Utilities =====
-    const $ = (sel, root = document) => root.querySelector(sel);
-    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-    const announce = (msg) => { els.live.textContent = ''; setTimeout(() => { els.live.textContent = msg; }, 10); };
-    const fmtPct = (n) => `${(n * 100).toFixed(0)}%`;
-    const nowISO = () => new Date().toISOString();
-
-    // Storage helpers with version guard
-    const saveState = (state) => localStorage.setItem(APP.storageKey, JSON.stringify({ v: APP.version, state }));
-    const loadState = () => {
-      try {
-        const raw = localStorage.getItem(APP.storageKey);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        return parsed.v === APP.version ? parsed.state : null;
-      } catch { return null; }
-    };
-    const saveAttempts = (arr) => localStorage.setItem(APP.attemptsKey, JSON.stringify({ v: APP.version, arr }));
-    const loadAttempts = () => {
-      try {
-        const raw = localStorage.getItem(APP.attemptsKey);
-        if (!raw) return [];
-        const parsed = JSON.parse(raw);
-        return parsed.v === APP.version ? parsed.arr : [];
-      } catch { return []; }
-    };
-
-    // ===== Dynamic dropdown population =====
-    function populateVolumes() {
-      clearOptions(els.volume);
-      addPlaceholder(els.volume, 'Select volume');
-      REGISTRY.volumes.forEach(v => {
-        const opt = new Option(v.title, v.id);
-        els.volume.add(opt);
-      });
-      els.volume.disabled = false;
-    }
-
-    function populateChapters(volId) {
-      clearOptions(els.chapter); addPlaceholder(els.chapter, 'Select chapter');
-      clearOptions(els.topic); addPlaceholder(els.topic, 'Select topic');
-      clearOptions(els.type); addPlaceholder(els.type, 'Select type');
-      els.topic.disabled = true; els.type.disabled = true;
-
-      const vol = REGISTRY.volumes.find(v => v.id === volId);
-      if (!vol) { els.chapter.disabled = true; return; }
-      vol.chapters.forEach(ch => els.chapter.add(new Option(ch.title, ch.id)));
-      els.chapter.disabled = false;
-    }
-
-    function populateTopics(volId, chId) {
-      clearOptions(els.topic); addPlaceholder(els.topic, 'Select topic');
-      clearOptions(els.type); addPlaceholder(els.type, 'Select type');
-      els.type.disabled = true;
-
-      const ch = getChapter(volId, chId);
-      if (!ch) { els.topic.disabled = true; return; }
-      ch.topics.forEach(t => els.topic.add(new Option(t.title, t.id)));
-      els.topic.disabled = false;
-    }
-
-    function populateTypes(volId, chId, tId) {
-      clearOptions(els.type); addPlaceholder(els.type, 'Select type');
-
-      const topic = getTopic(volId, chId, tId);
-      if (!topic) { els.type.disabled = true; return; }
-      topic.types.forEach(tp => els.type.add(new Option(tp, tp)));
-      els.type.disabled = false;
-    }
-
-    function clearOptions(sel) {
-      while (sel.options.length) sel.remove(0);
-    }
-    function addPlaceholder(sel, text) {
-      sel.add(new Option(text, '', true, false));
-    }
-
-    function getVolume(volId) { return REGISTRY.volumes.find(v => v.id === volId); }
-    function getChapter(volId, chId) {
-      const vol = getVolume(volId); if (!vol) return null;
-      return vol.chapters.find(c => c.id === chId) || null;
-    }
-    function getTopic(volId, chId, tId) {
-      const ch = getChapter(volId, chId); if (!ch) return null;
-      return ch.topics.find(t => t.id === tId) || null;
-    }
-
-    // ===== Rendering =====
-/* ===== INSERTION POINT (JS): Upgrade renderQuiz to support theorySet/practiceSet ===== */
-function renderQuiz(volId, chId, tId, type) {
-  els.host.setAttribute('aria-busy', 'true');
-  els.host.innerHTML = '';
-  els.scoreboard.hidden = true;
-  els.feedback.innerHTML = '';
-
-  const topic = getTopic(volId, chId, tId);
-  if (!topic) {
-    els.host.innerHTML = '<div class="notice error">No topic found.</div>';
-    els.host.setAttribute('aria-busy', 'false');
-    return;
-  }
-
-  const blocks = [];
-
-  // Helper to push single or multiple blocks for a given type
-  const pushTheory = () => {
-    if (Array.isArray(topic.theorySet) && topic.theorySet.length) {
-      topic.theorySet.forEach(item => blocks.push(makeTheoryBlock({ ...topic, theory: item })));
-    } else if (topic.theory) {
-      blocks.push(makeTheoryBlock(topic));
-    }
-  };
-  const pushPractice = () => {
-    if (Array.isArray(topic.practiceSet) && topic.practiceSet.length) {
-      topic.practiceSet.forEach(item => blocks.push(makePracticeBlock({ ...topic, practice: item })));
-    } else if (topic.practice) {
-      blocks.push(makePracticeBlock(topic));
-    }
-  };
-
-  if (type === 'Theory') pushTheory();
-  if (type === 'Practice') pushPractice();
-  if (type === 'Both') { pushTheory(); pushPractice(); }
-
-  if (!blocks.length) {
-    els.host.innerHTML = '<div class="notice">Selected type not available for this topic.</div>';
-    els.host.setAttribute('aria-busy', 'false');
-    return;
-  }
-
-  blocks.forEach(b => els.host.appendChild(b));
-  els.host.setAttribute('aria-busy', 'false');
-
-  // Enable submit after rendering
-  els.submit.disabled = false;
-
-  // Focus first choice for accessibility
-  const firstInput = els.host.querySelector('input[type="radio"]');
-  if (firstInput) firstInput.focus();
-}
-/* ===== END INSERTION (JS) renderQuiz upgrade ===== */
-
-    function makeTheoryBlock(topic) {
-      const tpl = document.getElementById('tpl-question-theory');
-      const node = tpl.content.cloneNode(true);
-      $('[data-meta]', node).textContent = breadcrumbString(topic, 'Theory');
-
-      $('[data-question]', node).textContent = topic.theory.question;
-      $$('[data-choice]', node).forEach(span => {
-        const key = span.getAttribute('data-choice');
-        span.textContent = topic.theory.choices[key];
-      });
-
-      // Store answer meta on container
-      const article = $('article.quiz-theory', node);
-      article.dataset.correct = topic.theory.correct;
-      $('[data-explain]', node).textContent = topic.theory.explain || '';
-
-      return node;
-    }
-
-    function makePracticeBlock(topic) {
-      const tpl = document.getElementById('tpl-question-practice');
-      const node = tpl.content.cloneNode(true);
-      $('[data-meta]', node).textContent = breadcrumbString(topic, 'Practice');
-
-      $('[data-question]', node).textContent = topic.practice.question;
-      $$('[data-choice]', node).forEach(span => {
-        const key = span.getAttribute('data-choice');
-        span.textContent = topic.practice.choices[key];
-      });
-
-      const qImg = $('[data-practice-q-img]', node);
-      qImg.src = topic.practice.qImg || '';
-      const aImg = $('[data-practice-a-img]', node);
-      aImg.src = topic.practice.aImg || '';
-
-      const article = $('article.quiz-practice', node);
-      article.dataset.correct = topic.practice.correct;
-      $('[data-explain]', node).textContent = topic.practice.explain || '';
-
-      return node;
-    }
-
-    function breadcrumbString(topic, type) {
-      const vol = REGISTRY.volumes.find(v => v.chapters.some(c => c.topics.some(t => t.id === topic.id)));
-      const ch = vol.chapters.find(c => c.topics.some(t => t.id === topic.id));
-      return `${vol.title} • ${ch.title} • ${topic.title} • ${type}`;
-    }
-
-    // ===== Evaluation =====
-    function evaluateCurrent() {
-      const blocks = $$('#quiz-host article.quiz-block');
-      if (!blocks.length) { announce('Nothing to submit yet.'); return; }
-
-      let total = 0, got = 0;
-      const feedbackParts = [];
-
-      blocks.forEach(block => {
-        total += 1;
-        const kind = block.dataset.kind; // 'theory' or 'practice'
-        const selected = block.querySelector('input[type="radio"]:checked');
-        const correct = block.dataset.correct;
-        const group = kind === 'theory' ? 'choice-theory' : 'choice-practice';
-        const selectedVal = selected ? selected.value : null;
-
-        // Reveal correct answers
-        const revealSel = kind === 'theory' ? '[data-answer-theory]' : '[data-answer-practice]';
-        const reveal = block.querySelector(revealSel);
-        if (reveal) {
-          reveal.hidden = false;
-          const correctSpan = reveal.querySelector('[data-correct]');
-          if (correctSpan) correctSpan.textContent = `${correct} — ${labelFor(block, group, correct)}`;
-        }
-
-        // Mark states
-        $$('input[type="radio"]', block).forEach(input => {
-          input.disabled = true;
-          const parent = input.closest('label.choice');
-          parent.classList.remove('is-correct', 'is-incorrect', 'is-selected');
-          if (input.value === correct) parent.classList.add('is-correct');
-          if (selected && input === selected) parent.classList.add('is-selected');
+    function updateChapters() {
+      const volume = document.getElementById("volumeSelect").value;
+      const chapterSelect = document.getElementById("chapterSelect");
+      chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+      if (volumeData[volume]) {
+        volumeData[volume].chapters.forEach(ch => {
+          chapterSelect.innerHTML += `<option value="${ch}">Chapter ${ch}</option>`;
         });
-
-        const ok = selectedVal === correct;
-        if (ok) got += 1;
-
-        feedbackParts.push(renderFeedbackLine(kind, selectedVal, correct));
-      });
-
-      const pct = total ? got / total : 0;
-      els.scoreRaw.textContent = `${got} / ${total}`;
-      els.scorePerc.textContent = fmtPct(pct);
-      els.scoreStatus.textContent = pct >= 0.5 ? 'Pass' : 'Try again';
-      els.scoreboard.hidden = false;
-
-      // Attempts/history
-      recordAttempt({
-        volume: els.volume.value,
-        chapter: els.chapter.value,
-        topic: els.topic.value,
-        type: els.type.value,
-        raw: got,
-        total,
-        pct,
-        at: nowISO()
-      });
-
-      els.feedback.innerHTML = `<ul class="feedback-list">${feedbackParts.join('')}</ul>`;
-      announce(`Submitted. Score ${got} out of ${total}. ${Math.round(pct*100)} percent.`);
-
-      // Disable submit until a new render/reset
-      els.submit.disabled = true;
-
-      // Analytics hook
-      onEvent('quiz:submitted', {
-        selection: currentSelection(),
-        score: { got, total, pct }
-      });
-    }
-
-    function labelFor(block, groupName, val) {
-      const input = block.querySelector(`input[name="${groupName}"][value="${val}"]`);
-      if (!input) return '';
-      const span = input.closest('label').querySelector('span[data-choice]');
-      return span ? span.textContent : '';
-    }
-
-    function renderFeedbackLine(kind, selected, correct) {
-      const kindLabel = kind === 'theory' ? 'Theory' : 'Practice';
-      const sel = selected ? selected : '—';
-      return `<li><strong>${kindLabel}:</strong> Your answer: <code>${sel}</code> • Correct: <code>${correct}</code></li>`;
-    }
-
-    // ===== Attempts, stats, export =====
-    function recordAttempt(entry) {
-      const arr = loadAttempts();
-      arr.push(entry);
-      saveAttempts(arr);
-      renderAttempts(arr);
-      renderStats(arr);
-    }
-
-    function renderAttempts(arr) {
-      els.attemptsBody.innerHTML = '';
-      arr.slice().reverse().forEach(a => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${new Date(a.at).toLocaleString()}</td>
-          <td>${titleFor('volume', a.volume)}</td>
-          <td>${titleFor('chapter', a.chapter)}</td>
-          <td>${titleFor('topic', a.topic)}</td>
-          <td>${a.type}</td>
-          <td>${a.raw}</td>
-          <td>${a.total}</td>
-          <td>${fmtPct(a.pct)}</td>
-        `;
-        els.attemptsBody.appendChild(tr);
-      });
-      els.attempts.hidden = arr.length === 0;
-    }
-
-    function renderStats(arr) {
-      const n = arr.length;
-      els.statAttempts.textContent = String(n);
-      if (!n) {
-        els.statAverage.textContent = '—';
-        els.statBest.textContent = '—';
-        els.statLast.textContent = '—';
-        return;
       }
-      const avg = arr.reduce((s, a) => s + a.pct, 0) / n;
-      const best = Math.max(...arr.map(a => a.pct));
-      const last = arr[arr.length - 1].pct;
-      els.statAverage.textContent = fmtPct(avg);
-      els.statBest.textContent = fmtPct(best);
-      els.statLast.textContent = fmtPct(last);
+      updateTopics(); // Reset downstream
     }
 
-    function titleFor(kind, id) {
-      if (!id) return '—';
-      if (kind === 'volume') {
-        return REGISTRY.volumes.find(v => v.id === id)?.title ?? id;
+    function updateTopics() {
+      const volume = document.getElementById("volumeSelect").value;
+      const chapter = document.getElementById("chapterSelect").value;
+      const topicSelect = document.getElementById("topicSelect");
+      topicSelect.innerHTML = '<option value="">Select Topic</option>';
+      if (volumeData[volume]?.topics[chapter]) {
+        volumeData[volume].topics[chapter].forEach(t => {
+          topicSelect.innerHTML += `<option value="${t}">Topic ${t}</option>`;
+        });
       }
-      if (kind === 'chapter') {
-        for (const v of REGISTRY.volumes) {
-          const c = v.chapters.find(c => c.id === id);
-          if (c) return c.title;
-        }
-        return id;
-      }
-      if (kind === 'topic') {
-        for (const v of REGISTRY.volumes) {
-          for (const c of v.chapters) {
-            const t = c.topics.find(t => t.id === id);
-            if (t) return t.title;
-          }
-        }
-        return id;
-      }
-      return id;
+      updateTypes(); // Reset downstream
     }
 
-    function exportCSV() {
-      const arr = loadAttempts();
-      if (!arr.length) { announce('No attempts to export.'); return; }
-      const header = ['date_time','volume','chapter','topic','type','raw','total','percentage'];
-      const rows = arr.map(a => [
-        new Date(a.at).toISOString(),
-        titleFor('volume', a.volume),
-        titleFor('chapter', a.chapter),
-        titleFor('topic', a.topic),
-        a.type,
-        a.raw,
-        a.total,
-        (a.pct * 100).toFixed(0) + '%'
-      ]);
-      const csv = [header, ...rows].map(r => r.map(csvEscape).join(',')).join('\r\n');
-      downloadBlob(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), 'quiz_attempts.csv');
-      onEvent('export:csv', { count: arr.length });
-    }
-
-    function csvEscape(v) {
-      const s = String(v ?? '');
-      if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
-      return s;
-    }
-
-    function downloadBlob(blob, filename) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename;
-      document.body.appendChild(a); a.click();
-      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
-    }
-
-    // ===== Controls, reset, persistence =====
-    function resetAll(hard = false) {
-      // Clear host and scoreboard
-      els.host.innerHTML = '<div class="placeholder"><p>Select Volume, Chapter, Topic, and Type to begin.</p></div>';
-      els.scoreboard.hidden = true;
-      els.feedback.innerHTML = '';
-      els.submit.disabled = true;
-
-      // Reset selects
-      els.volume.value = '';
-      populateChapters('');
-      els.chapter.value = '';
-      els.topic.value = '';
-      els.type.value = '';
-      els.chapter.disabled = true;
-      els.topic.disabled = true;
-      els.type.disabled = true;
-
-      // Persist or clear
-      if (hard) {
-        localStorage.removeItem(APP.storageKey);
-        onEvent('storage:cleared');
+    function updateTypes() {
+      const topic = document.getElementById("topicSelect").value;
+      const typeSelect = document.getElementById("typeSelect");
+      typeSelect.innerHTML = '<option value="">Select Type</option>';
+      // Placeholder logic: assume Topic 1 and 4 are Theory-only, others are Both
+      if (["1", "4"].includes(topic)) {
+        typeSelect.innerHTML += `<option value="Theory">Theory</option>`;
       } else {
-        saveState({ volume: '', chapter: '', topic: '', type: '' });
-      }
-
-      announce('Selections reset. You can choose again.');
-    }
-
-    function currentSelection() {
-      return {
-        volume: els.volume.value,
-        chapter: els.chapter.value,
-        topic: els.topic.value,
-        type: els.type.value
-      };
-    }
-
-    function persistSelection() {
-      const sel = currentSelection();
-      saveState(sel);
-    }
-
-    // ===== Event wiring =====
-/* ===== FIX: wireEvents to attach all dropdown and button actions ===== */
-function wireEvents() {
-  els.volume.addEventListener('change', () => {
-    const vol = els.volume.value;
-    populateChapters(vol);
-    persistSelection();
-  });
-
-  els.chapter.addEventListener('change', () => {
-    const vol = els.volume.value;
-    const ch = els.chapter.value;
-    populateTopics(vol, ch);
-    persistSelection();
-  });
-
-  els.topic.addEventListener('change', () => {
-    const vol = els.volume.value;
-    const ch = els.chapter.value;
-    const t = els.topic.value;
-    populateTypes(vol, ch, t);
-    persistSelection();
-  });
-
-  els.type.addEventListener('change', () => {
-    persistSelection();
-    const sel = currentSelection();
-    if (sel.volume && sel.chapter && sel.topic && sel.type) {
-      renderQuiz(sel.volume, sel.chapter, sel.topic, sel.type);
-    }
-  });
-
-  els.submit.addEventListener('click', () => {
-    evaluateCurrent();
-  });
-
-  els.reset.addEventListener('click', () => {
-    resetAll();
-  });
-
-  els.clearData.addEventListener('click', () => {
-    clearSavedData();
-  });
-
-  els.exportCSV.addEventListener('click', () => {
-    exportAttemptsCSV();
-  });
-
-  els.print.addEventListener('click', () => {
-    window.print();
-  });
-}
-
-/* ===== STARTUP ===== */
-document.addEventListener('DOMContentLoaded', () => {
-  try {
-    init();
-  } catch (err) {
-    console.error('Error during initialization:', err);
-    alert('An error occurred while starting the quizzes. Please check the console for details.');
-  }
-});
-
-/* ===== FIX: Ensure dropdowns initialize and events are wired ===== */
-function init() {
-  // Populate the Volume dropdown on page load
-  populateVolumes();
-
-  // Restore saved state if available
-  const state = loadState();
-  if (state) {
-    if (state.volume) {
-      els.volume.value = state.volume;
-      populateChapters(state.volume);
-    }
-    if (state.chapter) {
-      els.chapter.value = state.chapter;
-      populateTopics(state.volume, state.chapter);
-    }
-    if (state.topic) {
-      els.topic.value = state.topic;
-      populateTypes(state.volume, state.chapter, state.topic);
-    }
-    if (state.type) {
-      els.type.value = state.type;
-      if (state.volume && state.chapter && state.topic && state.type) {
-        renderQuiz(state.volume, state.chapter, state.topic, state.type);
+        typeSelect.innerHTML += `<option value="Theory">Theory</option>`;
+        typeSelect.innerHTML += `<option value="Practice">Practice</option>`;
+        typeSelect.innerHTML += `<option value="Both">Both</option>`;
       }
     }
-  }
 
-  // Load attempts history and stats
-  const attempts = loadAttempts();
-  renderAttempts(attempts);
-  renderStats(attempts);
+    function loadQuestions() {
+      const type = document.getElementById("typeSelect").value;
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
 
-  // Wire up all dropdown and button events
-  wireEvents();
+      if (type === "Theory" || type === "Both") {
+        const theory = document.getElementById("theoryTemplate").content.cloneNode(true);
+        container.appendChild(theory);
+      }
 
-  // Announce readiness
-  announce('Quizzes ready. Tabs, filters, and actions are always available at the top.');
-}
+      if (type === "Practice" || type === "Both") {
+        const practice = document.getElementById("practiceTemplate").content.cloneNode(true);
+        container.appendChild(practice);
+      }
 
-    // ===== Analytics hook (placeholder) =====
-    function onEvent(name, payload = {}) {
-      // Placeholder for future analytics wiring.
-      // console.debug('[analytics]', name, payload);
+      document.getElementById("results").classList.add("hidden");
     }
 
-    // Boot
-    document.addEventListener('DOMContentLoaded', init);
+    function submitAnswers() {
+      // Placeholder scoring logic
+      const rawScore = 1; // Replace with actual logic
+      const percentage = "100%"; // Replace with actual logic
+      document.getElementById("rawScore").textContent = rawScore;
+      document.getElementById("percentageScore").textContent = percentage;
+
+      document.querySelectorAll(".correct-answer").forEach(el => el.classList.remove("hidden"));
+      document.querySelectorAll(".excel-image.hidden").forEach(img => img.classList.remove("hidden"));
+      document.getElementById("results").classList.remove("hidden");
+    }
+
+    function resetQuiz() {
+      document.getElementById("volumeSelect").value = "";
+      document.getElementById("chapterSelect").innerHTML = '<option value="">Select Chapter</option>';
+      document.getElementById("topicSelect").innerHTML = '<option value="">Select Topic</option>';
+      document.getElementById("typeSelect").innerHTML = '<option value="">Select Type</option>';
+      document.getElementById("quizContainer").innerHTML = "";
+      document.getElementById("results").classList.add("hidden");
+    }
+
+    function navigateTo(tabName) {
+      alert(`Navigating to ${tabName} tab...`); // Placeholder
+    }
   </script>
 </body>
 </html>
-```
