@@ -1002,20 +1002,23 @@ const questions = {
   }
 };
 
-    // 🔗 DOM Elements
-    const volumeSelect = document.getElementById("volumeSelect");
-    const chapterSelect = document.getElementById("chapterSelect");
-    const topicSelect = document.getElementById("topicSelect");
-    const typeSelect = document.getElementById("typeSelect");
-    const submitBtn = document.getElementById("submitBtn");
-    const resetBtn = document.getElementById("resetBtn");
-    const quizContainer = document.getElementById("quizContainer");
-    const scoreDisplay = document.getElementById("scoreDisplay");
-    const rawScore = document.getElementById("rawScore");
-    const percentageScore = document.getElementById("percentageScore");
+// 🔗 DOM Elements
+const volumeSelect = document.getElementById("volumeSelect");
+const chapterSelect = document.getElementById("chapterSelect");
+const topicSelect = document.getElementById("topicSelect");
+const typeSelect = document.getElementById("typeSelect");
+const submitBtn = document.getElementById("submitBtn");
+const resetBtn = document.getElementById("resetBtn");
+const quizContainer = document.getElementById("quizContainer");
+const scoreDisplay = document.getElementById("scoreDisplay");
+const rawScore = document.getElementById("rawScore");
+const percentageScore = document.getElementById("percentageScore");
 
-    let score = 0;
-    let totalQuestions = 0;
+console.log("✅ volumeSelect:", volumeSelect);
+console.log("✅ chapterSelect:", chapterSelect);
+
+let score = 0;
+let totalQuestions = 0;
 
     // 🔄 Dropdown Logic
     volumeSelect.addEventListener("change", () => {
