@@ -1020,27 +1020,39 @@ console.log("✅ chapterSelect:", chapterSelect);
 let score = 0;
 let totalQuestions = 0;
 
-    // 🔄 Dropdown Logic
-    volumeSelect.addEventListener("change", () => {
-      const vol = volumeSelect.value;
-      chapterSelect.innerHTML = `<option value="">Select Chapter</option>`;
-      topicSelect.innerHTML = `<option value="">Select Topic</option>`;
-      typeSelect.innerHTML = `<option value="">Select Type</option>`;
-      chapterSelect.disabled = true;
-      topicSelect.disabled = true;
-      typeSelect.disabled = true;
-      submitBtn.disabled = true;
+// 🔄 Dropdown Logic
+volumeSelect.addEventListener("change", () => {
+  const vol = volumeSelect.value;
 
-      if (vol && quizData[vol]) {
-        chapterSelect.disabled = false;
-        for (let chap in quizData[vol].chapters) {
-          const option = document.createElement("option");
-          option.value = chap;
-          option.textContent = chap.replace("chap", "Chapter ");
-          chapterSelect.appendChild(option);
-        }
-      }
-    });
+  // Reset all dropdowns
+  chapterSelect.innerHTML = `<option value="">Select Chapter</option>`;
+  topicSelect.innerHTML = `<option value="">Select Topic</option>`;
+  typeSelect.innerHTML = `<option value="">Select Type</option>`;
+  chapterSelect.disabled = true;
+  topicSelect.disabled = true;
+  typeSelect.disabled = true;
+  submitBtn.disabled = true;
+
+  console.log("🔍 Volume selected:", vol);
+  console.log("📦 quizData[vol]:", quizData[vol]);
+
+  // Populate Chapter dropdown if volume is valid
+  if (vol && quizData[vol]) {
+    chapterSelect.disabled = false;
+
+    const chapters = quizData[vol].chapters;
+    console.log("📚 Chapters found:", Object.keys(chapters));
+
+    for (let chap in chapters) {
+      const option = document.createElement("option");
+      option.value = chap;
+      option.textContent = chap.replace("chap", "Chapter ");
+      chapterSelect.appendChild(option);
+    }
+  } else {
+    console.warn("⚠️ Volume not found in quizData or is empty.");
+  }
+});
 
     chapterSelect.addEventListener("change", () => {
       const vol = volumeSelect.value;
