@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Sticky Navigation Tabs -->
+  <!-- 🔒 Sticky Navigation Tabs -->
   <header class="sticky-header">
     <nav class="tab-bar">
       <a href="index.html">Home</a>
@@ -18,7 +18,7 @@
       <a href="tools.html">Tools</a>
     </nav>
 
-    <!-- Dropdown Controls -->
+    <!-- 🔧 Dropdown Controls -->
     <div class="dropdown-controls">
       <select id="volumeSelect">
         <option value="">Select Volume</option>
@@ -44,17 +44,17 @@
     </div>
   </header>
 
-  <!-- Quiz Display Area -->
+  <!-- 📦 Quiz Display Area -->
   <main id="quizContainer"></main>
 
-  <!-- Score Display -->
+  <!-- 📊 Score Display -->
   <footer id="scoreDisplay" class="hidden">
     <p>Raw Score: <span id="rawScore">0</span></p>
     <p>Percentage: <span id="percentageScore">0%</span></p>
   </footer>
 
   <script>
-    // Replaceable Data Structure
+    // 📁 REPLACEABLE BLOCK: Volumes, Chapters, Topics, Types
     const quizData = {
       vol1: {
         chapters: {
@@ -91,33 +91,40 @@
       }
     };
 
+    // 📁 REPLACEABLE BLOCK: Questions per Topic and Type
     const questions = {
       topic1: {
-        Theory: {
-          question: "What is the capital of France?",
-          choices: ["Berlin", "Madrid", "Paris", "Rome"],
-          answer: 2
-        },
-        Practice: {
-          question: "Identify the correct Excel formula for summing A1:A10.",
-          imageQ: "practice_q_topic1.png",
-          choices: ["=SUM(A1:A10)", "=TOTAL(A1:A10)", "=ADD(A1:A10)", "=AGGREGATE(A1:A10)"],
-          answer: 0,
-          imageA: "practice_a_topic1.png"
-        }
+        Theory: [
+          {
+            question: "What is the capital of France?",
+            choices: ["Berlin", "Madrid", "Paris", "Rome"],
+            answer: 2
+          }
+        ],
+        Practice: [
+          {
+            question: "Identify the correct Excel formula for summing A1:A10.",
+            imageQ: "practice_q_topic1.png",
+            choices: ["=SUM(A1:A10)", "=TOTAL(A1:A10)", "=ADD(A1:A10)", "=AGGREGATE(A1:A10)"],
+            answer: 0,
+            imageA: "practice_a_topic1.png"
+          }
+        ]
       },
       topic2: {
-        Practice: {
-          question: "Which Excel function returns the current date?",
-          imageQ: "practice_q_topic2.png",
-          choices: ["=TODAY()", "=NOW()", "=DATE()", "=CURRENT()"],
-          answer: 0,
-          imageA: "practice_a_topic2.png"
-        }
+        Practice: [
+          {
+            question: "Which Excel function returns the current date?",
+            imageQ: "practice_q_topic2.png",
+            choices: ["=TODAY()", "=NOW()", "=DATE()", "=CURRENT()"],
+            answer: 0,
+            imageA: "practice_a_topic2.png"
+          }
+        ]
       }
     };
 
-    // DOM Elements
+    // 🔗 DOM Elements
     const volumeSelect = document.getElementById("volumeSelect");
     const chapterSelect = document.getElementById("chapterSelect");
     const topicSelect = document.getElementById("topicSelect");
@@ -129,10 +136,10 @@
     const rawScore = document.getElementById("rawScore");
     const percentageScore = document.getElementById("percentageScore");
 
-    let currentAnswer = null;
     let score = 0;
+    let totalQuestions = 0;
 
-    // Populate Chapters
+    // 🔄 Dropdown Logic
     volumeSelect.addEventListener("change", () => {
       const vol = volumeSelect.value;
       chapterSelect.innerHTML = `<option value="">Select Chapter</option>`;
@@ -145,8 +152,7 @@
 
       if (vol && quizData[vol]) {
         chapterSelect.disabled = false;
-        const chapters = quizData[vol].chapters;
-        for (let chap in chapters) {
+        for (let chap in quizData[vol].chapters) {
           const option = document.createElement("option");
           option.value = chap;
           option.textContent = chap.replace("chap", "Chapter ");
@@ -155,7 +161,6 @@
       }
     });
 
-    // Populate Topics
     chapterSelect.addEventListener("change", () => {
       const vol = volumeSelect.value;
       const chap = chapterSelect.value;
@@ -167,8 +172,7 @@
 
       if (chap && quizData[vol].chapters[chap]) {
         topicSelect.disabled = false;
-        const topics = quizData[vol].chapters[chap].topics;
-        for (let topic in topics) {
+        for (let topic in quizData[vol].chapters[chap].topics) {
           const option = document.createElement("option");
           option.value = topic;
           option.textContent = topic.replace("topic", "Topic ");
@@ -177,7 +181,6 @@
       }
     });
 
-    // Populate Types
     topicSelect.addEventListener("change", () => {
       const vol = volumeSelect.value;
       const chap = chapterSelect.value;
@@ -188,8 +191,7 @@
 
       if (topic && quizData[vol].chapters[chap].topics[topic]) {
         typeSelect.disabled = false;
-        const types = quizData[vol].chapters[chap].topics[topic].types;
-        types.forEach(type => {
+        quizData[vol].chapters[chap].topics[topic].types.forEach(type => {
           const option = document.createElement("option");
           option.value = type;
           option.textContent = type;
@@ -198,54 +200,60 @@
       }
     });
 
-    // Enable Submit
     typeSelect.addEventListener("change", () => {
       submitBtn.disabled = !typeSelect.value;
     });
 
-    // Submit Logic
+    // 🚀 Submit Logic (continued)
     submitBtn.addEventListener("click", () => {
       const topic = topicSelect.value;
       const type = typeSelect.value;
       quizContainer.innerHTML = "";
       scoreDisplay.classList.remove("hidden");
       score = 0;
+      totalQuestions = 0;
 
+      // Render Theory Questions
       if (type === "Theory" || type === "Both") {
-        const q = questions[topic]?.Theory;
-        if (q) {
+        const theoryQs = questions[topic]?.Theory || [];
+        theoryQs.forEach((q, index) => {
+          totalQuestions++;
           const block = document.createElement("div");
           block.className = "quiz-block";
           block.innerHTML = `
             <p>${q.question}</p>
             ${q.choices.map((choice, i) => `
-              <label><input type="radio" name="theory" value="${i}"> ${choice}</label><br/>
+              <label><input type="radio" name="theory${index}" value="${i}"> ${choice}</label><br/>
             `).join("")}
-            <button onclick="checkTheory(${q.answer})">Reveal Answer</button>
+            <button onclick="checkTheory('${topic}', ${index})">Reveal Answer</button>
+            <div id="feedback-theory${index}" class="feedback"></div>
           `;
           quizContainer.appendChild(block);
-        }
+        });
       }
 
+      // Render Practice Questions
       if (type === "Practice" || type === "Both") {
-        const q = questions[topic]?.Practice;
-        if (q) {
+        const practiceQs = questions[topic]?.Practice || [];
+        practiceQs.forEach((q, index) => {
+          totalQuestions++;
           const block = document.createElement("div");
           block.className = "quiz-block";
           block.innerHTML = `
             <p>${q.question}</p>
             <img src="${q.imageQ}" alt="Practice Question Image" class="excel-image" />
             ${q.choices.map((choice, i) => `
-              <label><input type="radio" name="practice" value="${i}"> ${choice}</label><br/>
+              <label><input type="radio" name="practice${index}" value="${i}"> ${choice}</label><br/>
             `).join("")}
-            <button onclick="checkPractice(${q.answer}, '${q.imageA}')">Reveal Answer</button>
+            <button onclick="checkPractice('${topic}', ${index}, '${q.imageA}')">Reveal Answer</button>
+            <div id="feedback-practice${index}" class="feedback"></div>
           `;
           quizContainer.appendChild(block);
-        }
+        });
       }
     });
 
-    // Reset Logic
+    // ✅ Reset Logic
     resetBtn.addEventListener("click", () => {
       volumeSelect.value = "";
       chapterSelect.innerHTML = `<option value="">Select Chapter</option>`;
@@ -260,46 +268,51 @@
       rawScore.textContent = "0";
       percentageScore.textContent = "0%";
       score = 0;
+      totalQuestions = 0;
     });
 
-    // Answer Checkers
-    window.checkTheory = function(correctIndex) {
-      const selected = document.querySelector('input[name="theory"]:checked');
-      if (selected) {
+    // 🧠 Answer Checkers
+    window.checkTheory = function(topic, index) {
+      const selected = document.querySelector(`input[name="theory${index}"]:checked`);
+      const feedback = document.getElementById(`feedback-theory${index}`);
+      if (selected && feedback.innerHTML === "") {
+        const q = questions[topic].Theory[index];
         const userAnswer = parseInt(selected.value);
-        const result = document.createElement("p");
-        result.textContent = userAnswer === correctIndex
-          ? "✅ Correct!"
-          : `❌ Incorrect. Correct answer: ${document.querySelectorAll('input[name="theory"]')[correctIndex].parentElement.textContent.trim()}`;
-        quizContainer.appendChild(result);
+        const correctText = q.choices[q.answer];
+        feedback.innerHTML = userAnswer === q.answer
+          ? `<p>✅ Correct!</p>`
+          : `<p>❌ Incorrect. Correct answer: ${correctText}</p>`;
         score++;
         updateScore();
+        selected.closest(".quiz-block").scrollIntoView({ behavior: "smooth" });
       }
     };
 
-    window.checkPractice = function(correctIndex, imagePath) {
-      const selected = document.querySelector('input[name="practice"]:checked');
-      if (selected) {
+    window.checkPractice = function(topic, index, imagePath) {
+      const selected = document.querySelector(`input[name="practice${index}"]:checked`);
+      const feedback = document.getElementById(`feedback-practice${index}`);
+      if (selected && feedback.innerHTML === "") {
+        const q = questions[topic].Practice[index];
         const userAnswer = parseInt(selected.value);
-        const result = document.createElement("p");
-        result.textContent = userAnswer === correctIndex
-          ? "✅ Correct!"
-          : `❌ Incorrect. Correct answer: ${document.querySelectorAll('input[name="practice"]')[correctIndex].parentElement.textContent.trim()}`;
+        const correctText = q.choices[q.answer];
+        feedback.innerHTML = userAnswer === q.answer
+          ? `<p>✅ Correct!</p>`
+          : `<p>❌ Incorrect. Correct answer: ${correctText}</p>`;
         const answerImage = document.createElement("img");
         answerImage.src = imagePath;
         answerImage.alt = "Practice Answer Image";
         answerImage.className = "excel-image";
-        quizContainer.appendChild(result);
-        quizContainer.appendChild(answerImage);
+        feedback.appendChild(answerImage);
         score++;
         updateScore();
+        selected.closest(".quiz-block").scrollIntoView({ behavior: "smooth" });
       }
     };
 
+    // 📊 Score Updater
     function updateScore() {
       rawScore.textContent = score;
-      const totalBlocks = document.querySelectorAll(".quiz-block").length;
-      const percentage = totalBlocks > 0 ? Math.round((score / totalBlocks) * 100) : 0;
+      const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
       percentageScore.textContent = `${percentage}%`;
     }
   </script>
