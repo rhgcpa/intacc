@@ -1209,24 +1209,34 @@ submitBtn.addEventListener("click", () => {
     quizContainer.appendChild(block);
   };
 
-  // 🧠 Render Theory Questions
-  if (type === "Theory" || type === "Both") {
-    const theoryQs = questions[key]?.Theory || [];
-    theoryQs.forEach((q, index) => {
-      totalQuestions++;
-      renderBlock(q, index, "Theory");
-    });
-  }
+// 🧠 Render Questions Based on Selected Type
+if (type === "Theory" || type === "Both") {
+  const normalizedTopic = topic.replace(/\s+/g, "").replace(/[^a-zA-Z0-9]/g, "");
+  const key = `${normalizedTopic}_${chapter}_${volume}`;
+  const theoryQs = questions[key]?.Theory || [];
 
-  // 🧪 Render Practice Questions
-  if (type === "Practice" || type === "Both") {
-    const practiceQs = questions[key]?.Practice || [];
-    practiceQs.forEach((q, index) => {
-      totalQuestions++;
-      renderBlock(q, index, "Practice");
-    });
-  }
-});
+  console.log("🔑 Constructed key:", key);
+  console.log("📘 Theory questions found:", theoryQs.length);
+
+  theoryQs.forEach((q, index) => {
+    totalQuestions++;
+    renderBlock(q, index, "Theory");
+  });
+}
+
+if (type === "Practice" || type === "Both") {
+  const normalizedTopic = topic.replace(/\s+/g, "").replace(/[^a-zA-Z0-9]/g, "");
+  const key = `${normalizedTopic}_${chapter}_${volume}`;
+  const practiceQs = questions[key]?.Practice || [];
+
+  console.log("🔑 Constructed key:", key);
+  console.log("🧪 Practice questions found:", practiceQs.length);
+
+  practiceQs.forEach((q, index) => {
+    totalQuestions++;
+    renderBlock(q, index, "Practice");
+  });
+}
 
     // ✅ Reset Logic
     resetBtn.addEventListener("click", () => {
