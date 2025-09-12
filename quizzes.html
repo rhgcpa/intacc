@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- 🔝 Sticky Navigation Tabs -->
+  <!-- 📌 Sticky Navigation Tabs -->
   <header id="sticky-header">
     <nav class="tabs">
       <a href="index.html">Home</a>
@@ -23,20 +23,16 @@
       <select id="volume"></select>
       <select id="chapter"></select>
       <select id="topic"></select>
-      <select id="type">
-        <option value="Theory">Theory</option>
-        <option value="Practice">Practice</option>
-        <option value="Both">Both</option>
-      </select>
+      <select id="type"></select>
       <button id="submitBtn">Submit</button>
       <button id="resetBtn">Reset</button>
     </div>
   </header>
 
-  <!-- 📋 Quiz Display Section -->
+  <!-- 📝 Quiz Display Section -->
   <main>
     <section id="quizArea">
-      <h2>📝 Quiz Questions</h2>
+      <h2>🧠 Quiz Questions</h2>
       <div id="questionContainer">Please select filters and click Submit.</div>
       <div id="scoreContainer"></div>
     </section>
@@ -44,7 +40,7 @@
 
   <!-- 🧠 Script Logic -->
   <script>
-    // ✅ REPLACEABLE BLOCK: Question Bank
+    // 🔁 START REPLACEABLE BLOCK: Question Bank
     const questions = [
       {
         volume: "Volume 1",
@@ -66,7 +62,7 @@
         correct: 1,
         imageAnswer: "images/a1.png"
       }
-      // 🔧 Add more questions here
+      // 🔁 END REPLACEABLE BLOCK: Question Bank
     ];
 
     // 🔧 DOM Elements
@@ -98,6 +94,24 @@
       });
     };
 
+    const adjustDropdownWidth = (dropdown) => {
+      const tempSpan = document.createElement("span");
+      tempSpan.style.visibility = "hidden";
+      tempSpan.style.position = "absolute";
+      tempSpan.style.whiteSpace = "nowrap";
+      document.body.appendChild(tempSpan);
+
+      let maxWidth = 0;
+      Array.from(dropdown.options).forEach(opt => {
+        tempSpan.textContent = opt.textContent;
+        const width = tempSpan.offsetWidth;
+        if (width > maxWidth) maxWidth = width;
+      });
+
+      document.body.removeChild(tempSpan);
+      dropdown.style.width = `${maxWidth + 40}px`;
+    };
+
     // 🚀 Initial Load
     const initDropdowns = () => {
       const volumes = getUnique("volume");
@@ -117,11 +131,21 @@
       const chap = chapterDropdown.value;
       const topics = getUnique("topic", { volume: vol, chapter: chap });
       buildDropdown(topicDropdown, topics);
+      adjustDropdownWidth(topicDropdown);
       topicDropdown.dispatchEvent(new Event("change"));
     });
 
     topicDropdown.addEventListener("change", () => {
-      // Optional: preload logic
+      const vol = volumeDropdown.value;
+      const chap = chapterDropdown.value;
+      const topic = topicDropdown.value;
+
+      const types = getUnique("type", { volume: vol, chapter: chap, topic: topic });
+      const typeOptions = [...types];
+      if (types.includes("Theory") && types.includes("Practice")) {
+        typeOptions.push("Both");
+      }
+      buildDropdown(typeDropdown, typeOptions);
     });
 
     // 🧠 Quiz Renderer
@@ -221,7 +245,7 @@
       initDropdowns();
     });
 
-    // 🧭 Start
+    // 🧭 Initialize on Load
     initDropdowns();
   </script>
 </body>
