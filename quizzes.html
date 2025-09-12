@@ -58,6 +58,88 @@
   </footer>
 
   <script>
+
+  // 📁 REPLACEABLE BLOCK: Volumes, Chapters, Topics, Types
+const quizData = {
+  vol1: {
+    chapters: {
+      chap1: {
+        topics: {
+          "Cash and Cash Equivalents": {
+            types: ["Theory", "Practice"]
+          }
+        }
+      },
+      chap2: {
+        topics: {
+          "Definition and Classification of Financial Assets": {
+            types: ["Theory"]
+          },
+          "Recognition and Initial Measurement of Financial Assets": {
+            types: ["Theory", "Practice"]
+          },
+          "Subsequent Measurement of Financial Assets": {
+            types: ["Theory", "Practice"]
+          },
+          "Impairment, Financing, Associates, and Joint Ventures": {
+            types: ["Theory"]
+          }
+        }
+      },
+      chap3: {
+        topics: {
+          "Topic 1": { types: ["Theory"] },
+          "Topic 2": { types: ["Practice"] }
+        }
+      },
+      chap4: {
+        topics: {
+          "Topic 1": { types: ["Theory", "Practice"] }
+        }
+      },
+      chap5: {
+        topics: {
+          "Topic 1": { types: ["Theory"] }
+        }
+      }
+    }
+  },
+  vol2: {
+    chapters: {
+      chap1: {
+        topics: {
+          "Topic 1": { types: ["Theory", "Both"] }
+        }
+      },
+      chap2: {
+        topics: {
+          "Topic 1": { types: ["Practice"] },
+          "Topic 2": { types: ["Theory"] }
+        }
+      }
+    }
+  },
+  vol3: {
+    chapters: {
+      chap1: {
+        topics: {
+          "Topic 1": { types: ["Theory"] }
+        }
+      },
+      chap2: {
+        topics: {
+          "Topic 1": { types: ["Practice", "Both"] }
+        }
+      },
+      chap3: {
+        topics: {
+          "Topic 2": { types: ["Practice", "Both"] }
+        }
+      }
+    }
+  }
+};
+
     document.addEventListener("DOMContentLoaded", () => {
       const volumeSelect = document.getElementById("volumeSelect");
       const chapterSelect = document.getElementById("chapterSelect");
