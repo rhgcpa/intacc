@@ -1066,6 +1066,25 @@ console.log("✅ chapterSelect:", chapterSelect);
 let score = 0;
 let totalQuestions = 0;
 
+// 🎯 Auto-adjust dropdown width based on selected content
+function adjustDropdownWidth(selectElement) {
+  const temp = document.createElement("select");
+  const option = document.createElement("option");
+  option.textContent = selectElement.options[selectElement.selectedIndex]?.text || "";
+  temp.style.visibility = "hidden";
+  temp.style.position = "absolute";
+  temp.style.font = getComputedStyle(selectElement).font;
+  temp.appendChild(option);
+  document.body.appendChild(temp);
+  selectElement.style.width = `${temp.offsetWidth + 24}px`; // Add padding for clarity
+  document.body.removeChild(temp);
+}
+
+// 🧩 Attach width adjustment to dropdowns
+[volumeSelect, chapterSelect, topicSelect, typeSelect].forEach(select => {
+  select.addEventListener("change", () => adjustDropdownWidth(select));
+});
+
 // 🔄 Dropdown Logic
 volumeSelect.addEventListener("change", () => {
   const vol = volumeSelect.value;
