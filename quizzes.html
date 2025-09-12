@@ -1089,7 +1089,7 @@ function adjustDropdownWidth(selectElement) {
 volumeSelect.addEventListener("change", () => {
   const vol = volumeSelect.value;
 
-  // Reset all dropdowns
+  // 🔁 Reset all dropdowns
   chapterSelect.innerHTML = `<option value="">Select Chapter</option>`;
   topicSelect.innerHTML = `<option value="">Select Topic</option>`;
   typeSelect.innerHTML = `<option value="">Select Type</option>`;
@@ -1101,7 +1101,7 @@ volumeSelect.addEventListener("change", () => {
   console.log("🔍 Volume selected:", vol);
   console.log("📦 quizData[vol]:", quizData[vol]);
 
-  // Populate Chapter dropdown if volume is valid
+  // 📚 Populate Chapter dropdown if volume is valid
   if (vol && quizData[vol]) {
     chapterSelect.disabled = false;
 
@@ -1119,6 +1119,7 @@ volumeSelect.addEventListener("change", () => {
   }
 });
 
+// 📘 Chapter selection triggers Topic dropdown
 chapterSelect.addEventListener("change", () => {
   const vol = volumeSelect.value;
   const chap = chapterSelect.value;
@@ -1129,16 +1130,20 @@ chapterSelect.addEventListener("change", () => {
   typeSelect.disabled = true;
   submitBtn.disabled = true;
 
-  if (chap && quizData[vol].chapters[chap]) {
+  if (chap && quizData[vol]?.chapters?.[chap]) {
     topicSelect.disabled = false;
 
     const topics = quizData[vol].chapters[chap].topics;
+    console.log("🧩 Topics found:", Object.keys(topics));
+
     for (let topic in topics) {
       const option = document.createElement("option");
       option.value = topic;
       option.textContent = topic; // ✅ Use actual topic name
       topicSelect.appendChild(option);
     }
+  } else {
+    console.warn("⚠️ Chapter not found or invalid.");
   }
 });
 
@@ -1157,6 +1162,8 @@ topicSelect.addEventListener("change", () => {
     typeSelect.disabled = false;
 
     const types = quizData[vol].chapters[chap].topics[topic].types;
+    console.log("🧪 Types found:", types);
+
     types.forEach(type => {
       const option = document.createElement("option");
       option.value = type;
@@ -1165,6 +1172,8 @@ topicSelect.addEventListener("change", () => {
     });
 
     adjustDropdownWidth(typeSelect); // 🧩 Optional: dynamic width adjustment
+  } else {
+    console.warn("⚠️ Topic not found or invalid.");
   }
 });
 
