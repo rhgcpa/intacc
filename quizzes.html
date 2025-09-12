@@ -3,262 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EXCELlent Intermediate Accounting – Quizzes Hub</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    nav select, nav button { margin-right: 10px; padding: 5px; }
-    .hidden { display: none; }
-    .quiz-block { margin-bottom: 20px; }
-    .correct { color: green; }
-    .incorrect { color: red; }
-    .excel-image { max-width: 100%; height: auto; margin-top: 10px; }
-    .celebration-banner { background: #f0f8ff; padding: 20px; border: 2px solid #00f; margin-bottom: 20px; }
-    .progress-tracker { margin-top: 20px; font-weight: bold; }
-  </style>
+  <title>EXCELlent Intermediate Accounting – Quizzes</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>EXCELlent Intermediate Accounting – Quizzes Hub</h1>
-  </header>
-
-  <main>
-    <nav>
-      <select id="volumeSelect">
-        <option value="">Select Volume</option>
-        <option value="vol1">Volume 1</option>
-        <option value="vol2">Volume 2</option>
-      </select>
-
-      <select id="chapterSelect" disabled>
-        <option value="">Select Chapter</option>
-      </select>
-
-      <select id="topicSelect" disabled>
-        <option value="">Select Topic</option>
-      </select>
-
-      <select id="typeSelect" disabled>
-        <option value="">Select Type</option>
-      </select>
-
-      <button id="submitBtn" disabled>Submit</button>
-      <button id="resetBtn">Reset</button>
+  <!-- 🔝 Sticky Navigation Tabs -->
+  <header id="sticky-header">
+    <nav class="tabs">
+      <a href="index.html">Home</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="quizzes.html" class="active">Quizzes</a>
+      <a href="references.html">References</a>
+      <a href="visuals.html">Visuals</a>
+      <a href="tools.html">Tools</a>
     </nav>
 
-    <section id="scoreDisplay" class="hidden">
-      <p>Raw Score: <span id="rawScore">0</span></p>
-      <p>Percentage: <span id="percentageScore">0%</span></p>
-    </section>
+    <!-- 🔽 Sticky Filter Controls -->
+    <div class="filters">
+      <select id="volume"></select>
+      <select id="chapter"></select>
+      <select id="topic"></select>
+      <select id="type">
+        <option value="Theory">Theory</option>
+        <option value="Practice">Practice</option>
+        <option value="Both">Both</option>
+      </select>
+      <button id="submitBtn">Submit</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </header>
 
-    <section id="quizContainer"></section>
+  <!-- 📋 Quiz Display Section -->
+  <main>
+    <section id="quizArea">
+      <h2>📝 Quiz Questions</h2>
+      <div id="questionContainer">Please select filters and click Submit.</div>
+      <div id="scoreContainer"></div>
+    </section>
   </main>
 
-  <footer>
-    <p>&copy; 2025 EXCELlent Intermediate Accounting</p>
-  </footer>
-
+  <!-- 🧠 Script Logic -->
   <script>
+    // ✅ REPLACEABLE BLOCK: Question Bank
+    const questions = [
+      {
+        volume: "Volume 1",
+        chapter: "Chapter 1",
+        topic: "Cash and Cash Equivalents",
+        type: "Theory",
+        question: "Which of the following is considered a cash equivalent?",
+        choices: ["Inventory", "Accounts Receivable", "Treasury Bills", "Prepaid Rent"],
+        correct: 2
+      },
+      {
+        volume: "Volume 1",
+        chapter: "Chapter 1",
+        topic: "Cash and Cash Equivalents",
+        type: "Practice",
+        question: "Classify the following item as cash or cash equivalent.",
+        imageQuestion: "images/q1.png",
+        choices: ["Cash", "Cash Equivalent", "Neither", "Both"],
+        correct: 1,
+        imageAnswer: "images/a1.png"
+      }
+      // 🔧 Add more questions here
+    ];
 
-  // 📁 REPLACEABLE BLOCK: Volumes, Chapters, Topics, Types
-const quizData = {
-  vol1: {
-    chapters: {
-      chap1: {
-        topics: {
-          "Cash and Cash Equivalents": {
-            types: ["Theory", "Practice"]
-          }
-        }
-      },
-      chap2: {
-        topics: {
-          "Definition and Classification of Financial Assets": {
-            types: ["Theory"]
-          },
-          "Recognition and Initial Measurement of Financial Assets": {
-            types: ["Theory", "Practice"]
-          },
-          "Subsequent Measurement of Financial Assets": {
-            types: ["Theory", "Practice"]
-          },
-          "Impairment, Financing, Associates, and Joint Ventures": {
-            types: ["Theory"]
-          }
-        }
-      },
-      chap3: {
-        topics: {
-          "Topic 1": { types: ["Theory"] },
-          "Topic 2": { types: ["Practice"] }
-        }
-      },
-      chap4: {
-        topics: {
-          "Topic 1": { types: ["Theory", "Practice"] }
-        }
-      },
-      chap5: {
-        topics: {
-          "Topic 1": { types: ["Theory"] }
-        }
-      }
-    }
-  },
-  vol2: {
-    chapters: {
-      chap1: {
-        topics: {
-          "Topic 1": { types: ["Theory", "Both"] }
-        }
-      },
-      chap2: {
-        topics: {
-          "Topic 1": { types: ["Practice"] },
-          "Topic 2": { types: ["Theory"] }
-        }
-      }
-    }
-  },
-  vol3: {
-    chapters: {
-      chap1: {
-        topics: {
-          "Topic 1": { types: ["Theory"] }
-        }
-      },
-      chap2: {
-        topics: {
-          "Topic 1": { types: ["Practice", "Both"] }
-        }
-      },
-      chap3: {
-        topics: {
-          "Topic 2": { types: ["Practice", "Both"] }
-        }
-      }
-    }
-  }
-};
+    // 🔧 DOM Elements
+    const volumeDropdown = document.getElementById("volume");
+    const chapterDropdown = document.getElementById("chapter");
+    const topicDropdown = document.getElementById("topic");
+    const typeDropdown = document.getElementById("type");
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const questionContainer = document.getElementById("questionContainer");
+    const scoreContainer = document.getElementById("scoreContainer");
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const volumeSelect = document.getElementById("volumeSelect");
-      const chapterSelect = document.getElementById("chapterSelect");
-      const topicSelect = document.getElementById("topicSelect");
-      const typeSelect = document.getElementById("typeSelect");
-      const submitBtn = document.getElementById("submitBtn");
-      const resetBtn = document.getElementById("resetBtn");
-      const quizContainer = document.getElementById("quizContainer");
-      const scoreDisplay = document.getElementById("scoreDisplay");
-      const rawScore = document.getElementById("rawScore");
-      const percentageScore = document.getElementById("percentageScore");
+    // 🧩 Utility Functions
+    const getUnique = (key, filter = {}) => {
+      return [...new Set(
+        questions
+          .filter(q => Object.entries(filter).every(([k, v]) => q[k] === v))
+          .map(q => q[key])
+      )];
+    };
+
+    const buildDropdown = (dropdown, items) => {
+      dropdown.innerHTML = "";
+      items.forEach(item => {
+        const opt = document.createElement("option");
+        opt.value = item;
+        opt.textContent = item;
+        dropdown.appendChild(opt);
+      });
+    };
+
+    // 🚀 Initial Load
+    const initDropdowns = () => {
+      const volumes = getUnique("volume");
+      buildDropdown(volumeDropdown, volumes);
+      volumeDropdown.dispatchEvent(new Event("change"));
+    };
+
+    volumeDropdown.addEventListener("change", () => {
+      const vol = volumeDropdown.value;
+      const chapters = getUnique("chapter", { volume: vol });
+      buildDropdown(chapterDropdown, chapters);
+      chapterDropdown.dispatchEvent(new Event("change"));
+    });
+
+    chapterDropdown.addEventListener("change", () => {
+      const vol = volumeDropdown.value;
+      const chap = chapterDropdown.value;
+      const topics = getUnique("topic", { volume: vol, chapter: chap });
+      buildDropdown(topicDropdown, topics);
+      topicDropdown.dispatchEvent(new Event("change"));
+    });
+
+    topicDropdown.addEventListener("change", () => {
+      // Optional: preload logic
+    });
+
+    // 🧠 Quiz Renderer
+    submitBtn.addEventListener("click", () => {
+      const vol = volumeDropdown.value;
+      const chap = chapterDropdown.value;
+      const topic = topicDropdown.value;
+      const type = typeDropdown.value;
+
+      const filtered = questions.filter(q =>
+        q.volume === vol &&
+        q.chapter === chap &&
+        q.topic === topic &&
+        (type === "Both" || q.type === type)
+      );
+
+      if (filtered.length === 0) {
+        questionContainer.innerHTML = "<p>⚠️ No questions found for this selection.</p>";
+        scoreContainer.innerHTML = "";
+        return;
+      }
+
+      questionContainer.innerHTML = "";
+      scoreContainer.innerHTML = "";
 
       let score = 0;
-      let totalQuestions = 0;
 
-      function adjustDropdownWidth(selectElement) {
-        const temp = document.createElement("select");
-        const option = document.createElement("option");
-        option.textContent = selectElement.options[selectElement.selectedIndex]?.text || "";
-        temp.style.visibility = "hidden";
-        temp.style.position = "absolute";
-        temp.style.font = getComputedStyle(selectElement).font;
-        temp.appendChild(option);
-        document.body.appendChild(temp);
-        selectElement.style.width = `${temp.offsetWidth + 24}px`;
-        document.body.removeChild(temp);
-      }
+      filtered.forEach((q, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "question-block";
 
-      [volumeSelect, chapterSelect, topicSelect, typeSelect].forEach(select => {
-        select.addEventListener("change", () => adjustDropdownWidth(select));
-      });
+        const qText = document.createElement("p");
+        qText.innerHTML = `<strong>Q${index + 1}:</strong> ${q.question}`;
+        wrapper.appendChild(qText);
 
-      volumeSelect.addEventListener("change", () => {
-        const vol = volumeSelect.value;
-        chapterSelect.innerHTML = `<option value="">Select Chapter</option>`;
-        topicSelect.innerHTML = `<option value="">Select Topic</option>`;
-        typeSelect.innerHTML = `<option value="">Select Type</option>`;
-        chapterSelect.disabled = true;
-        topicSelect.disabled = true;
-        typeSelect.disabled = true;
-        submitBtn.disabled = true;
-
-        if (vol && quizData[vol]) {
-          chapterSelect.disabled = false;
-          const chapters = quizData[vol].chapters;
-          for (let chap in chapters) {
-            const option = document.createElement("option");
-            option.value = chap;
-            option.textContent = chap.replace("chap", "Chapter ");
-            chapterSelect.appendChild(option);
-          }
+        if (q.type === "Practice" && q.imageQuestion) {
+          const imgQ = document.createElement("img");
+          imgQ.src = q.imageQuestion;
+          imgQ.alt = "Practice Question Image";
+          imgQ.className = "excel-image";
+          wrapper.appendChild(imgQ);
         }
-      });
 
-      chapterSelect.addEventListener("change", () => {
-        const vol = volumeSelect.value;
-        const chap = chapterSelect.value;
-        topicSelect.innerHTML = `<option value="">Select Topic</option>`;
-        typeSelect.innerHTML = `<option value="">Select Type</option>`;
-        topicSelect.disabled = true;
-        typeSelect.disabled = true;
-        submitBtn.disabled = true;
+        const choiceList = document.createElement("ul");
+        q.choices.forEach((choice, i) => {
+          const li = document.createElement("li");
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = `q${index}`;
+          radio.value = i;
+          li.appendChild(radio);
+          li.appendChild(document.createTextNode(" " + choice));
+          choiceList.appendChild(li);
+        });
+        wrapper.appendChild(choiceList);
 
-        if (chap && quizData[vol]?.chapters?.[chap]) {
-          topicSelect.disabled = false;
-          const topics = quizData[vol].chapters[chap].topics;
-          for (let topic in topics) {
-            const option = document.createElement("option");
-            option.value = topic;
-            option.textContent = topic;
-            topicSelect.appendChild(option);
-          }
+        const answerDiv = document.createElement("div");
+        answerDiv.className = "answer-block";
+        answerDiv.style.display = "none";
+
+        const correctText = document.createElement("p");
+        correctText.textContent = `✅ Correct Answer: ${q.choices[q.correct]}`;
+        answerDiv.appendChild(correctText);
+
+        if (q.type === "Practice" && q.imageAnswer) {
+          const imgA = document.createElement("img");
+          imgA.src = q.imageAnswer;
+          imgA.alt = "Practice Answer Image";
+          imgA.className = "excel-image";
+          answerDiv.appendChild(imgA);
         }
+
+        wrapper.appendChild(answerDiv);
+        questionContainer.appendChild(wrapper);
       });
 
-      topicSelect.addEventListener("change", () => {
-        const vol = volumeSelect.value;
-        const chap = chapterSelect.value;
-        const topic = topicSelect.value;
-        typeSelect.innerHTML = `<option value="">Select Type</option>`;
-        typeSelect.disabled = true;
-        submitBtn.disabled = true;
-
-        if (topic && quizData[vol]?.chapters?.[chap]?.topics?.[topic]) {
-          typeSelect.disabled = false;
-          const types = quizData[vol].chapters[chap].topics[topic].types;
-          types.forEach(type => {
-            const option = document.createElement("option");
-            option.value = type;
-            option.textContent = type;
-            typeSelect.appendChild(option);
-          });
-          adjustDropdownWidth(typeSelect);
-        }
+      // 🧮 Score Calculation
+      const radios = document.querySelectorAll("input[type='radio']:checked");
+      radios.forEach(radio => {
+        const qIndex = parseInt(radio.name.replace("q", ""));
+        if (parseInt(radio.value) === filtered[qIndex].correct) score++;
       });
 
-      typeSelect.addEventListener("change", () => {
-        submitBtn.disabled = !typeSelect.value;
-      });
+      const percentage = ((score / filtered.length) * 100).toFixed(2);
+      scoreContainer.innerHTML = `<p>🎯 Raw Score: ${score} / ${filtered.length}</p><p>📊 Percentage: ${percentage}%</p>`;
 
-      resetBtn.addEventListener("click", () => {
-        volumeSelect.value = "";
-        chapterSelect.innerHTML = `<option value="">Select Chapter</option>`;
-        topicSelect.innerHTML = `<option value="">Select Topic</option>`;
-        typeSelect.innerHTML = `<option value="">Select Type</option>`;
-        chapterSelect.disabled = true;
-        topicSelect.disabled = true;
-        typeSelect.disabled = true;
-        submitBtn.disabled = true;
-        quizContainer.innerHTML = "";
-        scoreDisplay.classList.add("hidden");
-        rawScore.textContent = "0";
-        percentageScore.textContent = "0%";
-        score = 0;
-        totalQuestions = 0;
+      // Reveal answers
+      document.querySelectorAll(".answer-block").forEach(div => {
+        div.style.display = "block";
       });
-
-      console.log("✅ DOMContentLoaded block closed successfully");
     });
+
+    // 🔁 Reset Logic
+    resetBtn.addEventListener("click", () => {
+      questionContainer.innerHTML = "Please select filters and click Submit.";
+      scoreContainer.innerHTML = "";
+      initDropdowns();
+    });
+
+    // 🧭 Start
+    initDropdowns();
   </script>
 </body>
 </html>
