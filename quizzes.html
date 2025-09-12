@@ -1142,6 +1142,7 @@ chapterSelect.addEventListener("change", () => {
   }
 });
 
+// 🎯 Topic selection triggers Type dropdown population
 topicSelect.addEventListener("change", () => {
   const vol = volumeSelect.value;
   const chap = chapterSelect.value;
@@ -1151,7 +1152,8 @@ topicSelect.addEventListener("change", () => {
   typeSelect.disabled = true;
   submitBtn.disabled = true;
 
-  if (topic && quizData[vol].chapters[chap].topics[topic]) {
+  // ✅ Validate topic and populate types
+  if (topic && quizData[vol]?.chapters?.[chap]?.topics?.[topic]) {
     typeSelect.disabled = false;
 
     const types = quizData[vol].chapters[chap].topics[topic].types;
@@ -1161,9 +1163,12 @@ topicSelect.addEventListener("change", () => {
       option.textContent = type;
       typeSelect.appendChild(option);
     });
+
+    adjustDropdownWidth(typeSelect); // 🧩 Optional: dynamic width adjustment
   }
 });
 
+// 🚀 Enable Submit button only when Type is selected
 typeSelect.addEventListener("change", () => {
   submitBtn.disabled = !typeSelect.value;
 });
