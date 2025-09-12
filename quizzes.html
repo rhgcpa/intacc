@@ -55,7 +55,7 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-console.log("🚀 Script is running after DOMContentLoaded");
+    console.log("🚀 Script is running after DOMContentLoaded");
 
 // 📁 REPLACEABLE BLOCK: Volumes, Chapters, Topics, Types
 const quizData = {
@@ -1355,16 +1355,17 @@ function safeGetQuestion(key, type, index) {
   }
 }
 
-// 📊 Score Updater
-function updateScore() {
-  rawScore.textContent = score;
-  const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
-  percentageScore.textContent = `${percentage}%`;
-  celebrateIfPerfect(); // 🎉 Trigger celebration if perfect score
-}
+    // 📊 Score Updater
+    function updateScore() {
+      rawScore.textContent = score;
+      const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+      percentageScore.textContent = `${percentage}%`;
+      celebrateIfPerfect(); // 🎉 Trigger celebration if perfect score
+    }
 
-// ✅ Close the DOMContentLoaded listener
-});
+console.log("✅ DOMContentLoaded block closed successfully");
+
+  }); // ✅ Close DOMContentLoaded listener
 </script>
 
 <script>
