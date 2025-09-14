@@ -1240,41 +1240,71 @@
       return copy;
     };
 
-    // 🚀 Initial Load
-    const initDropdowns = () => {
-      const volumes = getUnique("volume");
-      buildDropdown(volumeDropdown, volumes);
-      volumeDropdown.dispatchEvent(new Event("change"));
-    };
+// 🚀 Initial Load
+const initDropdowns = () => {
+  const volumes = getUnique("volume");
+  buildDropdown(volumeDropdown, volumes);
 
-    volumeDropdown.addEventListener("change", () => {
-      const vol = volumeDropdown.value;
-      const chapters = getUnique("chapter", { volume: vol });
-      buildDropdown(chapterDropdown, chapters);
-      chapterDropdown.dispatchEvent(new Event("change"));
-    });
+  // Clear dependent dropdowns
+  chapterDropdown.innerHTML = "";
+  topicDropdown.innerHTML = "";
+  typeDropdown.innerHTML = "";
 
-    chapterDropdown.addEventListener("change", () => {
-      const vol = volumeDropdown.value;
-      const chap = chapterDropdown.value;
-      const topics = getUnique("topic", { volume: vol, chapter: chap });
-      buildDropdown(topicDropdown, topics);
-      adjustDropdownWidth(topicDropdown);
-      topicDropdown.dispatchEvent(new Event("change"));
-    });
+  // Add placeholder options
+  const placeholder = (text) => {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = text;
+    opt.disabled = true;
+    opt.selected = true;
+    return opt;
+  };
 
-    topicDropdown.addEventListener("change", () => {
-      const vol = volumeDropdown.value;
-      const chap = chapterDropdown.value;
-      const topic = topicDropdown.value;
+  chapterDropdown.appendChild(placeholder("Select Chapter"));
+  topicDropdown.appendChild(placeholder("Select Topic"));
+  typeDropdown.appendChild(placeholder("Select Type"));
+};
 
-      const types = getUnique("type", { volume: vol, chapter: chap, topic: topic });
-      const typeOptions = [...types];
-      if (types.includes("Theory") && types.includes("Practice")) {
-        typeOptions.push("Both");
-      }
-      buildDropdown(typeDropdown, typeOptions);
-    });
+volumeDropdown.addEventListener("change", () => {
+  const vol = volumeDropdown.value;
+  const chapters = getUnique("chapter", { volume: vol });
+  buildDropdown(chapterDropdown, chapters);
+  chapterDropdown.insertBefore(placeholder("Select Chapter"), chapterDropdown.firstChild);
+  chapterDropdown.selectedIndex = 0;
+
+  topicDropdown.innerHTML = "";
+  typeDropdown.innerHTML = "";
+  topicDropdown.appendChild(placeholder("Select Topic"));
+  typeDropdown.appendChild(placeholder("Select Type"));
+});
+
+chapterDropdown.addEventListener("change", () => {
+  const vol = volumeDropdown.value;
+  const chap = chapterDropdown.value;
+  const topics = getUnique("topic", { volume: vol, chapter: chap });
+  buildDropdown(topicDropdown, topics);
+  adjustDropdownWidth(topicDropdown);
+  topicDropdown.insertBefore(placeholder("Select Topic"), topicDropdown.firstChild);
+  topicDropdown.selectedIndex = 0;
+
+  typeDropdown.innerHTML = "";
+  typeDropdown.appendChild(placeholder("Select Type"));
+});
+
+topicDropdown.addEventListener("change", () => {
+  const vol = volumeDropdown.value;
+  const chap = chapterDropdown.value;
+  const topic = topicDropdown.value;
+
+  const types = getUnique("type", { volume: vol, chapter: chap, topic: topic });
+  const typeOptions = [...types];
+  if (types.includes("Theory") && types.includes("Practice")) {
+    typeOptions.push("Both");
+  }
+  buildDropdown(typeDropdown, typeOptions);
+  typeDropdown.insertBefore(placeholder("Select Type"), typeDropdown.firstChild);
+  typeDropdown.selectedIndex = 0;
+});
 
     // 🧠 Quiz Renderer
     submitBtn.addEventListener("click", () => {
