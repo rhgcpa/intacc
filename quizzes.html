@@ -1353,6 +1353,14 @@ submitBtn.addEventListener("click", () => {
   console.log("Selected Type:", type);
   console.log("Total Questions:", questions.length);
 
+  // 🔍 Diagnostic comparison with first question
+  console.log("🔍 First question object:", questions[0]);
+  console.log("🔍 Comparing to selected values:");
+  console.log("volume match:", questions[0].volume === vol);
+  console.log("chapter match:", questions[0].chapter === chap);
+  console.log("topic match:", questions[0].topic === topic);
+  console.log("type match:", questions[0].type === type);
+
   let filtered = questions.filter(q =>
     q.volume === vol &&
     q.chapter === chap &&
@@ -1362,67 +1370,67 @@ submitBtn.addEventListener("click", () => {
 
   console.log("Filtered Questions:", filtered);
 
-      if (filtered.length === 0) {
-        questionContainer.innerHTML = "<p>⚠️ No questions found for this selection.</p>";
-        scoreContainer.innerHTML = "";
-        return;
-      }
+  if (filtered.length === 0) {
+    questionContainer.innerHTML = "<p>⚠️ No questions found for this selection.</p>";
+    scoreContainer.innerHTML = "";
+    return;
+  }
 
-      filtered = shuffleArray(filtered); // 🔀 Shuffle before rendering
+  filtered = shuffleArray(filtered); // 🔀 Shuffle before rendering
 
-      questionContainer.innerHTML = "";
-      scoreContainer.innerHTML = "";
+  questionContainer.innerHTML = "";
+  scoreContainer.innerHTML = "";
 
-      let score = 0;
+  let score = 0;
 
-      filtered.forEach((q, index) => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "question-block";
+  filtered.forEach((q, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "question-block";
 
-        const qText = document.createElement("p");
-        qText.innerHTML = `<strong>Q${index + 1}:</strong> ${q.question}`;
-        wrapper.appendChild(qText);
+    const qText = document.createElement("p");
+    qText.innerHTML = `<strong>Q${index + 1}:</strong> ${q.question}`;
+    wrapper.appendChild(qText);
 
-        if (q.type === "Practice" && q.imageQuestion) {
-          const imgQ = document.createElement("img");
-          imgQ.src = q.imageQuestion;
-          imgQ.alt = "Practice Question Image";
-          imgQ.className = "excel-image";
-          wrapper.appendChild(imgQ);
-        }
+    if (q.type === "Practice" && q.imageQuestion) {
+      const imgQ = document.createElement("img");
+      imgQ.src = q.imageQuestion;
+      imgQ.alt = "Practice Question Image";
+      imgQ.className = "excel-image";
+      wrapper.appendChild(imgQ);
+    }
 
-        const choiceList = document.createElement("ul");
-        q.choices.forEach((choice, i) => {
-          const li = document.createElement("li");
-          const radio = document.createElement("input");
-          radio.type = "radio";
-          radio.name = `q${index}`;
-          radio.value = i;
-          li.appendChild(radio);
-          li.appendChild(document.createTextNode(" " + choice));
-          choiceList.appendChild(li);
-        });
-        wrapper.appendChild(choiceList);
+    const choiceList = document.createElement("ul");
+    q.choices.forEach((choice, i) => {
+      const li = document.createElement("li");
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = `q${index}`;
+      radio.value = i;
+      li.appendChild(radio);
+      li.appendChild(document.createTextNode(" " + choice));
+      choiceList.appendChild(li);
+    });
+    wrapper.appendChild(choiceList);
 
-        const answerDiv = document.createElement("div");
-        answerDiv.className = "answer-block";
-        answerDiv.style.display = "none";
+    const answerDiv = document.createElement("div");
+    answerDiv.className = "answer-block";
+    answerDiv.style.display = "none";
 
-        const correctText = document.createElement("p");
-        correctText.textContent = `✅ Correct Answer: ${q.choices[q.correct]}`;
-        answerDiv.appendChild(correctText);
+    const correctText = document.createElement("p");
+    correctText.textContent = `✅ Correct Answer: ${q.choices[q.correct]}`;
+    answerDiv.appendChild(correctText);
 
-        if (q.type === "Practice" && q.imageAnswer) {
-          const imgA = document.createElement("img");
-          imgA.src = q.imageAnswer;
-          imgA.alt = "Practice Answer Image";
-          imgA.className = "excel-image";
-          answerDiv.appendChild(imgA);
-        }
+    if (q.type === "Practice" && q.imageAnswer) {
+      const imgA = document.createElement("img");
+      imgA.src = q.imageAnswer;
+      imgA.alt = "Practice Answer Image";
+      imgA.className = "excel-image";
+      answerDiv.appendChild(imgA);
+    }
 
-        wrapper.appendChild(answerDiv);
-        questionContainer.appendChild(wrapper);
-      });
+    wrapper.appendChild(answerDiv);
+    questionContainer.appendChild(wrapper);
+  });
 
       // 🧮 Score Calculation
       const radios = document.querySelectorAll("input[type='radio']:checked");
