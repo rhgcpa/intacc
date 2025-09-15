@@ -1327,8 +1327,14 @@ topicDropdown.addEventListener("change", () => {
   typeDropdown.selectedIndex = 0;
 });
 
-// 🧠 Quiz Renderer with Guard Clause
+// 🧠 Quiz Renderer with Temporary Session Override
+// 🚧 TEMPORARY OVERRIDE for testing session-dependent logic
+const storageToken = "test-token";
+const storageSession = "test-session";
+const storageExpiresAt = Date.now() + 3600000; // 1 hour from now
+
 submitBtn.addEventListener("click", () => {
+
   const vol = volumeDropdown.value;
   const chap = chapterDropdown.value;
   const topic = topicDropdown.value;
