@@ -1242,14 +1242,17 @@
 
 // 🚀 Initial Load
 const initDropdowns = () => {
-volumeDropdown.innerHTML = "";
-volumeDropdown.appendChild(placeholder("Select Volume"));
-volumes.forEach(vol => {
-  const opt = document.createElement("option");
-  opt.value = vol;
-  opt.textContent = vol;
-  volumeDropdown.appendChild(opt);
-});
+  const volumes = getUnique("volume");
+  volumeDropdown.innerHTML = "";
+  volumeDropdown.appendChild(placeholder("Select Volume"));
+  volumes.forEach(vol => {
+    const opt = document.createElement("option");
+    opt.value = vol;
+    opt.textContent = vol;
+    volumeDropdown.appendChild(opt);
+  });
+  volumeDropdown.selectedIndex = 0;
+};
 
   // Clear dependent dropdowns
   chapterDropdown.innerHTML = "";
@@ -1273,6 +1276,8 @@ volumes.forEach(vol => {
 
 volumeDropdown.addEventListener("change", () => {
   const vol = volumeDropdown.value;
+  if (!vol) return;
+
   const chapters = getUnique("chapter", { volume: vol });
   buildDropdown(chapterDropdown, chapters);
   chapterDropdown.insertBefore(placeholder("Select Chapter"), chapterDropdown.firstChild);
@@ -1287,6 +1292,8 @@ volumeDropdown.addEventListener("change", () => {
 chapterDropdown.addEventListener("change", () => {
   const vol = volumeDropdown.value;
   const chap = chapterDropdown.value;
+  if (!chap) return;
+
   const topics = getUnique("topic", { volume: vol, chapter: chap });
   buildDropdown(topicDropdown, topics);
   adjustDropdownWidth(topicDropdown);
@@ -1301,6 +1308,7 @@ topicDropdown.addEventListener("change", () => {
   const vol = volumeDropdown.value;
   const chap = chapterDropdown.value;
   const topic = topicDropdown.value;
+  if (!topic) return;
 
   const types = getUnique("type", { volume: vol, chapter: chap, topic: topic });
   const typeOptions = [...types];
