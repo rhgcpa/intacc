@@ -1362,13 +1362,21 @@ submitBtn.addEventListener("click", () => {
   console.log("topic match:", questions[0].topic === topic);
   console.log("type match:", questions[0].type === type);
 
-// 🚧 TEMPORARY HARD-CODED FILTER TEST
-let filtered = questions.filter(q =>
-  q.volume === "Volume 1" &&
-  q.chapter === "Chapter 1" &&
-  q.topic === "Cash and Cash Equivalents" &&
-  q.type === "Theory"
-);
+// 🚧 MANUAL INJECTION TEST
+let filtered = [{
+  volume: "Volume 1",
+  chapter: "Chapter 1",
+  topic: "Cash and Cash Equivalents",
+  type: "Theory",
+  question: "Cash on hand includes:",
+  choices: [
+    "Checks dated less than 6 months after today.",
+    "Checks dated less than 6 months before today.",
+    "Checks dated more than 6 months after today.",
+    "Checks dated more than 6 months before today."
+  ],
+  correct: 1
+}];
 
   console.log("Filtered Questions:", filtered);
 
