@@ -1252,7 +1252,6 @@ const initDropdowns = () => {
     volumeDropdown.appendChild(opt);
   });
   volumeDropdown.selectedIndex = 0;
-};
 
   // Clear dependent dropdowns
   chapterDropdown.innerHTML = "";
@@ -1272,7 +1271,7 @@ const initDropdowns = () => {
   chapterDropdown.appendChild(placeholder("Select Chapter"));
   topicDropdown.appendChild(placeholder("Select Topic"));
   typeDropdown.appendChild(placeholder("Select Type"));
-};
+}; // ✅ Only one closing brace needed here
 
 volumeDropdown.addEventListener("change", () => {
   const vol = volumeDropdown.value;
