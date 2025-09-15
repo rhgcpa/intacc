@@ -1274,6 +1274,7 @@ const initDropdowns = () => {
   typeDropdown.appendChild(placeholder("Select Type"));
 };
 
+// 🎯 Volume Listener
 volumeDropdown.addEventListener("change", () => {
   const vol = volumeDropdown.value;
   if (!vol) return;
@@ -1290,6 +1291,7 @@ volumeDropdown.addEventListener("change", () => {
   typeDropdown.appendChild(placeholder("Select Type"));
 });
 
+// 🎯 Chapter Listener
 chapterDropdown.addEventListener("change", () => {
   const vol = volumeDropdown.value;
   const chap = chapterDropdown.value;
@@ -1305,6 +1307,7 @@ chapterDropdown.addEventListener("change", () => {
   typeDropdown.appendChild(placeholder("Select Type"));
 });
 
+// 🎯 Topic Listener
 topicDropdown.addEventListener("change", () => {
   const vol = volumeDropdown.value;
   const chap = chapterDropdown.value;
