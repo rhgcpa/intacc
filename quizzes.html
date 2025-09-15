@@ -1324,19 +1324,27 @@ topicDropdown.addEventListener("change", () => {
   typeDropdown.selectedIndex = 0;
 });
 
-    // 🧠 Quiz Renderer
-    submitBtn.addEventListener("click", () => {
-      const vol = volumeDropdown.value;
-      const chap = chapterDropdown.value;
-      const topic = topicDropdown.value;
-      const type = typeDropdown.value;
+// 🧠 Quiz Renderer
+submitBtn.addEventListener("click", () => {
+  const vol = volumeDropdown.value;
+  const chap = chapterDropdown.value;
+  const topic = topicDropdown.value;
+  const type = typeDropdown.value;
 
-      let filtered = questions.filter(q =>
-        q.volume === vol &&
-        q.chapter === chap &&
-        q.topic === topic &&
-        (type === "Both" || q.type === type)
-      );
+  console.log("Selected Volume:", vol);
+  console.log("Selected Chapter:", chap);
+  console.log("Selected Topic:", topic);
+  console.log("Selected Type:", type);
+  console.log("Total Questions:", questions.length);
+
+  let filtered = questions.filter(q =>
+    q.volume === vol &&
+    q.chapter === chap &&
+    q.topic === topic &&
+    (type === "Both" || q.type === type)
+  );
+
+  console.log("Filtered Questions:", filtered);
 
       if (filtered.length === 0) {
         questionContainer.innerHTML = "<p>⚠️ No questions found for this selection.</p>";
