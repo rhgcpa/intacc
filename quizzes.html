@@ -1408,8 +1408,11 @@ topicDropdown.addEventListener("change", () => {
       initDropdowns();
     });
 
-    // 🧭 Initialize on Load
-    initDropdowns();
+// 🧭 Initialize on Load
+window.addEventListener("DOMContentLoaded", () => {
+  initDropdowns();
+});
+
   </script>
 </body>
 </html>
