@@ -1327,12 +1327,19 @@ topicDropdown.addEventListener("change", () => {
   typeDropdown.selectedIndex = 0;
 });
 
-// 🧠 Quiz Renderer
+// 🧠 Quiz Renderer with Guard Clause
 submitBtn.addEventListener("click", () => {
   const vol = volumeDropdown.value;
   const chap = chapterDropdown.value;
   const topic = topicDropdown.value;
   const type = typeDropdown.value;
+
+  // 🚫 Guard against incomplete selections
+  if (!vol || !chap || !topic || !type) {
+    questionContainer.innerHTML = "<p>⚠️ Please select all filters before submitting.</p>";
+    scoreContainer.innerHTML = "";
+    return;
+  }
 
   console.log("Selected Volume:", vol);
   console.log("Selected Chapter:", chap);
@@ -1430,12 +1437,24 @@ submitBtn.addEventListener("click", () => {
       });
     });
 
-    // 🔁 Reset Logic
-    resetBtn.addEventListener("click", () => {
-      questionContainer.innerHTML = "Please select filters and click Submit.";
-      scoreContainer.innerHTML = "";
-      initDropdowns();
-    });
+// 🔁 Reset Logic with Full Dropdown Restoration
+resetBtn.addEventListener("click", () => {
+  questionContainer.innerHTML = "Please select filters and click Submit.";
+  scoreContainer.innerHTML = "";
+  initDropdowns();
+
+  // Reset dropdown selections to placeholders
+  volumeDropdown.selectedIndex = 0;
+
+  chapterDropdown.innerHTML = "";
+  chapterDropdown.appendChild(placeholder("Select Chapter"));
+
+  topicDropdown.innerHTML = "";
+  topicDropdown.appendChild(placeholder("Select Topic"));
+
+  typeDropdown.innerHTML = "";
+  typeDropdown.appendChild(placeholder("Select Type"));
+});
 
 // 🧭 Initialize on Load
 window.addEventListener("DOMContentLoaded", () => {
