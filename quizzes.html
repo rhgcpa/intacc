@@ -1242,8 +1242,14 @@
 
 // 🚀 Initial Load
 const initDropdowns = () => {
-  const volumes = getUnique("volume");
-  buildDropdown(volumeDropdown, volumes);
+volumeDropdown.innerHTML = "";
+volumeDropdown.appendChild(placeholder("Select Volume"));
+volumes.forEach(vol => {
+  const opt = document.createElement("option");
+  opt.value = vol;
+  opt.textContent = vol;
+  volumeDropdown.appendChild(opt);
+});
 
   // Clear dependent dropdowns
   chapterDropdown.innerHTML = "";
