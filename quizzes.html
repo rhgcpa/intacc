@@ -1411,16 +1411,6 @@ submitBtn.addEventListener("click", () => {
   console.log("topic match:", questions[0].topic === topic);
   console.log("type match:", questions[0].type === type);
 
-// ✅ Apply normalized values to filtering logic
-let filtered = questions.filter(q =>
-  q.volume.trim().toLowerCase() === normalizedVol &&
-  q.chapter.trim().toLowerCase() === normalizedChap &&
-  q.topic.trim().toLowerCase() === normalizedTopic &&
-  (normalizedType === "both"
-    ? ["practice", "theory"].includes(q.type.trim().toLowerCase())
-    : q.type.trim().toLowerCase() === normalizedType)
-);
-
   console.log("Filtered Questions:", filtered);
   console.log("🔍 Matching questions for selected filters:");
 filtered.forEach((q, i) => {
