@@ -1373,6 +1373,20 @@ submitBtn.addEventListener("click", () => {
   const normalizedTopic = topic.trim().toLowerCase();
   const normalizedType = type.trim().toLowerCase();
 
+const topicOnly = questions.filter(q =>
+  q.topic.trim().toLowerCase() === normalizedTopic
+);
+
+console.log("🔍 Topic-only match count:", topicOnly.length);
+topicOnly.forEach((q, i) => {
+  console.log(`Q${i + 1}:`, {
+    volume: `"${q.volume}"`,
+    chapter: `"${q.chapter}"`,
+    topic: `"${q.topic}"`,
+    type: `"${q.type}"`
+  });
+});
+
   // 🚫 Guard against incomplete selections
   if (!vol || !chap || !topic || !type) {
     questionContainer.innerHTML = "<p>⚠️ Please select all filters before submitting.</p>";
