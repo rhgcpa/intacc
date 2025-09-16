@@ -1187,6 +1187,15 @@ console.log("✅ quizzes.html script loaded");
 ];
     console.log("🧠 Question Bank Loaded:", questions.length);
 
+// 🧼 Normalize all question fields once for consistent filtering
+questions = questions.map(q => ({
+  ...q,
+  volume: q.volume.trim().toLowerCase(),
+  chapter: q.chapter.trim().toLowerCase(),
+  topic: q.topic.trim().toLowerCase(),
+  type: q.type.trim().toLowerCase()
+}));
+
 const theoryCount = questions.filter(q => q.type === "Theory").length;
 const practiceCount = questions.filter(q => q.type === "Practice").length;
 
