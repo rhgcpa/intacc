@@ -1186,6 +1186,14 @@ console.log("✅ quizzes.html script loaded");
 // ⬇️ Insert all future batch questions directly above this line
 ];
     console.log("🧠 Question Bank Loaded:", questions.length);
+
+const theoryCount = questions.filter(q => q.type === "Theory").length;
+const practiceCount = questions.filter(q => q.type === "Practice").length;
+
+console.log("📊 Theory Questions:", theoryCount);
+console.log("📊 Practice Questions:", practiceCount);
+console.log("📊 Total Questions:", questions.length);
+
     const topicCheck = questions.filter(q =>
   q.topic.trim().toLowerCase() === "cash and cash equivalents".toLowerCase()
 );
