@@ -1371,6 +1371,15 @@ let filtered = questions.filter(q =>
 );
 
   console.log("Filtered Questions:", filtered);
+  console.log("🔍 Matching questions for selected filters:");
+filtered.forEach((q, i) => {
+  console.log(`Q${i + 1}:`, {
+    volume: q.volume,
+    chapter: q.chapter,
+    topic: q.topic,
+    type: q.type
+  });
+});
 
   if (filtered.length === 0) {
     questionContainer.innerHTML = "<p>⚠️ No questions found for this selection.</p>";
