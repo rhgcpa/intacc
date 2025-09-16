@@ -1185,7 +1185,19 @@ console.log("✅ quizzes.html script loaded");
 }
 // ⬇️ Insert all future batch questions directly above this line
 ];
-console.log("🧠 Question Bank Loaded:", questions.length);
+    console.log("🧠 Question Bank Loaded:", questions.length);
+    const topicCheck = questions.filter(q =>
+  q.topic.trim().toLowerCase() === "cash and cash equivalents".toLowerCase()
+);
+console.log("🔍 Questions with topic 'Cash and Cash Equivalents':", topicCheck.length);
+topicCheck.forEach((q, i) => {
+  console.log(`Q${i + 1}:`, {
+    volume: q.volume,
+    chapter: q.chapter,
+    topic: q.topic,
+    type: q.type
+  });
+});
 // 🔁 END REPLACEABLE BLOCK: Question Bank
 
     // 🔧 DOM Elements
