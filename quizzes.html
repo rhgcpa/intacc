@@ -1354,6 +1354,11 @@ submitBtn.addEventListener("click", () => {
   console.log("Selected Type:", type);
   console.log("Total Questions:", questions.length);
   console.log("🧪 Sample question object:", questions[0]);
+  console.log("🔍 Comparing dropdown values to question[0]:");
+  console.log("Dropdown Volume:", vol, "| Question Volume:", questions[0].volume);
+  console.log("Dropdown Chapter:", chap, "| Question Chapter:", questions[0].chapter);
+  console.log("Dropdown Topic:", topic, "| Question Topic:", questions[0].topic);
+  console.log("Dropdown Type:", type, "| Question Type:", questions[0].type);
   console.log("🔍 Available values in question[0]:");
   console.log("volume:", questions[0].volume);
   console.log("chapter:", questions[0].chapter);
