@@ -1373,6 +1373,12 @@ submitBtn.addEventListener("click", () => {
   const topic = topicDropdown.value;
   const type = typeDropdown.value;
 
+  // 🔍 Normalize dropdown values before filtering
+  const normalizedVol = vol.trim().toLowerCase();
+  const normalizedChap = chap.trim().toLowerCase();
+  const normalizedTopic = topic.trim().toLowerCase();
+  const normalizedType = type.trim().toLowerCase();
+
   // 🚫 Guard against incomplete selections
   if (!vol || !chap || !topic || !type) {
     questionContainer.innerHTML = "<p>⚠️ Please select all filters before submitting.</p>";
@@ -1419,15 +1425,6 @@ let filtered = questions.filter(q =>
   (normalizedType === "both"
     ? ["practice", "theory"].includes(q.type.trim().toLowerCase())
     : q.type.trim().toLowerCase() === normalizedType)
-);
-
-let filtered = questions.filter(q =>
-  q.volume.trim().toLowerCase() === vol.trim().toLowerCase() &&
-  q.chapter.trim().toLowerCase() === chap.trim().toLowerCase() &&
-  q.topic.trim().toLowerCase() === topic.trim().toLowerCase() &&
-  (type === "Both"
-    ? ["practice", "theory"].includes(q.type.trim().toLowerCase())
-    : q.type.trim().toLowerCase() === type.trim().toLowerCase())
 );
 
   console.log("Filtered Questions:", filtered);
