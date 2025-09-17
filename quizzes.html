@@ -286,6 +286,7 @@
         chapter: chapterSelect.value
       });
       populateDropdown(topicSelect, topics, "Select Topic");
+      topicSelect.disabled = topics.length === 0;
 
       adjustTopicDropdownWidth();
 
@@ -390,10 +391,12 @@
     function initializeDropdowns() {
       const volumes = getUniqueValues("volume");
       populateDropdown(volumeSelect, volumes, "Select Volume");
-      updateDropdowns();
     }
 
-    volumeSelect.addEventListener("change", updateDropdowns);
+    volumeSelect.addEventListener("change", () => {
+      updateDropdowns();
+    });
+
     chapterSelect.addEventListener("change", updateDropdowns);
     topicSelect.addEventListener("change", updateDropdowns);
     typeSelect.addEventListener("change", renderQuestions);
