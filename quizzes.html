@@ -58,9 +58,9 @@
     </nav>
     <div class="controls">
       <select id="volumeSelect"></select>
-      <select id="chapterSelect"></select>
-      <select id="topicSelect"></select>
-      <select id="typeSelect"></select>
+      <select id="chapterSelect" disabled></select>
+      <select id="topicSelect" disabled></select>
+      <select id="typeSelect" disabled></select>
       <button id="submitBtn">Submit</button>
       <button id="resetBtn">Reset</button>
     </div>
@@ -280,6 +280,7 @@
 
       const chapters = getUniqueValues("chapter", { volume: selectedVolume });
       populateDropdown(chapterSelect, chapters, "Select Chapter");
+      chapterSelect.disabled = chapters.length === 0;
 
       const topics = getUniqueValues("topic", {
         volume: selectedVolume,
