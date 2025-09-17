@@ -8,7 +8,6 @@
   <script defer src="quizzes.js"></script>
 </head>
 <body>
-  <!-- Sticky Navigation Tabs -->
   <header class="sticky-header">
     <nav class="tabs">
       <a href="index.html">Home</a>
@@ -19,23 +18,26 @@
       <a href="tools.html">Tools</a>
     </nav>
 
-    <!-- Sticky Dropdown Filters -->
     <div class="filters">
-      <select id="volumeSelect"></select>
-      <select id="chapterSelect"></select>
-      <select id="topicSelect" style="min-width: 200px;"></select>
+      <select id="volumeSelect">
+        <option disabled selected value="">Select Volume</option>
+      </select>
+      <select id="chapterSelect">
+        <option disabled selected value="">Select Chapter</option>
+      </select>
+      <select id="topicSelect" style="min-width: 200px;">
+        <option disabled selected value="">Select Topic</option>
+      </select>
       <select id="typeSelect">
-        <option value="Theory">Theory</option>
+        <option disabled selected value="">Select Type</option>
       </select>
       <button id="submitBtn">Submit</button>
       <button id="resetBtn">Reset</button>
     </div>
   </header>
 
-  <!-- Quiz Container -->
   <main id="quizContainer">
-    <p class="note">Questions start below this line</p>
-
+    <!-- Questions start below this line -->
     <div id="questionsArea">
 <div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
   <p><strong>Theory Question 1:</strong> Cash on hand includes:</p>
@@ -115,6 +117,17 @@
 </div>
 
 <div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
+  <p><strong>Theory Question 7:</strong> Check withdrawals are recorded as:</p>
+  <ul>
+    <li><label><input type="radio" name="q6" value="A" /> Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.</label></li>
+    <li><label><input type="radio" name="q6" value="B" /> Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.</label></li>
+    <li><label><input type="radio" name="q6" value="C" /> Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.</label></li>
+    <li><label><input type="radio" name="q6" value="D" /> Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity.</label></li>
+  </ul>
+  <div class="answer" id="answer6" style="display:none;"><p>Correct Answer: D</p></div>
+</div>
+
+<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
   <p><strong>Theory Question 8:</strong> Timing differences for Deposit Liabilities of financial institution comprise:</p>
   <ul>
     <li><label><input type="radio" name="q7" value="A" /> Credit memos and debit memos.</label></li>
@@ -148,51 +161,6 @@
 </div>
 
 <div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Practice">
-  <p><strong>Practice Question 1:</strong> With these givens, the closing outstanding checks are:</p>
-  <img src="images/practice1.png" alt="Practice Question Image" class="excel-image" />
-  <ul>
-    <li><label><input type="radio" name="q10" value="A" /> 289,000.00</label></li>
-    <li><label><input type="radio" name="q10" value="B" /> 311,000.00</label></li>
-    <li><label><input type="radio" name="q10" value="C" /> 489,000.00</label></li>
-    <li><label><input type="radio" name="q10" value="D" /> 511,000.00</label></li>
-  </ul>
-  <div class="answer" id="answer10" style="display:none;">
-    <p>Correct Answer: B</p>
-    <img src="images/answer1.png" alt="Practice Answer Image" class="excel-image" />
-  </div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Practice">
-  <p><strong>Practice Question 2:</strong> Based on the data, what is the adjusted closing balance?</p>
-  <img src="images/practice2.png" alt="Practice Question Image" class="excel-image" />
-  <ul>
-    <li><label><input type="radio" name="q11" value="A" /> 2,499,800.00</label></li>
-    <li><label><input type="radio" name="q11" value="B" /> 2,500,000.00</label></li>
-    <li><label><input type="radio" name="q11" value="C" /> 2,498,700.00</label></li>
-    <li><label><input type="radio" name="q11" value="D" /> 2,501,300.00</label></li>
-  </ul>
-  <div class="answer" id="answer11" style="display:none;">
-    <p>Correct Answer: B</p>
-    <img src="images/answer2.png" alt="Practice Answer Image" class="excel-image" />
-  </div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Practice">
-  <p><strong>Practice Question 3:</strong> What is the closing outstanding deposits?</p>
-  <img src="images/practice3.png" alt="Practice Question Image" class="excel-image" />
-  <ul>
-    <li><label><input type="radio" name="q12" value="A" /> 913,000.00</label></li>
-    <li><label><input type="radio" name="q12" value="B" /> 898,700.00</label></li>
-    <li><label><input type="radio" name="q12" value="C" /> 911,300.00</label></li>
-    <li><label><input type="radio" name="q12" value="D" /> 900,000.00</label></li>
-  </ul>
-  <div class="answer" id="answer12" style="display:none;">
-    <p>Correct Answer: A</p>
-    <img src="images/answer3.png" alt="Practice Answer Image" class="excel-image" />
-  </div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Practice">
   <p><strong>Practice Question 4:</strong> What is the closing book balance?</p>
   <img src="images/practice4.png" alt="Practice Question Image" class="excel-image" />
   <ul>
@@ -222,11 +190,11 @@
   </div>
 </div>
 
-    <p class="note">Questions end above this line</p>
+    </div>
+    <!-- Questions end above this line -->
     <div id="scoreArea"></div>
   </main>
 
-  <!-- Dynamic Logic Script -->
   <script>
     const volumeSelect = document.getElementById('volumeSelect');
     const chapterSelect = document.getElementById('chapterSelect');
@@ -237,23 +205,26 @@
     const questionsArea = document.getElementById('questionsArea');
     const scoreArea = document.getElementById('scoreArea');
 
-    let allQuestions = []; // Will be populated batch-by-batch
+    let allQuestions = []; // Populated externally
     let currentQuestions = [];
 
     function loadQuestions() {
+      if (allQuestions.length === 0) return;
       populateDropdowns();
     }
 
     function populateDropdowns() {
       const volumes = [...new Set(allQuestions.map(q => q.volume))];
-      volumeSelect.innerHTML = volumes.map(v => `<option value="${v}">${v}</option>`).join('');
+      volumeSelect.innerHTML = `<option disabled selected value="">Select Volume</option>` +
+        volumes.map(v => `<option value="${v}">${v}</option>`).join('');
       updateChapters();
     }
 
     function updateChapters() {
       const selectedVolume = volumeSelect.value;
       const chapters = [...new Set(allQuestions.filter(q => q.volume === selectedVolume).map(q => q.chapter))];
-      chapterSelect.innerHTML = chapters.map(c => `<option value="${c}">${c}</option>`).join('');
+      chapterSelect.innerHTML = `<option disabled selected value="">Select Chapter</option>` +
+        chapters.map(c => `<option value="${c}">${c}</option>`).join('');
       updateTopics();
     }
 
@@ -261,7 +232,8 @@
       const selectedVolume = volumeSelect.value;
       const selectedChapter = chapterSelect.value;
       const topics = [...new Set(allQuestions.filter(q => q.volume === selectedVolume && q.chapter === selectedChapter).map(q => q.topic))];
-      topicSelect.innerHTML = topics.map(t => `<option value="${t}">${t}</option>`).join('');
+      topicSelect.innerHTML = `<option disabled selected value="">Select Topic</option>` +
+        topics.map(t => `<option value="${t}">${t}</option>`).join('');
       adjustTopicWidth();
       updateTypes();
     }
@@ -277,7 +249,7 @@
       const selectedTopic = topicSelect.value;
       const filtered = allQuestions.filter(q => q.volume === selectedVolume && q.chapter === selectedChapter && q.topic === selectedTopic);
       const hasPractice = filtered.some(q => q.type === "Practice");
-      typeSelect.innerHTML = `<option value="Theory">Theory</option>`;
+      typeSelect.innerHTML = `<option disabled selected value="">Select Type</option><option value="Theory">Theory</option>`;
       if (hasPractice) {
         typeSelect.innerHTML += `<option value="Practice">Practice</option><option value="Both">Both</option>`;
       }
@@ -288,6 +260,8 @@
       const selectedChapter = chapterSelect.value;
       const selectedTopic = topicSelect.value;
       const selectedType = typeSelect.value;
+
+      if (!selectedVolume || !selectedChapter || !selectedTopic || !selectedType) return;
 
       currentQuestions = allQuestions.filter(q =>
         q.volume === selectedVolume &&
@@ -343,7 +317,10 @@
     function resetQuiz() {
       questionsArea.innerHTML = '';
       scoreArea.innerHTML = '';
-      populateDropdowns();
+      volumeSelect.innerHTML = `<option disabled selected value="">Select Volume</option>`;
+      chapterSelect.innerHTML = `<option disabled selected value="">Select Chapter</option>`;
+      topicSelect.innerHTML = `<option disabled selected value="">Select Topic</option>`;
+      typeSelect.innerHTML = `<option disabled selected value="">Select Type</option>`;
     }
 
     function shuffle(array) {
@@ -357,14 +334,13 @@
     volumeSelect.addEventListener('change', updateChapters);
     chapterSelect.addEventListener('change', updateTopics);
     topicSelect.addEventListener('change', updateTypes);
-    typeSelect.addEventListener('change', () => {});
     submitBtn.addEventListener('click', () => {
       renderQuestions();
       showAnswers();
     });
     resetBtn.addEventListener('click', resetQuiz);
 
-    loadQuestions();
+    // Load only after allQuestions is populated externally
   </script>
 </body>
 </html>
