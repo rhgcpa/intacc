@@ -256,14 +256,14 @@
     }
 
     function adjustTopicDropdownWidth() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.font = window.getComputedStyle(topicSelect).font;
+
       const topics = getUniqueValues("topic", {
         volume: volumeSelect.value,
         chapter: chapterSelect.value
       });
-
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      ctx.font = window.getComputedStyle(topicSelect).font;
 
       let maxWidth = 0;
       topics.forEach(topic => {
@@ -301,6 +301,7 @@
         types.push("Practice", "Both");
       }
       populateDropdown(typeSelect, types, "Select Type");
+      typeSelect.disabled = types.length === 0;
     }
 
     function renderQuestions() {
@@ -393,10 +394,7 @@
       populateDropdown(volumeSelect, volumes, "Select Volume");
     }
 
-    volumeSelect.addEventListener("change", () => {
-      updateDropdowns();
-    });
-
+    volumeSelect.addEventListener("change", updateDropdowns);
     chapterSelect.addEventListener("change", updateDropdowns);
     topicSelect.addEventListener("change", updateDropdowns);
     typeSelect.addEventListener("change", renderQuestions);
