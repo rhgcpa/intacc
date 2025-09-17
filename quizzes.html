@@ -70,212 +70,189 @@
   <div class="score-summary" id="scoreSummary"></div>
 
   <script>
-let quizData = []; // Populated after parsing Word and PNG files
+    let quizData = []; // Populated after parsing Word and PNG files
 
-// Questions start below this line
-quizData.push(
-  {
-    volume: "Volume 1",
-    chapter: "Chapter 1",
-    topic: "Cash and Cash Equivalents",
-    type: "Theory",
-    questions: [
+    // Questions start below this line
+    quizData.push(
       {
-        question: "Q1. Cash on hand includes:",
-        choices: [
-          "Checks dated less than 6 months after today.",
-          "Checks dated less than 6 months before today.",
-          "Checks dated more than 6 months after today.",
-          "Checks dated more than 6 months before today."
-        ],
-        correct: "B"
+        volume: "Volume 1",
+        chapter: "Chapter 1",
+        topic: "Cash and Cash Equivalents",
+        type: "Theory",
+        questions: [
+          {
+            question: "Q1. Cash on hand includes:",
+            choices: [
+              "Checks dated less than 6 months after today.",
+              "Checks dated less than 6 months before today.",
+              "Checks dated more than 6 months after today.",
+              "Checks dated more than 6 months before today."
+            ],
+            correct: "B"
+          },
+          {
+            question: "Q2. In defining cash equivalents, known maturity value denotes:",
+            choices: [
+              "Maturity date is determinable on acquisition date.",
+              "Maturity value is determinable on acquisition date.",
+              "Maturity value will be determined on maturity date.",
+              "Maturity value will be known on maturity date."
+            ],
+            correct: "B"
+          },
+          {
+            question: "Q3. Which are excluded from cash equivalents?",
+            choices: [
+              "Credit cards receivable.",
+              "Debit cards receivable.",
+              "Time deposits downgraded lower than savings accounts when pre-terminated.",
+              "Time deposits downgraded not lower than savings accounts when pre-terminated."
+            ],
+            correct: "C"
+          },
+          {
+            question: "Q4. Which are classified as restricted cash, and presented as noncurrent assets?",
+            choices: [
+              "Currency usable for at least 12 months after the reporting period.",
+              "Currency usable for less than 12 months after the reporting period.",
+              "Currency usable for more than 12 months after the reporting period.",
+              "Currency usable within 12 months after the reporting period."
+            ],
+            correct: "A"
+          },
+          {
+            question: "Q5. Which are classified as short-term investments, and presented as current assets?",
+            choices: [
+              "Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.",
+              "Bank deposits withdrawable with significant penalty and usable for more than 12 months.",
+              "Bank deposits withdrawable with significant penalty and usable within 12 months.",
+              "Bank deposits withdrawable without penalty and usable for less than 12 months."
+            ],
+            correct: "C"
+          },
+          {
+            question: "Q6. These describe a bank overdraft, except:",
+            choices: [
+              "It is allowed only if caused by normal bank charges or other incidental handling fees.",
+              "It is disallowed in the Philippines.",
+              "It is known as temporary overdrawing in the Philippines.",
+              "It is the negative (or overdrawn) balance in a demand deposit account."
+            ],
+            correct: "B"
+          },
+          {
+            question: "Q7. Check withdrawals are recorded as:",
+            choices: [
+              "Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.",
+              "Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.",
+              "Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.",
+              "Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity."
+            ],
+            correct: "D"
+          },
+          {
+            question: "Q8. Timing differences for Deposit Liabilities of financial institution comprise:",
+            choices: [
+              "Credit memos and debit memos.",
+              "Outstanding checks and debit memos.",
+              "Outstanding deposits and credit memos.",
+              "Outstanding deposits and outstanding checks."
+            ],
+            correct: "D"
+          },
+          {
+            question: "Q9. Which describe debit memos?",
+            choices: [
+              "They are already credited to Demand Deposits but not yet debited to Deposit Liabilities.",
+              "They are already credited to Deposit Liabilities but not yet debited to Demand Deposits.",
+              "They are already debited to Demand Deposits but not yet credited to Deposit Liabilities.",
+              "They are already debited to Deposit Liabilities but not yet credited to Demand Deposits."
+            ],
+            correct: "D"
+          },
+          {
+            question: "Q10. Before replenishment, the adjusted balance of Petty Cash Fund equals:",
+            choices: [
+              "Currency in the custody of the Petty Cash Custodian.",
+              "Established amount.",
+              "Minimum threshold.",
+              "Total of Petty Cash Vouchers."
+            ],
+            correct: "A"
+          }
+        ]
       },
       {
-        question: "Q2. In defining cash equivalents, known maturity value denotes:",
-        choices: [
-          "Maturity date is determinable on acquisition date.",
-          "Maturity value is determinable on acquisition date.",
-          "Maturity value will be determined on maturity date.",
-          "Maturity value will be known on maturity date."
-        ],
-        correct: "B"
-      },
-      {
-        question: "Q3. Which are excluded from cash equivalents?",
-        choices: [
-          "Credit cards receivable.",
-          "Debit cards receivable.",
-          "Time deposits downgraded lower than savings accounts when pre-terminated.",
-          "Time deposits downgraded not lower than savings accounts when pre-terminated."
-        ],
-        correct: "C"
-      },
-      {
-        question: "Q4. Which are classified as restricted cash, and presented as noncurrent assets?",
-        choices: [
-          "Currency usable for at least 12 months after the reporting period.",
-          "Currency usable for less than 12 months after the reporting period.",
-          "Currency usable for more than 12 months after the reporting period.",
-          "Currency usable within 12 months after the reporting period."
-        ],
-        correct: "A"
-      },
-      {
-        question: "Q5. Which are classified as short-term investments, and presented as current assets?",
-        choices: [
-          "Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.",
-          "Bank deposits withdrawable with significant penalty and usable for more than 12 months.",
-          "Bank deposits withdrawable with significant penalty and usable within 12 months.",
-          "Bank deposits withdrawable without penalty and usable for less than 12 months."
-        ],
-        correct: "C"
-      },
-      {
-        question: "Q6. These describe a bank overdraft, except:",
-        choices: [
-          "It is allowed only if caused by normal bank charges or other incidental handling fees.",
-          "It is disallowed in the Philippines.",
-          "It is known as temporary overdrawing in the Philippines.",
-          "It is the negative (or overdrawn) balance in a demand deposit account."
-        ],
-        correct: "B"
-      },
-      {
-        question: "Q7. Check withdrawals are recorded as:",
-        choices: [
-          "Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.",
-          "Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.",
-          "Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.",
-          "Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity."
-        ],
-        correct: "D"
-      },
-      {
-        question: "Q8. Timing differences for Deposit Liabilities of financial institution comprise:",
-        choices: [
-          "Credit memos and debit memos.",
-          "Outstanding checks and debit memos.",
-          "Outstanding deposits and credit memos.",
-          "Outstanding deposits and outstanding checks."
-        ],
-        correct: "D"
-      },
-      {
-        question: "Q9. Which describe debit memos?",
-        choices: [
-          "They are already credited to Demand Deposits but not yet debited to Deposit Liabilities.",
-          "They are already credited to Deposit Liabilities but not yet debited to Demand Deposits.",
-          "They are already debited to Demand Deposits but not yet credited to Deposit Liabilities.",
-          "They are already debited to Deposit Liabilities but not yet credited to Demand Deposits."
-        ],
-        correct: "D"
-      },
-      {
-        question: "Q10. Before replenishment, the adjusted balance of Petty Cash Fund equals:",
-        choices: [
-          "Currency in the custody of the Petty Cash Custodian.",
-          "Established amount.",
-          "Minimum threshold.",
-          "Total of Petty Cash Vouchers."
-        ],
-        correct: "A"
+        volume: "Volume 1",
+        chapter: "Chapter 1",
+        topic: "Cash and Cash Equivalents",
+        type: "Practice",
+        questions: [
+          {
+            question: "Q1. With these givens, the closing outstanding checks are:",
+            image: "images/practice1.png",
+            choices: ["289,000.00", "311,000.00", "489,000.00", "511,000.00"],
+            correct: "B",
+            answerImage: "images/answer1.png"
+          },
+          {
+            question: "Q2. With these givens, the opening outstanding checks are:",
+            image: "images/practice2.png",
+            choices: ["289,000.00", "311,000.00", "489,000.00", "511,000.00"],
+            correct: "B",
+            answerImage: "images/answer2.png"
+          },
+          {
+            question: "Q3. With these givens, the closing book balance is:",
+            image: "images/practice3.png",
+            choices: ["2,496,000.00", "2,499,800.00", "2,500,200.00", "2,504,000.00"],
+            correct: "B",
+            answerImage: "images/answer3.png"
+          },
+          {
+            question: "Q4. With these givens, the closing outstanding deposits are:",
+            image: "images/practice4.png",
+            choices: ["487,000.00", "513,000.00", "887,000.00", "913,000.00"],
+            correct: "D",
+            answerImage: "images/answer4.png"
+          },
+          {
+            question: "Q5. With these givens, the closing outstanding deposits are:",
+            image: "images/practice5.png",
+            choices: ["398,700.00", "398,900.00", "898,700.00", "898,900.00"],
+            correct: "C",
+            answerImage: "images/answer5.png"
+          }
+        ]
       }
-    ]
-  },
-  {
-    volume: "Volume 1",
-    chapter: "Chapter 1",
-    topic: "Cash and Cash Equivalents",
-    type: "Practice",
-    questions: [
-      {
-        question: "Q1. With these givens, the closing outstanding checks are:",
-        image: "images/practice1.png",
-        choices: ["289,000.00", "311,000.00", "489,000.00", "511,000.00"],
-        correct: "B",
-        answerImage: "images/answer1.png"
-      },
-      {
-        question: "Q2. With these givens, the opening outstanding checks are:",
-        image: "images/practice2.png",
-        choices: ["289,000.00", "311,000.00", "489,000.00", "511,000.00"],
-        correct: "B",
-        answerImage: "images/answer2.png"
-      },
-      {
-        question: "Q3. With these givens, the closing book balance is:",
-        image: "images/practice3.png",
-        choices: ["2,496,000.00", "2,499,800.00", "2,500,200.00", "2,504,000.00"],
-        correct: "B",
-        answerImage: "images/answer3.png"
-      },
-      {
-        question: "Q4. With these givens, the closing outstanding deposits are:",
-        image: "images/practice4.png",
-        choices: ["487,000.00", "513,000.00", "887,000.00", "913,000.00"],
-        correct: "D",
-        answerImage: "images/answer4.png"
-      },
-      {
-        question: "Q5. With these givens, the closing outstanding deposits are:",
-        image: "images/practice5.png",
-        choices: ["398,700.00", "398,900.00", "898,700.00", "898,900.00"],
-        correct: "C",
-        answerImage: "images/answer5.png"
-      }
-    ]
-  }
-);
-// Questions end above this line
+    );
+    // Questions end above this line
 
     let currentQuestions = [];
 
-    const volumeSelect = document.getElementById("volumeSelect");
-    const chapterSelect = document.getElementById("chapterSelect");
-    const topicSelect = document.getElementById("topicSelect");
-    const typeSelect = document.getElementById("typeSelect");
-    const quizContainer = document.getElementById("quizContainer");
-    const scoreSummary = document.getElementById("scoreSummary");
-
-    function populateDropdown(select, options) {
+    function populateDropdown(select, options, placeholder) {
       select.innerHTML = "";
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = placeholder;
+      defaultOption.disabled = true;
+      defaultOption.selected = true;
+      select.appendChild(defaultOption);
+
       options.forEach(opt => {
         const option = document.createElement("option");
         option.value = opt;
         option.textContent = opt;
         select.appendChild(option);
       });
+
+      select.disabled = options.length === 0;
     }
 
     function getUniqueValues(key, filter = {}) {
       return [...new Set(quizData
         .filter(q => Object.entries(filter).every(([k, v]) => q[k] === v))
         .map(q => q[key]))];
-    }
-
-    function updateDropdowns() {
-      const selectedVolume = volumeSelect.value;
-      const selectedChapter = chapterSelect.value;
-
-      populateDropdown(chapterSelect, getUniqueValues("chapter", { volume: selectedVolume }));
-      populateDropdown(topicSelect, getUniqueValues("topic", {
-        volume: selectedVolume,
-        chapter: chapterSelect.value
-      }));
-
-      adjustTopicDropdownWidth();
-
-      const topicQuestions = quizData.filter(q =>
-        q.volume === selectedVolume &&
-        q.chapter === chapterSelect.value &&
-        q.topic === topicSelect.value
-      );
-
-      const types = ["Theory"];
-      if (topicQuestions.some(q => q.type === "Practice")) {
-        types.push("Practice", "Both");
-      }
-      populateDropdown(typeSelect, types);
     }
 
     function adjustTopicDropdownWidth() {
@@ -294,7 +271,35 @@ quizData.push(
         if (width > maxWidth) maxWidth = width;
       });
 
-      topicSelect.style.width = `${Math.ceil(maxWidth + 40)}px`; // Add padding
+      topicSelect.style.width = `${Math.ceil(maxWidth + 40)}px`;
+    }
+
+    function updateDropdowns() {
+      const selectedVolume = volumeSelect.value;
+      const selectedChapter = chapterSelect.value;
+
+      const chapters = getUniqueValues("chapter", { volume: selectedVolume });
+      populateDropdown(chapterSelect, chapters, "Select Chapter");
+
+      const topics = getUniqueValues("topic", {
+        volume: selectedVolume,
+        chapter: chapterSelect.value
+      });
+      populateDropdown(topicSelect, topics, "Select Topic");
+
+      adjustTopicDropdownWidth();
+
+      const topicQuestions = quizData.filter(q =>
+        q.volume === selectedVolume &&
+        q.chapter === chapterSelect.value &&
+        q.topic === topicSelect.value
+      );
+
+      const types = ["Theory"];
+      if (topicQuestions.some(q => q.type === "Practice")) {
+        types.push("Practice", "Both");
+      }
+      populateDropdown(typeSelect, types, "Select Type");
     }
 
     function renderQuestions() {
@@ -320,7 +325,7 @@ quizData.push(
         block.className = "question-block";
 
         const qText = document.createElement("p");
-        qText.textContent = `Q${i + 1}: ${q.question}`;
+        qText.textContent = `Q${i + 1}: ${q.question.replace(/^Q\d+\.\s*/, "")}`;
         block.appendChild(qText);
 
         if (q.image) {
@@ -373,14 +378,19 @@ quizData.push(
     function resetQuiz() {
       quizContainer.innerHTML = "";
       scoreSummary.textContent = "";
-      populateDropdown(volumeSelect, getUniqueValues("volume"));
-      updateDropdowns();
+      initializeDropdowns();
     }
 
     function shuffleArray(arr) {
       return arr.map(v => [Math.random(), v])
                 .sort((a, b) => a[0] - b[0])
                 .map(v => v[1]);
+    }
+
+    function initializeDropdowns() {
+      const volumes = getUniqueValues("volume");
+      populateDropdown(volumeSelect, volumes, "Select Volume");
+      updateDropdowns();
     }
 
     volumeSelect.addEventListener("change", updateDropdowns);
@@ -390,9 +400,7 @@ quizData.push(
     document.getElementById("submitBtn").addEventListener("click", submitAnswers);
     document.getElementById("resetBtn").addEventListener("click", resetQuiz);
 
-    // Initial load
-    populateDropdown(volumeSelect, getUniqueValues("volume"));
-    updateDropdowns();
+    initializeDropdowns();
   </script>
 </body>
 </html>
