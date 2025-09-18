@@ -5,342 +5,474 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quizzes | EXCELlent Intermediate Accounting</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer src="quizzes.js"></script>
+  <script defer>
+    // Data structure placeholder
+    const questionData = [];
+
+    // DOM elements
+    let volumeSelect, chapterSelect, topicSelect, typeSelect;
+    let questionContainer, scoreContainer;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      volumeSelect = document.getElementById("volume");
+      chapterSelect = document.getElementById("chapter");
+      topicSelect = document.getElementById("topic");
+      typeSelect = document.getElementById("type");
+      questionContainer = document.getElementById("questions");
+      scoreContainer = document.getElementById("score");
+
+      populateVolumeDropdown();
+      setupDropdownListeners();
+      document.getElementById("submitBtn").addEventListener("click", handleSubmit);
+      document.getElementById("resetBtn").addEventListener("click", handleReset);
+    });
+
+    function populateVolumeDropdown() {
+      const volumes = [...new Set(questionData.map(q => q.volume))];
+      volumes.forEach(v => {
+        const option = document.createElement("option");
+        option.value = v;
+        option.textContent = `Volume ${v}`;
+        volumeSelect.appendChild(option);
+      });
+    }
+
+    function setupDropdownListeners() {
+      volumeSelect.addEventListener("change", () => {
+        resetDropdown(chapterSelect, "Select Chapter");
+        resetDropdown(topicSelect, "Select Topic");
+        resetDropdown(typeSelect, "Select Type");
+        const chapters = [...new Set(questionData
+          .filter(q => q.volume === volumeSelect.value)
+          .map(q => q.chapter))];
+        chapters.forEach(c => {
+          const option = document.createElement("option");
+          option.value = c;
+          option.textContent = `Chapter ${c}`;
+          chapterSelect.appendChild(option);
+        });
+      });
+
+      chapterSelect.addEventListener("change", () => {
+        resetDropdown(topicSelect, "Select Topic");
+        resetDropdown(typeSelect, "Select Type");
+        const topics = [...new Set(questionData
+          .filter(q => q.volume === volumeSelect.value && q.chapter === chapterSelect.value)
+          .map(q => q.topic))];
+        topics.forEach(t => {
+          const option = document.createElement("option");
+          option.value = t;
+          option.textContent = t;
+          topicSelect.appendChild(option);
+        });
+        adjustTopicDropdownWidth(topics);
+      });
+
+      topicSelect.addEventListener("change", () => {
+        resetDropdown(typeSelect, "Select Type");
+        const filtered = questionData.filter(q =>
+          q.volume === volumeSelect.value &&
+          q.chapter === chapterSelect.value &&
+          q.topic === topicSelect.value
+        );
+        const hasPractice = filtered.some(q => q.type === "Practice");
+        ["Theory", ...(hasPractice ? ["Practice", "Both"] : [])].forEach(t => {
+          const option = document.createElement("option");
+          option.value = t;
+          option.textContent = t;
+          typeSelect.appendChild(option);
+        });
+      });
+
+      typeSelect.addEventListener("change", () => {
+        renderQuestions();
+      });
+    }
+
+    function resetDropdown(dropdown, placeholder) {
+      dropdown.innerHTML = "";
+      const placeholderOption = document.createElement("option");
+      placeholderOption.value = "";
+      placeholderOption.textContent = placeholder;
+      dropdown.appendChild(placeholderOption);
+    }
+
+    function adjustTopicDropdownWidth(topics) {
+      const maxLength = Math.max(...topics.map(t => t.length));
+      topicSelect.style.width = `${maxLength * 10}px`;
+    }
+
+    function renderQuestions() {
+      questionContainer.innerHTML = "";
+      scoreContainer.innerHTML = "";
+      const selected = {
+        volume: volumeSelect.value,
+        chapter: chapterSelect.value,
+        topic: topicSelect.value,
+        type: typeSelect.value
+      };
+      let filtered = questionData.filter(q =>
+        q.volume === selected.volume &&
+        q.chapter === selected.chapter &&
+        q.topic === selected.topic &&
+        (selected.type === "Both" || q.type === selected.type)
+      );
+      filtered = shuffleArray(filtered);
+
+      let theoryCount = 1;
+      let practiceCount = 1;
+
+      filtered.forEach((q, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "question-block";
+
+        const questionLabel = document.createElement("p");
+        questionLabel.textContent =
+          q.type === "Theory"
+            ? `Theory Question ${theoryCount++}: ${q.question}`
+            : `Practice Question ${practiceCount++}: ${q.question}`;
+        wrapper.appendChild(questionLabel);
+
+        if (q.type === "Practice" && q.image) {
+          const img = document.createElement("img");
+          img.src = q.image;
+          img.alt = "Practice Question Image";
+          wrapper.appendChild(img);
+        }
+
+        ["A", "B", "C", "D"].forEach(choice => {
+          const label = document.createElement("label");
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = `q${index}`;
+          radio.value = choice;
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
+          wrapper.appendChild(label);
+          wrapper.appendChild(document.createElement("br"));
+        });
+
+        const answerDiv = document.createElement("div");
+        answerDiv.className = "answer";
+        answerDiv.style.display = "none";
+        answerDiv.textContent = `Correct Answer: ${q.correct}`;
+        if (q.type === "Practice" && q.answerImage) {
+          const answerImg = document.createElement("img");
+          answerImg.src = q.answerImage;
+          answerImg.alt = "Practice Answer Image";
+          answerDiv.appendChild(document.createElement("br"));
+          answerDiv.appendChild(answerImg);
+        }
+        wrapper.appendChild(answerDiv);
+        questionContainer.appendChild(wrapper);
+      });
+    }
+
+    function handleSubmit() {
+      const blocks = document.querySelectorAll(".question-block");
+      let correct = 0;
+      blocks.forEach((block, index) => {
+        const selected = block.querySelector(`input[name="q${index}"]:checked`);
+        const correctAnswer = questionData[index].correct;
+        if (selected && selected.value === correctAnswer) correct++;
+        block.querySelector(".answer").style.display = "block";
+      });
+      const total = blocks.length;
+      const percent = ((correct / total) * 100).toFixed(2);
+      scoreContainer.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
+    }
+
+    function handleReset() {
+      resetDropdown(volumeSelect, "Select Volume");
+      resetDropdown(chapterSelect, "Select Chapter");
+      resetDropdown(topicSelect, "Select Topic");
+      resetDropdown(typeSelect, "Select Type");
+      questionContainer.innerHTML = "";
+      scoreContainer.innerHTML = "";
+      populateVolumeDropdown();
+    }
+
+    function shuffleArray(arr) {
+      return arr
+        .map(a => [Math.random(), a])
+        .sort((a, b) => a[0] - b[0])
+        .map(a => a[1]);
+    }
+  </script>
 </head>
 <body>
   <header class="sticky-header">
-    <nav class="tabs">
-      <a href="index.html">Home</a>
-      <a href="glossary.html">Glossary</a>
-      <a class="active" href="quizzes.html">Quizzes</a>
-      <a href="references.html">References</a>
-      <a href="visuals.html">Visuals</a>
-      <a href="tools.html">Tools</a>
+    <nav>
+      <ul class="tabs">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="quizzes.html" class="active">Quizzes</a></li>
+        <li><a href="references.html">References</a></li>
+        <li><a href="visuals.html">Visuals</a></li>
+        <li><a href="tools.html">Tools</a></li>
+      </ul>
     </nav>
-
-    <div class="filters">
-      <select id="volumeSelect">
-        <option disabled selected value="">Select Volume</option>
+    <div class="controls">
+      <select id="volume">
+        <option value="">Select Volume</option>
       </select>
-      <select id="chapterSelect">
-        <option disabled selected value="">Select Chapter</option>
+      <select id="chapter">
+        <option value="">Select Chapter</option>
       </select>
-      <select id="topicSelect" style="min-width: 200px;">
-        <option disabled selected value="">Select Topic</option>
+      <select id="topic">
+        <option value="">Select Topic</option>
       </select>
-      <select id="typeSelect">
-        <option disabled selected value="">Select Type</option>
+      <select id="type">
+        <option value="">Select Type</option>
       </select>
       <button id="submitBtn">Submit</button>
       <button id="resetBtn">Reset</button>
     </div>
   </header>
 
-  <main id="quizContainer">
-    <!-- Questions start below this line -->
-    <div id="questionsArea">
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 1:</strong> Cash on hand includes:</p>
-  <ul>
-    <li><label><input type="radio" name="q0" value="A" /> Checks dated less than 6 months after today.</label></li>
-    <li><label><input type="radio" name="q0" value="B" /> Checks dated less than 6 months before today.</label></li>
-    <li><label><input type="radio" name="q0" value="C" /> Checks dated more than 6 months after today.</label></li>
-    <li><label><input type="radio" name="q0" value="D" /> Checks dated more than 6 months before today.</label></li>
-  </ul>
-  <div class="answer" id="answer0" style="display:none;"><p>Correct Answer: B</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 2:</strong> In defining cash equivalents, known maturity value denotes:</p>
-  <ul>
-    <li><label><input type="radio" name="q1" value="A" /> Maturity date is determinable on acquisition date.</label></li>
-    <li><label><input type="radio" name="q1" value="B" /> Maturity value is determinable on acquisition date.</label></li>
-    <li><label><input type="radio" name="q1" value="C" /> Maturity value will be determined on maturity date.</label></li>
-    <li><label><input type="radio" name="q1" value="D" /> Maturity value will be known on maturity date.</label></li>
-  </ul>
-  <div class="answer" id="answer1" style="display:none;"><p>Correct Answer: B</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 3:</strong> Which are excluded from cash equivalents?</p>
-  <ul>
-    <li><label><input type="radio" name="q2" value="A" /> Credit cards receivable.</label></li>
-    <li><label><input type="radio" name="q2" value="B" /> Debit cards receivable.</label></li>
-    <li><label><input type="radio" name="q2" value="C" /> Time deposits downgraded lower than savings accounts when pre-terminated.</label></li>
-    <li><label><input type="radio" name="q2" value="D" /> Time deposits downgraded not lower than savings accounts when pre-terminated.</label></li>
-  </ul>
-  <div class="answer" id="answer2" style="display:none;"><p>Correct Answer: C</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 4:</strong> Which are classified as restricted cash, and presented as noncurrent assets?</p>
-  <ul>
-    <li><label><input type="radio" name="q3" value="A" /> Currency usable for at least 12 months after the reporting period.</label></li>
-    <li><label><input type="radio" name="q3" value="B" /> Currency usable for less than 12 months after the reporting period.</label></li>
-    <li><label><input type="radio" name="q3" value="C" /> Currency usable for more than 12 months after the reporting period.</label></li>
-    <li><label><input type="radio" name="q3" value="D" /> Currency usable within 12 months after the reporting period.</label></li>
-  </ul>
-  <div class="answer" id="answer3" style="display:none;"><p>Correct Answer: A</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 5:</strong> Which are classified as short-term investments, and presented as current assets?</p>
-  <ul>
-    <li><label><input type="radio" name="q4" value="A" /> Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.</label></li>
-    <li><label><input type="radio" name="q4" value="B" /> Bank deposits withdrawable with significant penalty and usable for more than 12 months.</label></li>
-    <li><label><input type="radio" name="q4" value="C" /> Bank deposits withdrawable with significant penalty and usable within 12 months.</label></li>
-    <li><label><input type="radio" name="q4" value="D" /> Bank deposits withdrawable without penalty and usable for less than 12 months.</label></li>
-  </ul>
-  <div class="answer" id="answer4" style="display:none;"><p>Correct Answer: C</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 6:</strong> These describe a bank overdraft, except:</p>
-  <ul>
-    <li><label><input type="radio" name="q5" value="A" /> It is allowed only if caused by normal bank charges or other incidental handling fees.</label></li>
-    <li><label><input type="radio" name="q5" value="B" /> It is disallowed in the Philippines.</label></li>
-    <li><label><input type="radio" name="q5" value="C" /> It is known as temporary overdrawing in the Philippines.</label></li>
-    <li><label><input type="radio" name="q5" value="D" /> It is the negative (or overdrawn) balance in a demand deposit account.</label></li>
-  </ul>
-  <div class="answer" id="answer5" style="display:none;"><p>Correct Answer: B</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 7:</strong> Check withdrawals are recorded as:</p>
-  <ul>
-    <li><label><input type="radio" name="q6" value="A" /> Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.</label></li>
-    <li><label><input type="radio" name="q6" value="B" /> Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.</label></li>
-    <li><label><input type="radio" name="q6" value="C" /> Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.</label></li>
-    <li><label><input type="radio" name="q6" value="D" /> Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity.</label></li>
-  </ul>
-  <div class="answer" id="answer6" style="display:none;"><p>Correct Answer: D</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 7:</strong> Check withdrawals are recorded as:</p>
-  <ul>
-    <li><label><input type="radio" name="q6" value="A" /> Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.</label></li>
-    <li><label><input type="radio" name="q6" value="B" /> Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.</label></li>
-    <li><label><input type="radio" name="q6" value="C" /> Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.</label></li>
-    <li><label><input type="radio" name="q6" value="D" /> Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity.</label></li>
-  </ul>
-  <div class="answer" id="answer6" style="display:none;"><p>Correct Answer: D</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 8:</strong> Timing differences for Deposit Liabilities of financial institution comprise:</p>
-  <ul>
-    <li><label><input type="radio" name="q7" value="A" /> Credit memos and debit memos.</label></li>
-    <li><label><input type="radio" name="q7" value="B" /> Outstanding deposits and outstanding checks.</label></li>
-    <li><label><input type="radio" name="q7" value="C" /> Cleared deposits and cleared checks.</label></li>
-    <li><label><input type="radio" name="q7" value="D" /> Adjusted receipts and adjusted disbursements.</label></li>
-  </ul>
-  <div class="answer" id="answer7" style="display:none;"><p>Correct Answer: B</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 9:</strong> Which of the following is true about outstanding deposits?</p>
-  <ul>
-    <li><label><input type="radio" name="q8" value="A" /> They are deposits recorded by the bank but not yet recorded by the entity.</label></li>
-    <li><label><input type="radio" name="q8" value="B" /> They are deposits recorded by the entity but not yet recorded by the bank.</label></li>
-    <li><label><input type="radio" name="q8" value="C" /> They are deposits recorded by both the bank and the entity.</label></li>
-    <li><label><input type="radio" name="q8" value="D" /> They are deposits not recorded by either the bank or the entity.</label></li>
-  </ul>
-  <div class="answer" id="answer8" style="display:none;"><p>Correct Answer: B</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Theory">
-  <p><strong>Theory Question 10:</strong> Which of the following is true about outstanding checks?</p>
-  <ul>
-    <li><label><input type="radio" name="q9" value="A" /> They are checks recorded by the bank but not yet recorded by the entity.</label></li>
-    <li><label><input type="radio" name="q9" value="B" /> They are checks recorded by the entity but not yet recorded by the bank.</label></li>
-    <li><label><input type="radio" name="q9" value="C" /> They are checks recorded by both the bank and the entity.</label></li>
-    <li><label><input type="radio" name="q9" value="D" /> They are checks not recorded by either the bank or the entity.</label></li>
-  </ul>
-  <div class="answer" id="answer9" style="display:none;"><p>Correct Answer: B</p></div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Practice">
-  <p><strong>Practice Question 4:</strong> What is the closing book balance?</p>
-  <img src="images/practice4.png" alt="Practice Question Image" class="excel-image" />
-  <ul>
-    <li><label><input type="radio" name="q13" value="A" /> 2,000,000.00</label></li>
-    <li><label><input type="radio" name="q13" value="B" /> 2,500,000.00</label></li>
-    <li><label><input type="radio" name="q13" value="C" /> 1,600,000.00</label></li>
-    <li><label><input type="radio" name="q13" value="D" /> 2,499,800.00</label></li>
-  </ul>
-  <div class="answer" id="answer13" style="display:none;">
-    <p>Correct Answer: D</p>
-    <img src="images/answer4.png" alt="Practice Answer Image" class="excel-image" />
-  </div>
-</div>
-
-<div class="question-block" data-volume="Volume 1" data-chapter="Chapter 1" data-topic="Cash and Cash Equivalents" data-type="Practice">
-  <p><strong>Practice Question 5:</strong> What is the adjusted receipts?</p>
-  <img src="images/practice5.png" alt="Practice Question Image" class="excel-image" />
-  <ul>
-    <li><label><input type="radio" name="q14" value="A" /> 2,500,000.00</label></li>
-    <li><label><input type="radio" name="q14" value="B" /> 2,000,000.00</label></li>
-    <li><label><input type="radio" name="q14" value="C" /> 1,600,000.00</label></li>
-    <li><label><input type="radio" name="q14" value="D" /> 1,601,300.00</label></li>
-  </ul>
-  <div class="answer" id="answer14" style="display:none;">
-    <p>Correct Answer: A</p>
-    <img src="images/answer5.png" alt="Practice Answer Image" class="excel-image" />
-  </div>
-</div>
-
-    </div>
-    <!-- Questions end above this line -->
-    <div id="scoreArea"></div>
+  <main>
+    <section id="questions">
+      <!-- Question entries are pasted, below this line -->
+questionData.push(
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 1",
+    question: "Cash on hand includes:",
+    choices: {
+      A: "Checks dated less than 6 months after today.",
+      B: "Checks dated less than 6 months before today.",
+      C: "Checks dated more than 6 months after today.",
+      D: "Checks dated more than 6 months before today."
+    },
+    correct: "B"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 2",
+    question: "In defining cash equivalents, known maturity value denotes:",
+    choices: {
+      A: "Maturity date is determinable on acquisition date.",
+      B: "Maturity value is determinable on acquisition date.",
+      C: "Maturity value will be determined on maturity date.",
+      D: "Maturity value will be known on maturity date."
+    },
+    correct: "B"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 3",
+    question: "Which are excluded from cash equivalents?",
+    choices: {
+      A: "Credit cards receivable.",
+      B: "Debit cards receivable.",
+      C: "Time deposits downgraded lower than savings accounts when pre-terminated.",
+      D: "Time deposits downgraded not lower than savings accounts when pre-terminated."
+    },
+    correct: "C"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 4",
+    question: "Which are classified as restricted cash, and presented as noncurrent assets?",
+    choices: {
+      A: "Currency usable for at least 12 months after the reporting period.",
+      B: "Currency usable for less than 12 months after the reporting period.",
+      C: "Currency usable for more than 12 months after the reporting period.",
+      D: "Currency usable within 12 months after the reporting period."
+    },
+    correct: "A"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 5",
+    question: "Which are classified as short-term investments, and presented as current assets?",
+    choices: {
+      A: "Bank deposits withdrawable with insignificant penalty and usable for less than 12 months.",
+      B: "Bank deposits withdrawable with significant penalty and usable for more than 12 months.",
+      C: "Bank deposits withdrawable with significant penalty and usable within 12 months.",
+      D: "Bank deposits withdrawable without penalty and usable for less than 12 months."
+    },
+    correct: "C"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 6",
+    question: "These describe a bank overdraft, except:",
+    choices: {
+      A: "It is allowed only if caused by normal bank changes or other incidental handling fees.",
+      B: "It is disallowed in the Philippines.",
+      C: "It is known as temporary overdrawing in the Philippines.",
+      D: "It is the negative (or overdrawn) balance in a demand deposit account."
+    },
+    correct: "B"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 7",
+    question: "Check withdrawals are recorded as:",
+    choices: {
+      A: "Debit to Demand Deposits of depositor entity and credit to Deposit Liabilities of financial institution.",
+      B: "Debit to Demand Deposits of financial institution and credit to Deposit Liabilities of depositor entity.",
+      C: "Debit to Deposit Liabilities of depositor entity and credit to Demand Deposits of financial institution.",
+      D: "Debit to Deposit Liabilities of financial institution and credit to Demand Deposits of depositor entity."
+    },
+    correct: "D"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 8",
+    question: "Timing differences for Deposit Liabilities of financial institution comprise:",
+    choices: {
+      A: "Credit memos and debit memos.",
+      B: "Outstanding checks and debit memos.",
+      C: "Outstanding deposits and credit memos.",
+      D: "Outstanding deposits and outstanding checks."
+    },
+    correct: "D"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 9",
+    question: "Which describe debit memos?",
+    choices: {
+      A: "They are already credited to Demand Deposits but not yet debited to Deposit Liabilities.",
+      B: "They are already credited to Deposit Liabilities but not yet debited to Demand Deposits.",
+      C: "They are already debited to Demand Deposits but not yet credited to Deposit Liabilities.",
+      D: "They are already debited to Deposit Liabilities but not yet credited to Demand Deposits."
+    },
+    correct: "D"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Theory",
+    number: "Theory Question 10",
+    question: "Before replenishment, the adjusted balance of Petty Cash Fund equals:",
+    choices: {
+      A: "Currency in the custody of the Petty Cash Custodian.",
+      B: "Established amount.",
+      C: "Minimum threshold.",
+      D: "Total of Petty Cash Vouchers."
+    },
+    correct: "A"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Practice",
+    number: "Practice Question 1",
+    question: "With these givens, the closing outstanding checks are:",
+    image: "zy5CsBWwkzp2nMp2jY8kg.png",
+    choices: {
+      A: "289,000.00",
+      B: "311,000.00",
+      C: "489,000.00",
+      D: "511,000.00"
+    },
+    correct: "B",
+    answerImage: "nZRXjao7ERtBtAf55ZycQ.png"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Practice",
+    number: "Practice Question 2",
+    question: "With these givens, the opening outstanding checks are:",
+    image: "irLKCDvXen98iZtNzDiFn.png",
+    choices: {
+      A: "289,000.00",
+      B: "311,000.00",
+      C: "489,000.00",
+      D: "511,000.00"
+    },
+    correct: "B",
+    answerImage: "dtgher71GgCHFK7Qu6nyv.png"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Practice",
+    number: "Practice Question 3",
+    question: "With these givens, the closing book balance is:",
+    image: "a8WpVghVxRSBzK6g8hM9e.png",
+    choices: {
+      A: "2,496,000.00",
+      B: "2,499,800.00",
+      C: "2,500,200.00",
+      D: "2,504,000.00"
+    },
+    correct: "B",
+    answerImage: "94nWCzsFeM2JxkYQTSGCB.png"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Practice",
+    number: "Practice Question 4",
+    question: "With these givens, the closing outstanding deposits are:",
+    image: "hRbrgnqHNDuFxeUyBVo5H.png",
+    choices: {
+      A: "487,000.00",
+      B: "513,000.00",
+      C: "887,000.00",
+      D: "913,000.00"
+    },
+    correct: "D",
+    answerImage: "MpaGLNeVXcxrnaS1XCCs3.png"
+  },
+  {
+    volume: "1",
+    chapter: "1",
+    topic: "Cash and Cash Equivalents",
+    type: "Practice",
+    number: "Practice Question 5",
+    question: "With these givens, the closing outstanding deposits are:",
+    image: "BghDPJ14KX5e1ceZZTQi4.png",
+    choices: {
+      A: "398,700.00",
+      B: "398,900.00",
+      C: "898,700.00",
+      D: "898,900.00"
+    },
+    correct: "C",
+    answerImage: "rt6UpcjwfZvsdC3zjddKu.png"
+  }
+);
+      <!-- Question entries are pasted, above this line -->
+    </section>
+    <section id="score"></section>
   </main>
-
-  <script>
-    const volumeSelect = document.getElementById('volumeSelect');
-    const chapterSelect = document.getElementById('chapterSelect');
-    const topicSelect = document.getElementById('topicSelect');
-    const typeSelect = document.getElementById('typeSelect');
-    const submitBtn = document.getElementById('submitBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const questionsArea = document.getElementById('questionsArea');
-    const scoreArea = document.getElementById('scoreArea');
-
-    let allQuestions = []; // Populated externally
-    let currentQuestions = [];
-
-    function loadQuestions() {
-      if (allQuestions.length === 0) return;
-      populateDropdowns();
-    }
-
-    function populateDropdowns() {
-      const volumes = [...new Set(allQuestions.map(q => q.volume))];
-      volumeSelect.innerHTML = `<option disabled selected value="">Select Volume</option>` +
-        volumes.map(v => `<option value="${v}">${v}</option>`).join('');
-      updateChapters();
-    }
-
-    function updateChapters() {
-      const selectedVolume = volumeSelect.value;
-      const chapters = [...new Set(allQuestions.filter(q => q.volume === selectedVolume).map(q => q.chapter))];
-      chapterSelect.innerHTML = `<option disabled selected value="">Select Chapter</option>` +
-        chapters.map(c => `<option value="${c}">${c}</option>`).join('');
-      updateTopics();
-    }
-
-    function updateTopics() {
-      const selectedVolume = volumeSelect.value;
-      const selectedChapter = chapterSelect.value;
-      const topics = [...new Set(allQuestions.filter(q => q.volume === selectedVolume && q.chapter === selectedChapter).map(q => q.topic))];
-      topicSelect.innerHTML = `<option disabled selected value="">Select Topic</option>` +
-        topics.map(t => `<option value="${t}">${t}</option>`).join('');
-      adjustTopicWidth();
-      updateTypes();
-    }
-
-    function adjustTopicWidth() {
-      const widest = [...topicSelect.options].reduce((max, opt) => Math.max(max, opt.text.length), 0);
-      topicSelect.style.minWidth = `${widest * 10}px`;
-    }
-
-    function updateTypes() {
-      const selectedVolume = volumeSelect.value;
-      const selectedChapter = chapterSelect.value;
-      const selectedTopic = topicSelect.value;
-      const filtered = allQuestions.filter(q => q.volume === selectedVolume && q.chapter === selectedChapter && q.topic === selectedTopic);
-      const hasPractice = filtered.some(q => q.type === "Practice");
-      typeSelect.innerHTML = `<option disabled selected value="">Select Type</option><option value="Theory">Theory</option>`;
-      if (hasPractice) {
-        typeSelect.innerHTML += `<option value="Practice">Practice</option><option value="Both">Both</option>`;
-      }
-    }
-
-    function renderQuestions() {
-      const selectedVolume = volumeSelect.value;
-      const selectedChapter = chapterSelect.value;
-      const selectedTopic = topicSelect.value;
-      const selectedType = typeSelect.value;
-
-      if (!selectedVolume || !selectedChapter || !selectedTopic || !selectedType) return;
-
-      currentQuestions = allQuestions.filter(q =>
-        q.volume === selectedVolume &&
-        q.chapter === selectedChapter &&
-        q.topic === selectedTopic &&
-        (selectedType === "Both" || q.type === selectedType)
-      );
-
-      currentQuestions = shuffle([...currentQuestions]);
-
-      questionsArea.innerHTML = '';
-      currentQuestions.forEach((q, i) => {
-        const label = `${q.type} Question ${i + 1}`;
-        const block = document.createElement('div');
-        block.className = 'question-block';
-        block.setAttribute('data-volume', q.volume);
-        block.setAttribute('data-chapter', q.chapter);
-        block.setAttribute('data-topic', q.topic);
-        block.setAttribute('data-type', q.type);
-        block.innerHTML = `
-          <p><strong>${label}:</strong> ${q.question}</p>
-          ${q.imageQuestion ? `<img src="${q.imageQuestion}" alt="Practice Question Image" class="excel-image" />` : ''}
-          <ul>
-            ${q.choices.map((choice, idx) => `
-              <li>
-                <label>
-                  <input type="radio" name="q${i}" value="${choice.charAt(0)}" />
-                  ${choice}
-                </label>
-              </li>
-            `).join('')}
-          </ul>
-          <div class="answer" id="answer${i}" style="display:none;">
-            <p>Correct Answer: ${q.answer}</p>
-            ${q.imageAnswer ? `<img src="${q.imageAnswer}" alt="Practice Answer Image" class="excel-image" />` : ''}
-          </div>
-        `;
-        questionsArea.appendChild(block);
-      });
-    }
-
-    function showAnswers() {
-      let correct = 0;
-      currentQuestions.forEach((q, i) => {
-        const selected = document.querySelector(`input[name="q${i}"]:checked`);
-        if (selected && selected.value === q.answer) correct++;
-        document.getElementById(`answer${i}`).style.display = 'block';
-      });
-      const percent = ((correct / currentQuestions.length) * 100).toFixed(2);
-      scoreArea.innerHTML = `<p>Score: ${correct} / ${currentQuestions.length} (${percent}%)</p>`;
-    }
-
-    function resetQuiz() {
-      questionsArea.innerHTML = '';
-      scoreArea.innerHTML = '';
-      volumeSelect.innerHTML = `<option disabled selected value="">Select Volume</option>`;
-      chapterSelect.innerHTML = `<option disabled selected value="">Select Chapter</option>`;
-      topicSelect.innerHTML = `<option disabled selected value="">Select Topic</option>`;
-      typeSelect.innerHTML = `<option disabled selected value="">Select Type</option>`;
-    }
-
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
-
-    volumeSelect.addEventListener('change', updateChapters);
-    chapterSelect.addEventListener('change', updateTopics);
-    topicSelect.addEventListener('change', updateTypes);
-    submitBtn.addEventListener('click', () => {
-      renderQuestions();
-      showAnswers();
-    });
-    resetBtn.addEventListener('click', resetQuiz);
-
-    // Load only after allQuestions is populated externally
-  </script>
 </body>
 </html>
