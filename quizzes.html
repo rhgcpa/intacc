@@ -162,90 +162,90 @@
     correct: "A"
   },
   {
-    volume: "1",
-    chapter: "1",
-    topic: "Cash and Cash Equivalents",
-    type: "Practice",
-    number: "Practice Question 1",
-    question: "With these givens, the closing outstanding checks are:",
-    image: "zy5CsBWwkzp2nMp2jY8kg.png",
-    choices: {
-      A: "289,000.00",
-      B: "311,000.00",
-      C: "489,000.00",
-      D: "511,000.00"
-    },
-    correct: "B",
-    answerImage: "nZRXjao7ERtBtAf55ZycQ.png"
+  volume: "1",
+  chapter: "1",
+  topic: "Cash and Cash Equivalents",
+  type: "Practice",
+  number: "Practice Question 1",
+  question: "With these givens, the closing outstanding checks are:",
+  image: "9AksMpPc4BgGRVMbg38mM.png",
+  choices: {
+    A: "289,000.00",
+    B: "311,000.00",
+    C: "489,000.00",
+    D: "511,000.00"
   },
-  {
-    volume: "1",
-    chapter: "1",
-    topic: "Cash and Cash Equivalents",
-    type: "Practice",
-    number: "Practice Question 2",
-    question: "With these givens, the opening outstanding checks are:",
-    image: "irLKCDvXen98iZtNzDiFn.png",
-    choices: {
-      A: "289,000.00",
-      B: "311,000.00",
-      C: "489,000.00",
-      D: "511,000.00"
-    },
-    correct: "B",
-    answerImage: "dtgher71GgCHFK7Qu6nyv.png"
+  correct: "B",
+  answerImage: "uUmFNSmAsimSRT3wQcDj3.png"
+},
+{
+  volume: "1",
+  chapter: "1",
+  topic: "Cash and Cash Equivalents",
+  type: "Practice",
+  number: "Practice Question 2",
+  question: "With these givens, the opening outstanding checks are:",
+  image: "B9Xr1f8d6jNNEu4WUbBzw.png",
+  choices: {
+    A: "289,000.00",
+    B: "311,000.00",
+    C: "489,000.00",
+    D: "511,000.00"
   },
-  {
-    volume: "1",
-    chapter: "1",
-    topic: "Cash and Cash Equivalents",
-    type: "Practice",
-    number: "Practice Question 3",
-    question: "With these givens, the closing book balance is:",
-    image: "a8WpVghVxRSBzK6g8hM9e.png",
-    choices: {
-      A: "2,496,000.00",
-      B: "2,499,800.00",
-      C: "2,500,200.00",
-      D: "2,504,000.00"
-    },
-    correct: "B",
-    answerImage: "94nWCzsFeM2JxkYQTSGCB.png"
+  correct: "B",
+  answerImage: "hgCNpSqitud8HfLd3bC9m.png"
+},
+{
+  volume: "1",
+  chapter: "1",
+  topic: "Cash and Cash Equivalents",
+  type: "Practice",
+  number: "Practice Question 3",
+  question: "With these givens, the closing book balance is:",
+  image: "WSmSFWzcrxavWNeuLi48o.png",
+  choices: {
+    A: "2,496,000.00",
+    B: "2,499,800.00",
+    C: "2,500,200.00",
+    D: "2,504,000.00"
   },
-  {
-    volume: "1",
-    chapter: "1",
-    topic: "Cash and Cash Equivalents",
-    type: "Practice",
-    number: "Practice Question 4",
-    question: "With these givens, the closing outstanding deposits are:",
-    image: "hRbrgnqHNDuFxeUyBVo5H.png",
-    choices: {
-      A: "487,000.00",
-      B: "513,000.00",
-      C: "887,000.00",
-      D: "913,000.00"
-    },
-    correct: "D",
-    answerImage: "MpaGLNeVXcxrnaS1XCCs3.png"
+  correct: "B",
+  answerImage: "NnfzN1f5D5pSqMMMUv91Z.png"
+},
+{
+  volume: "1",
+  chapter: "1",
+  topic: "Cash and Cash Equivalents",
+  type: "Practice",
+  number: "Practice Question 4",
+  question: "With these givens, the closing outstanding deposits are:",
+  image: "MkAdUTutipx5A4YTi8HKR.png",
+  choices: {
+    A: "487,000.00",
+    B: "513,000.00",
+    C: "887,000.00",
+    D: "913,000.00"
   },
-  {
-    volume: "1",
-    chapter: "1",
-    topic: "Cash and Cash Equivalents",
-    type: "Practice",
-    number: "Practice Question 5",
-    question: "With these givens, the closing outstanding deposits are:",
-    image: "BghDPJ14KX5e1ceZZTQi4.png",
-    choices: {
-      A: "398,700.00",
-      B: "398,900.00",
-      C: "898,700.00",
-      D: "898,900.00"
-    },
-    correct: "C",
-    answerImage: "rt6UpcjwfZvsdC3zjddKu.png"
-  }
+  correct: "D",
+  answerImage: "NaY2c9aBHHXp6QTNKnK6y.png"
+},
+{
+  volume: "1",
+  chapter: "1",
+  topic: "Cash and Cash Equivalents",
+  type: "Practice",
+  number: "Practice Question 5",
+  question: "With these givens, the closing outstanding deposits are:",
+  image: "iSBewd5A58zieu7UW8ikH.png",
+  choices: {
+    A: "398,700.00",
+    B: "398,900.00",
+    C: "898,700.00",
+    D: "898,900.00"
+  },
+  correct: "C",
+  answerImage: "6LBumfAAmt2dwQbDtWvJP.png"
+}
   );
 </script>
 <!-- Question entries are pasted, above this line -->
@@ -379,12 +379,13 @@
             : `Practice Question ${practiceCount++}: ${q.question}`;
         wrapper.appendChild(questionLabel);
 
-        if (q.type === "Practice" && q.image) {
-          const img = document.createElement("img");
-          img.src = q.image;
-          img.alt = "Practice Question Image";
-          wrapper.appendChild(img);
-        }
+if (q.type === "Practice" && q.image) {
+  const img = document.createElement("img");
+  img.src = `images/${q.image}`; // Adjust path if needed
+  img.alt = "Practice Question Image";
+  wrapper.appendChild(img);
+  wrapper.appendChild(document.createElement("br")); // Ensures image is on its own line
+}
 
         ["A", "B", "C", "D"].forEach(choice => {
           const label = document.createElement("label");
