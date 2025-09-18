@@ -5,230 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quizzes | EXCELlent Intermediate Accounting</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer>
-    // Data structure placeholder
-    const questionData = [];
-
-    // DOM elements
-    let volumeSelect, chapterSelect, topicSelect, typeSelect;
-    let questionContainer, scoreContainer;
-
-    document.addEventListener("DOMContentLoaded", () => {
-      volumeSelect = document.getElementById("volume");
-      chapterSelect = document.getElementById("chapter");
-      topicSelect = document.getElementById("topic");
-      typeSelect = document.getElementById("type");
-      questionContainer = document.getElementById("questions");
-      scoreContainer = document.getElementById("score");
-
-      populateVolumeDropdown();
-      setupDropdownListeners();
-      document.getElementById("submitBtn").addEventListener("click", handleSubmit);
-      document.getElementById("resetBtn").addEventListener("click", handleReset);
-    });
-
-    function populateVolumeDropdown() {
-      const volumes = [...new Set(questionData.map(q => q.volume))];
-      volumes.forEach(v => {
-        const option = document.createElement("option");
-        option.value = v;
-        option.textContent = `Volume ${v}`;
-        volumeSelect.appendChild(option);
-      });
-    }
-
-    function setupDropdownListeners() {
-      volumeSelect.addEventListener("change", () => {
-        resetDropdown(chapterSelect, "Select Chapter");
-        resetDropdown(topicSelect, "Select Topic");
-        resetDropdown(typeSelect, "Select Type");
-        const chapters = [...new Set(questionData
-          .filter(q => q.volume === volumeSelect.value)
-          .map(q => q.chapter))];
-        chapters.forEach(c => {
-          const option = document.createElement("option");
-          option.value = c;
-          option.textContent = `Chapter ${c}`;
-          chapterSelect.appendChild(option);
-        });
-      });
-
-      chapterSelect.addEventListener("change", () => {
-        resetDropdown(topicSelect, "Select Topic");
-        resetDropdown(typeSelect, "Select Type");
-        const topics = [...new Set(questionData
-          .filter(q => q.volume === volumeSelect.value && q.chapter === chapterSelect.value)
-          .map(q => q.topic))];
-        topics.forEach(t => {
-          const option = document.createElement("option");
-          option.value = t;
-          option.textContent = t;
-          topicSelect.appendChild(option);
-        });
-        adjustTopicDropdownWidth(topics);
-      });
-
-      topicSelect.addEventListener("change", () => {
-        resetDropdown(typeSelect, "Select Type");
-        const filtered = questionData.filter(q =>
-          q.volume === volumeSelect.value &&
-          q.chapter === chapterSelect.value &&
-          q.topic === topicSelect.value
-        );
-        const hasPractice = filtered.some(q => q.type === "Practice");
-        ["Theory", ...(hasPractice ? ["Practice", "Both"] : [])].forEach(t => {
-          const option = document.createElement("option");
-          option.value = t;
-          option.textContent = t;
-          typeSelect.appendChild(option);
-        });
-      });
-
-      typeSelect.addEventListener("change", () => {
-        renderQuestions();
-      });
-    }
-
-    function resetDropdown(dropdown, placeholder) {
-      dropdown.innerHTML = "";
-      const placeholderOption = document.createElement("option");
-      placeholderOption.value = "";
-      placeholderOption.textContent = placeholder;
-      dropdown.appendChild(placeholderOption);
-    }
-
-    function adjustTopicDropdownWidth(topics) {
-      const maxLength = Math.max(...topics.map(t => t.length));
-      topicSelect.style.width = `${maxLength * 10}px`;
-    }
-
-    function renderQuestions() {
-      questionContainer.innerHTML = "";
-      scoreContainer.innerHTML = "";
-      const selected = {
-        volume: volumeSelect.value,
-        chapter: chapterSelect.value,
-        topic: topicSelect.value,
-        type: typeSelect.value
-      };
-      let filtered = questionData.filter(q =>
-        q.volume === selected.volume &&
-        q.chapter === selected.chapter &&
-        q.topic === selected.topic &&
-        (selected.type === "Both" || q.type === selected.type)
-      );
-      filtered = shuffleArray(filtered);
-
-      let theoryCount = 1;
-      let practiceCount = 1;
-
-      filtered.forEach((q, index) => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "question-block";
-
-        const questionLabel = document.createElement("p");
-        questionLabel.textContent =
-          q.type === "Theory"
-            ? `Theory Question ${theoryCount++}: ${q.question}`
-            : `Practice Question ${practiceCount++}: ${q.question}`;
-        wrapper.appendChild(questionLabel);
-
-        if (q.type === "Practice" && q.image) {
-          const img = document.createElement("img");
-          img.src = q.image;
-          img.alt = "Practice Question Image";
-          wrapper.appendChild(img);
-        }
-
-        ["A", "B", "C", "D"].forEach(choice => {
-          const label = document.createElement("label");
-          const radio = document.createElement("input");
-          radio.type = "radio";
-          radio.name = `q${index}`;
-          radio.value = choice;
-          label.appendChild(radio);
-          label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
-          wrapper.appendChild(label);
-          wrapper.appendChild(document.createElement("br"));
-        });
-
-        const answerDiv = document.createElement("div");
-        answerDiv.className = "answer";
-        answerDiv.style.display = "none";
-        answerDiv.textContent = `Correct Answer: ${q.correct}`;
-        if (q.type === "Practice" && q.answerImage) {
-          const answerImg = document.createElement("img");
-          answerImg.src = q.answerImage;
-          answerImg.alt = "Practice Answer Image";
-          answerDiv.appendChild(document.createElement("br"));
-          answerDiv.appendChild(answerImg);
-        }
-        wrapper.appendChild(answerDiv);
-        questionContainer.appendChild(wrapper);
-      });
-    }
-
-    function handleSubmit() {
-      const blocks = document.querySelectorAll(".question-block");
-      let correct = 0;
-      blocks.forEach((block, index) => {
-        const selected = block.querySelector(`input[name="q${index}"]:checked`);
-        const correctAnswer = questionData[index].correct;
-        if (selected && selected.value === correctAnswer) correct++;
-        block.querySelector(".answer").style.display = "block";
-      });
-      const total = blocks.length;
-      const percent = ((correct / total) * 100).toFixed(2);
-      scoreContainer.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
-    }
-
-    function handleReset() {
-      resetDropdown(volumeSelect, "Select Volume");
-      resetDropdown(chapterSelect, "Select Chapter");
-      resetDropdown(topicSelect, "Select Topic");
-      resetDropdown(typeSelect, "Select Type");
-      questionContainer.innerHTML = "";
-      scoreContainer.innerHTML = "";
-      populateVolumeDropdown();
-    }
-
-    function shuffleArray(arr) {
-      return arr
-        .map(a => [Math.random(), a])
-        .sort((a, b) => a[0] - b[0])
-        .map(a => a[1]);
-    }
-  </script>
-</head>
-<body>
-  <header class="sticky-header">
-    <nav>
-      <ul class="tabs">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="glossary.html">Glossary</a></li>
-        <li><a href="quizzes.html" class="active">Quizzes</a></li>
-        <li><a href="references.html">References</a></li>
-        <li><a href="visuals.html">Visuals</a></li>
-        <li><a href="tools.html">Tools</a></li>
-      </ul>
-    </nav>
-    <div class="controls">
-      <select id="volume">
-        <option value="">Select Volume</option>
-      </select>
-      <select id="chapter">
-        <option value="">Select Chapter</option>
-      </select>
-      <select id="topic">
-        <option value="">Select Topic</option>
-      </select>
-      <select id="type">
-        <option value="">Select Type</option>
-      </select>
-      <button id="submitBtn">Submit</button>
-      <button id="resetBtn">Reset</button>
-    </div>
-  </header>
 
   <main>
     <section id="questions">
@@ -476,5 +252,228 @@
     </section>
     <section id="score"></section>
   </main>
+
+  <script defer>
+
+    // DOM elements
+    let volumeSelect, chapterSelect, topicSelect, typeSelect;
+    let questionContainer, scoreContainer;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      volumeSelect = document.getElementById("volume");
+      chapterSelect = document.getElementById("chapter");
+      topicSelect = document.getElementById("topic");
+      typeSelect = document.getElementById("type");
+      questionContainer = document.getElementById("questions");
+      scoreContainer = document.getElementById("score");
+
+      populateVolumeDropdown();
+      setupDropdownListeners();
+      document.getElementById("submitBtn").addEventListener("click", handleSubmit);
+      document.getElementById("resetBtn").addEventListener("click", handleReset);
+    });
+
+    function populateVolumeDropdown() {
+      const volumes = [...new Set(questionData.map(q => q.volume))];
+      volumes.forEach(v => {
+        const option = document.createElement("option");
+        option.value = v;
+        option.textContent = `Volume ${v}`;
+        volumeSelect.appendChild(option);
+      });
+    }
+
+    function setupDropdownListeners() {
+      volumeSelect.addEventListener("change", () => {
+        resetDropdown(chapterSelect, "Select Chapter");
+        resetDropdown(topicSelect, "Select Topic");
+        resetDropdown(typeSelect, "Select Type");
+        const chapters = [...new Set(questionData
+          .filter(q => q.volume === volumeSelect.value)
+          .map(q => q.chapter))];
+        chapters.forEach(c => {
+          const option = document.createElement("option");
+          option.value = c;
+          option.textContent = `Chapter ${c}`;
+          chapterSelect.appendChild(option);
+        });
+      });
+
+      chapterSelect.addEventListener("change", () => {
+        resetDropdown(topicSelect, "Select Topic");
+        resetDropdown(typeSelect, "Select Type");
+        const topics = [...new Set(questionData
+          .filter(q => q.volume === volumeSelect.value && q.chapter === chapterSelect.value)
+          .map(q => q.topic))];
+        topics.forEach(t => {
+          const option = document.createElement("option");
+          option.value = t;
+          option.textContent = t;
+          topicSelect.appendChild(option);
+        });
+        adjustTopicDropdownWidth(topics);
+      });
+
+      topicSelect.addEventListener("change", () => {
+        resetDropdown(typeSelect, "Select Type");
+        const filtered = questionData.filter(q =>
+          q.volume === volumeSelect.value &&
+          q.chapter === chapterSelect.value &&
+          q.topic === topicSelect.value
+        );
+        const hasPractice = filtered.some(q => q.type === "Practice");
+        ["Theory", ...(hasPractice ? ["Practice", "Both"] : [])].forEach(t => {
+          const option = document.createElement("option");
+          option.value = t;
+          option.textContent = t;
+          typeSelect.appendChild(option);
+        });
+      });
+
+      typeSelect.addEventListener("change", () => {
+        renderQuestions();
+      });
+    }
+
+    function resetDropdown(dropdown, placeholder) {
+      dropdown.innerHTML = "";
+      const placeholderOption = document.createElement("option");
+      placeholderOption.value = "";
+      placeholderOption.textContent = placeholder;
+      dropdown.appendChild(placeholderOption);
+    }
+
+    function adjustTopicDropdownWidth(topics) {
+      const maxLength = Math.max(...topics.map(t => t.length));
+      topicSelect.style.width = `${maxLength * 10}px`;
+    }
+
+    function renderQuestions() {
+      questionContainer.innerHTML = "";
+      scoreContainer.innerHTML = "";
+      const selected = {
+        volume: volumeSelect.value,
+        chapter: chapterSelect.value,
+        topic: topicSelect.value,
+        type: typeSelect.value
+      };
+      let filtered = questionData.filter(q =>
+        q.volume === selected.volume &&
+        q.chapter === selected.chapter &&
+        q.topic === selected.topic &&
+        (selected.type === "Both" || q.type === selected.type)
+      );
+      filtered = shuffleArray(filtered);
+
+      let theoryCount = 1;
+      let practiceCount = 1;
+
+      filtered.forEach((q, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "question-block";
+
+        const questionLabel = document.createElement("p");
+        questionLabel.textContent =
+          q.type === "Theory"
+            ? `Theory Question ${theoryCount++}: ${q.question}`
+            : `Practice Question ${practiceCount++}: ${q.question}`;
+        wrapper.appendChild(questionLabel);
+
+        if (q.type === "Practice" && q.image) {
+          const img = document.createElement("img");
+          img.src = q.image;
+          img.alt = "Practice Question Image";
+          wrapper.appendChild(img);
+        }
+
+        ["A", "B", "C", "D"].forEach(choice => {
+          const label = document.createElement("label");
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = `q${index}`;
+          radio.value = choice;
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
+          wrapper.appendChild(label);
+          wrapper.appendChild(document.createElement("br"));
+        });
+
+        const answerDiv = document.createElement("div");
+        answerDiv.className = "answer";
+        answerDiv.style.display = "none";
+        answerDiv.textContent = `Correct Answer: ${q.correct}`;
+        if (q.type === "Practice" && q.answerImage) {
+          const answerImg = document.createElement("img");
+          answerImg.src = q.answerImage;
+          answerImg.alt = "Practice Answer Image";
+          answerDiv.appendChild(document.createElement("br"));
+          answerDiv.appendChild(answerImg);
+        }
+        wrapper.appendChild(answerDiv);
+        questionContainer.appendChild(wrapper);
+      });
+    }
+
+    function handleSubmit() {
+      const blocks = document.querySelectorAll(".question-block");
+      let correct = 0;
+      blocks.forEach((block, index) => {
+        const selected = block.querySelector(`input[name="q${index}"]:checked`);
+        const correctAnswer = questionData[index].correct;
+        if (selected && selected.value === correctAnswer) correct++;
+        block.querySelector(".answer").style.display = "block";
+      });
+      const total = blocks.length;
+      const percent = ((correct / total) * 100).toFixed(2);
+      scoreContainer.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
+    }
+
+    function handleReset() {
+      resetDropdown(volumeSelect, "Select Volume");
+      resetDropdown(chapterSelect, "Select Chapter");
+      resetDropdown(topicSelect, "Select Topic");
+      resetDropdown(typeSelect, "Select Type");
+      questionContainer.innerHTML = "";
+      scoreContainer.innerHTML = "";
+      populateVolumeDropdown();
+    }
+
+    function shuffleArray(arr) {
+      return arr
+        .map(a => [Math.random(), a])
+        .sort((a, b) => a[0] - b[0])
+        .map(a => a[1]);
+    }
+  </script>
+</head>
+<body>
+  <header class="sticky-header">
+    <nav>
+      <ul class="tabs">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="glossary.html">Glossary</a></li>
+        <li><a href="quizzes.html" class="active">Quizzes</a></li>
+        <li><a href="references.html">References</a></li>
+        <li><a href="visuals.html">Visuals</a></li>
+        <li><a href="tools.html">Tools</a></li>
+      </ul>
+    </nav>
+    <div class="controls">
+      <select id="volume">
+        <option value="">Select Volume</option>
+      </select>
+      <select id="chapter">
+        <option value="">Select Chapter</option>
+      </select>
+      <select id="topic">
+        <option value="">Select Topic</option>
+      </select>
+      <select id="type">
+        <option value="">Select Type</option>
+      </select>
+      <button id="submitBtn">Submit</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </header>
 </body>
 </html>
