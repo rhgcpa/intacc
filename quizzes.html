@@ -5,32 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quizzes | EXCELlent Intermediate Accounting</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* === Local Tab Styling Override: Horizontal Layout === */
-    .tab-bar {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-      align-items: center;
-      background-color: #f9f9f9;
-      padding: 10px 0;
-      border-bottom: 1px solid #ccc;
-    }
 
-    .tab-bar a {
-      margin: 0 12px;
-      text-decoration: none;
-      color: #333;
-      font-weight: bold;
-      font-size: 14px;
-    }
+<style>
+  /* === Local Tab Styling Override: Horizontal Layout for .tabs === */
+  .tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    list-style-type: none;
+    margin: 0;
+  }
 
-    .tab-bar a:hover {
-      color: #0078D7;
-      text-decoration: underline;
-    }
-    /* === End Local Tab Styling Override === */
-  </style>
+  .tabs li {
+    margin: 0 12px;
+  }
+
+  .tabs a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .tabs a:hover {
+    color: #0078D7;
+    text-decoration: underline;
+  }
+  /* === End Local Tab Styling Override === */
+</style>
 
 <style>
   /* === Sticky Controls Styling === */
