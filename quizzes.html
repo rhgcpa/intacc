@@ -462,6 +462,11 @@ if (q.type === "Practice" && q.image) {
           wrapper.appendChild(document.createElement("br"));
         });
 
+const answerDiv = document.createElement("div");
+answerDiv.className = "answer";
+answerDiv.style.display = "none";
+answerDiv.textContent = `Correct Answer: ${q.correct}`;
+
 if (q.type === "Practice" && q.answerImage) {
   const answerImg = document.createElement("img");
   answerImg.src = `images/practice/${q.answerImage}`;
