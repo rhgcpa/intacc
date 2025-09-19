@@ -483,6 +483,9 @@ if (q.type === "Practice" && q.answerImage) {
 wrapper.appendChild(answerDiv);
 questionContainer.appendChild(wrapper);
 
+    }); // End of filtered.forEach
+  }     // End of renderQuestions
+
 function handleSubmit() {
   const blocks = document.querySelectorAll(".question-block");
   let correct = 0;
@@ -514,8 +517,6 @@ function handleSubmit() {
         .map(a => a[1]);
     }
 
-    }); // End of filtered.forEach
-  }     // End of renderQuestions
   </script>
 </head>
 <body>
