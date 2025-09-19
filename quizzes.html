@@ -380,51 +380,51 @@
 
 console.log("Testing image path:", q.image);
 
-      if (q.type === "Practice" && q.image) {
-        const img = document.createElement("img");
-        img.src = `images/practice/${q.image}`;
-        img.alt = "Practice Question Image";
-        img.onerror = () => {
-          console.warn(`Missing question image: ${q.image}`);
-          img.alt = "Image not found";
-          img.style.border = "1px solid red";
-        };
-        wrapper.appendChild(img);
-        wrapper.appendChild(document.createElement("br"));
-      }
+if (q.type === "Practice" && q.image) {
+  const img = document.createElement("img");
+  img.src = q.image;
+  img.alt = "Practice Question Image";
+  img.onerror = () => {
+    console.warn(`Missing question image: ${q.image}`);
+    img.alt = "Image not found";
+    img.style.border = "1px solid red";
+  };
+  wrapper.appendChild(img);
+  wrapper.appendChild(document.createElement("br"));
+}
 
-      ["A", "B", "C", "D"].forEach(choice => {
-        const label = document.createElement("label");
-        const radio = document.createElement("input");
-        radio.type = "radio";
-        radio.name = `q${index}`;
-        radio.value = choice;
-        label.appendChild(radio);
-        label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
-        wrapper.appendChild(label);
-        wrapper.appendChild(document.createElement("br"));
-      });
+["A", "B", "C", "D"].forEach(choice => {
+  const label = document.createElement("label");
+  const radio = document.createElement("input");
+  radio.type = "radio";
+  radio.name = `q${index}`;
+  radio.value = choice;
+  label.appendChild(radio);
+  label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
+  wrapper.appendChild(label);
+  wrapper.appendChild(document.createElement("br"));
+});
 
-      const answerDiv = document.createElement("div");
-      answerDiv.className = "answer";
-      answerDiv.style.display = "none";
-      answerDiv.textContent = `Correct Answer: ${q.correct}`;
+const answerDiv = document.createElement("div");
+answerDiv.className = "answer";
+answerDiv.style.display = "none";
+answerDiv.textContent = `Correct Answer: ${q.correct}`;
 
-      if (q.type === "Practice" && q.answerImage) {
-        const answerImg = document.createElement("img");
-        answerImg.src = `images/practice/${q.answerImage}`;
-        answerImg.alt = "Practice Answer Image";
-        answerImg.onerror = () => {
-          console.warn(`Missing answer image: ${q.answerImage}`);
-          answerImg.alt = "Image not found";
-          answerImg.style.border = "1px solid red";
-        };
-        answerDiv.appendChild(document.createElement("br"));
-        answerDiv.appendChild(answerImg);
-      }
+if (q.type === "Practice" && q.answerImage) {
+  const answerImg = document.createElement("img");
+  answerImg.src = q.answerImage;
+  answerImg.alt = "Practice Answer Image";
+  answerImg.onerror = () => {
+    console.warn(`Missing answer image: ${q.answerImage}`);
+    answerImg.alt = "Image not found";
+    answerImg.style.border = "1px solid red";
+  };
+  answerDiv.appendChild(document.createElement("br"));
+  answerDiv.appendChild(answerImg);
+}
 
-      wrapper.appendChild(answerDiv);
-      questionContainer.appendChild(wrapper);
+wrapper.appendChild(answerDiv);
+questionContainer.appendChild(wrapper);
     });
   }
 
