@@ -32,6 +32,25 @@
     /* === End Local Tab Styling Override === */
   </style>
 
+<style>
+  /* === Sticky Controls Styling === */
+  #sticky-controls {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #ffffff;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  #sticky-controls select,
+  #sticky-controls button,
+  #sticky-controls .tab-bar {
+    margin: 5px;
+  }
+  /* === End Sticky Controls Styling === */
+</style>
+
 <script>
   const questionData = [];
   questionData.push(
@@ -468,34 +487,36 @@ if (q.type === "Practice" && q.image) {
   </script>
 </head>
 <body>
-  <header class="sticky-header">
-    <nav>
-      <ul class="tabs">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="glossary.html">Glossary</a></li>
-        <li><a href="quizzes.html" class="active">Quizzes</a></li>
-        <li><a href="references.html">References</a></li>
-        <li><a href="visuals.html">Visuals</a></li>
-        <li><a href="tools.html">Tools</a></li>
-      </ul>
-    </nav>
-    <div class="controls">
-      <select id="volume">
-        <option value="">Select Volume</option>
-      </select>
-      <select id="chapter">
-        <option value="">Select Chapter</option>
-      </select>
-      <select id="topic">
-        <option value="">Select Topic</option>
-      </select>
-      <select id="type">
-        <option value="">Select Type</option>
-      </select>
-      <button id="submitBtn">Submit</button>
-      <button id="resetBtn">Reset</button>
-    </div>
-  </header>
+  <div id="sticky-controls">
+    <header class="sticky-header">
+      <nav>
+        <ul class="tabs">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="glossary.html">Glossary</a></li>
+          <li><a href="quizzes.html" class="active">Quizzes</a></li>
+          <li><a href="references.html">References</a></li>
+          <li><a href="visuals.html">Visuals</a></li>
+          <li><a href="tools.html">Tools</a></li>
+        </ul>
+      </nav>
+      <div class="controls">
+        <select id="volume">
+          <option value="">Select Volume</option>
+        </select>
+        <select id="chapter">
+          <option value="">Select Chapter</option>
+        </select>
+        <select id="topic">
+          <option value="">Select Topic</option>
+        </select>
+        <select id="type">
+          <option value="">Select Type</option>
+        </select>
+        <button id="submitBtn">Submit</button>
+        <button id="resetBtn">Reset</button>
+      </div>
+    </header>
+  </div>
 
 <main>
   <section id="questions">
