@@ -378,6 +378,8 @@
           : `Practice Question ${practiceCount++}: ${q.question}`;
       wrapper.appendChild(questionLabel);
 
+console.log("Testing image path:", q.image);
+
       if (q.type === "Practice" && q.image) {
         const img = document.createElement("img");
         img.src = `images/practice/${q.image}`;
