@@ -314,6 +314,7 @@
     // DOM elements
     let volumeSelect, chapterSelect, topicSelect, typeSelect;
     let questionContainer, scoreContainer;
+    let renderedQuestions = [];
 
     document.addEventListener("DOMContentLoaded", () => {
       volumeSelect = document.getElementById("volume");
@@ -419,6 +420,7 @@
         q.topic === selected.topic &&
         (selected.type === "Both" || q.type === selected.type)
       );
+      renderedQuestions = filtered;
       filtered = shuffleArray(filtered);
 
       let theoryCount = 1;
@@ -471,19 +473,19 @@ if (q.type === "Practice" && q.image) {
       });
     }
 
-    function handleSubmit() {
-      const blocks = document.querySelectorAll(".question-block");
-      let correct = 0;
-      blocks.forEach((block, index) => {
-        const selected = block.querySelector(`input[name="q${index}"]:checked`);
-        const correctAnswer = questionData[index].correct;
-        if (selected && selected.value === correctAnswer) correct++;
-        block.querySelector(".answer").style.display = "block";
-      });
-      const total = blocks.length;
-      const percent = ((correct / total) * 100).toFixed(2);
-      scoreContainer.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
-    }
+function handleSubmit() {
+  const blocks = document.querySelectorAll(".question-block");
+  let correct = 0;
+  blocks.forEach((block, index) => {
+    const selected = block.querySelector(`input[name="q${index}"]:checked`);
+    const correctAnswer = renderedQuestions[index].correct;
+    if (selected && selected.value === correctAnswer) correct++;
+    block.querySelector(".answer").style.display = "block";
+  });
+  const total = blocks.length;
+  const percent = ((correct / total) * 100).toFixed(2);
+  scoreContainer.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
+}
 
     function handleReset() {
       resetDropdown(volumeSelect, "Select Volume");
