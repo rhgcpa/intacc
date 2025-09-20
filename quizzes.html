@@ -1326,7 +1326,7 @@ function handleSubmit() {
     const correctAnswer = renderedQuestions[index].correct;
     const feedbackDiv = block.querySelector(".feedback");
 
-    if (selected && selected.value === correctAnswer) {
+if (selected && selected.value.trim().toUpperCase() === correctAnswer.trim().toUpperCase()) {
       correct++;
       feedbackDiv.innerHTML = `<p class="correct">Question ${index + 1}: Correct!</p>`;
     } else {
@@ -1344,15 +1344,16 @@ function handleSubmit() {
   checkPerfectScore(correct, total);
 }
 
-  function handleReset() {
-    resetDropdown(volumeSelect, "Select Volume");
-    resetDropdown(chapterSelect, "Select Chapter");
-    resetDropdown(topicSelect, "Select Topic");
-    resetDropdown(typeSelect, "Select Type");
-    questionContainer.innerHTML = "";
-    scoreContainer.innerHTML = "";
-    populateVolumeDropdown();
-  }
+function handleReset() {
+  resetDropdown(volumeSelect, "Select Volume");
+  resetDropdown(chapterSelect, "Select Chapter");
+  resetDropdown(topicSelect, "Select Topic");
+  resetDropdown(typeSelect, "Select Type");
+  questionContainer.innerHTML = "";
+  scoreContainer.innerHTML = "";
+  document.getElementById("progressTracker").style.display = "none";
+  populateVolumeDropdown();
+}
 
 function updateProgress(current, total) {
   const tracker = document.getElementById("progressTracker");
