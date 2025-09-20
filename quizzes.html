@@ -1326,6 +1326,7 @@ function handleSubmit() {
     const correctAnswer = renderedQuestions[index].correct;
     const feedbackDiv = block.querySelector(".feedback");
 
+console.log(`Selected: ${selected?.value}, Correct: ${correctAnswer}`);
 if (selected && selected.value.trim().toUpperCase() === correctAnswer.trim().toUpperCase()) {
       correct++;
       feedbackDiv.innerHTML = `<p class="correct">Question ${index + 1}: Correct!</p>`;
