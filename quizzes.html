@@ -1355,8 +1355,8 @@ function handleSubmit() {
   }
 
 function updateProgress(current, total) {
-  document.getElementById("currentQuestion").textContent = current;
-  document.getElementById("totalQuestions").textContent = total;
+  const tracker = document.getElementById("progressTracker");
+  tracker.textContent = `Question ${current} of ${total}`;
 }
 
 function checkPerfectScore(score, total) {
@@ -1596,9 +1596,7 @@ function renderQuestions() {
 </div>
 
 <!-- 📈 Progress Tracker -->
-<div id="progressTracker" class="progress-tracker" style="display: none;">
-  Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
-</div>
+<div id="progressTracker" class="progress-tracker" style="display: none;"></div>
 
 <!-- ✅/❌ Feedback Section -->
 <div id="feedback" class="feedback">
