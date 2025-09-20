@@ -1391,8 +1391,8 @@ function renderQuestions() {
     (selected.type === "Both" || q.type === selected.type)
   );
 
-  renderedQuestions = filtered;
-  filtered = shuffleArray(filtered);
+filtered = shuffleArray(filtered);
+renderedQuestions = filtered;
 
   // 🧮 Track question counts
   let theoryCount = 1;
