@@ -1404,6 +1404,7 @@ function renderQuestions() {
     wrapper.className = "question-block";
 
     const questionLabel = document.createElement("p");
+    console.log(`Q${index + 1} correct answer: ${q.correct}`);
     questionLabel.textContent =
       q.type === "Theory"
         ? `Theory Question ${theoryCount++}: ${q.question}`
