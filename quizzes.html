@@ -1365,9 +1365,15 @@ function checkPerfectScore(score, total) {
 }
 
 function renderQuestions() {
+  // 🧹 Clear previous content
   questionContainer.innerHTML = "";
   scoreContainer.innerHTML = "";
 
+  // 🎯 Reveal progress tracker only when rendering begins
+  const progressTracker = document.getElementById("progressTracker");
+  progressTracker.style.display = "block";
+
+  // 🎯 Capture dropdown selections
   const selected = {
     volume: volumeSelect.value,
     chapter: chapterSelect.value,
@@ -1375,6 +1381,7 @@ function renderQuestions() {
     type: typeSelect.value
   };
 
+  // 🔍 Filter questions based on selection
   let filtered = questionData.filter(q =>
     q.volume === selected.volume &&
     q.chapter === selected.chapter &&
@@ -1385,9 +1392,11 @@ function renderQuestions() {
   renderedQuestions = filtered;
   filtered = shuffleArray(filtered);
 
+  // 🧮 Track question counts
   let theoryCount = 1;
   let practiceCount = 1;
 
+  // 🧱 Render each question block
   filtered.forEach((q, index) => {
     const wrapper = document.createElement("div");
     wrapper.className = "question-block";
@@ -1453,6 +1462,9 @@ function renderQuestions() {
 
     questionContainer.appendChild(wrapper);
   });
+
+  // 🔢 Update progress tracker with actual question count
+  updateProgress(1, renderedQuestions.length);
 }
 
   function populateVolumeDropdown() {
@@ -1584,7 +1596,7 @@ function renderQuestions() {
 </div>
 
 <!-- 📈 Progress Tracker -->
-<div id="progressTracker" class="progress-tracker">
+<div id="progressTracker" class="progress-tracker" style="display: none;">
   Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
 </div>
 
