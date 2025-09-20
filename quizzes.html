@@ -1317,19 +1317,32 @@
       .map(a => a[1]);
   }
 
-  function handleSubmit() {
-    const blocks = document.querySelectorAll(".question-block");
-    let correct = 0;
-    blocks.forEach((block, index) => {
-      const selected = block.querySelector(`input[name="q${index}"]:checked`);
-      const correctAnswer = renderedQuestions[index].correct;
-      if (selected && selected.value === correctAnswer) correct++;
-      block.querySelector(".answer").style.display = "block";
-    });
-    const total = blocks.length;
-    const percent = ((correct / total) * 100).toFixed(2);
-    scoreContainer.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
-  }
+function handleSubmit() {
+  const blocks = document.querySelectorAll(".question-block");
+  let correct = 0;
+
+  blocks.forEach((block, index) => {
+    const selected = block.querySelector(`input[name="q${index}"]:checked`);
+    const correctAnswer = renderedQuestions[index].correct;
+    const feedbackDiv = block.querySelector(".feedback");
+
+    if (selected && selected.value === correctAnswer) {
+      correct++;
+      feedbackDiv.innerHTML = `<p class="correct">Question ${index + 1}: Correct!</p>`;
+    } else {
+      feedbackDiv.innerHTML = `<p class="incorrect">Question ${index + 1}: Incorrect.</p>`;
+    }
+
+    block.querySelector(".answer").style.display = "block";
+  });
+
+  const total = blocks.length;
+  const percent = ((correct / total) * 100).toFixed(2);
+  scoreContainer.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
+
+  updateProgress(total, total);
+  checkPerfectScore(correct, total);
+}
 
   function handleReset() {
     resetDropdown(volumeSelect, "Select Volume");
@@ -1341,87 +1354,106 @@
     populateVolumeDropdown();
   }
 
-  function renderQuestions() {
-    questionContainer.innerHTML = "";
-    scoreContainer.innerHTML = "";
-    const selected = {
-      volume: volumeSelect.value,
-      chapter: chapterSelect.value,
-      topic: topicSelect.value,
-      type: typeSelect.value
-    };
-    let filtered = questionData.filter(q =>
-      q.volume === selected.volume &&
-      q.chapter === selected.chapter &&
-      q.topic === selected.topic &&
-      (selected.type === "Both" || q.type === selected.type)
-    );
-    renderedQuestions = filtered;
-    filtered = shuffleArray(filtered);
-
-    let theoryCount = 1;
-    let practiceCount = 1;
-
-    filtered.forEach((q, index) => {
-      const wrapper = document.createElement("div");
-      wrapper.className = "question-block";
-
-      const questionLabel = document.createElement("p");
-      questionLabel.textContent =
-        q.type === "Theory"
-          ? `Theory Question ${theoryCount++}: ${q.question}`
-          : `Practice Question ${practiceCount++}: ${q.question}`;
-      wrapper.appendChild(questionLabel);
-
-console.log("Testing image path:", q.image);
-
-if (q.type === "Practice" && q.image) {
-  const img = document.createElement("img");
-  img.src = q.image;
-  img.alt = "Practice Question Image";
-  img.onerror = () => {
-    console.warn(`Missing question image: ${q.image}`);
-    img.alt = "Image not found";
-    img.style.border = "1px solid red";
-  };
-  wrapper.appendChild(img);
-  wrapper.appendChild(document.createElement("br"));
+function updateProgress(current, total) {
+  document.getElementById("currentQuestion").textContent = current;
+  document.getElementById("totalQuestions").textContent = total;
 }
 
-["A", "B", "C", "D"].forEach(choice => {
-  const label = document.createElement("label");
-  const radio = document.createElement("input");
-  radio.type = "radio";
-  radio.name = `q${index}`;
-  radio.value = choice;
-  label.appendChild(radio);
-  label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
-  wrapper.appendChild(label);
-  wrapper.appendChild(document.createElement("br"));
-});
-
-const answerDiv = document.createElement("div");
-answerDiv.className = "answer";
-answerDiv.style.display = "none";
-answerDiv.textContent = `Correct Answer: ${q.correct}`;
-
-if (q.type === "Practice" && q.answerImage) {
-  const answerImg = document.createElement("img");
-  answerImg.src = q.answerImage;
-  answerImg.alt = "Practice Answer Image";
-  answerImg.onerror = () => {
-    console.warn(`Missing answer image: ${q.answerImage}`);
-    answerImg.alt = "Image not found";
-    answerImg.style.border = "1px solid red";
-  };
-  answerDiv.appendChild(document.createElement("br"));
-  answerDiv.appendChild(answerImg);
+function checkPerfectScore(score, total) {
+  const banner = document.getElementById("perfectScoreBanner");
+  banner.style.display = score === total ? "block" : "none";
 }
 
-wrapper.appendChild(answerDiv);
-questionContainer.appendChild(wrapper);
+function renderQuestions() {
+  questionContainer.innerHTML = "";
+  scoreContainer.innerHTML = "";
+
+  const selected = {
+    volume: volumeSelect.value,
+    chapter: chapterSelect.value,
+    topic: topicSelect.value,
+    type: typeSelect.value
+  };
+
+  let filtered = questionData.filter(q =>
+    q.volume === selected.volume &&
+    q.chapter === selected.chapter &&
+    q.topic === selected.topic &&
+    (selected.type === "Both" || q.type === selected.type)
+  );
+
+  renderedQuestions = filtered;
+  filtered = shuffleArray(filtered);
+
+  let theoryCount = 1;
+  let practiceCount = 1;
+
+  filtered.forEach((q, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "question-block";
+
+    const questionLabel = document.createElement("p");
+    questionLabel.textContent =
+      q.type === "Theory"
+        ? `Theory Question ${theoryCount++}: ${q.question}`
+        : `Practice Question ${practiceCount++}: ${q.question}`;
+    wrapper.appendChild(questionLabel);
+
+    console.log("Testing image path:", q.image);
+
+    if (q.type === "Practice" && q.image) {
+      const img = document.createElement("img");
+      img.src = q.image;
+      img.alt = "Practice Question Image";
+      img.onerror = () => {
+        console.warn(`Missing question image: ${q.image}`);
+        img.alt = "Image not found";
+        img.style.border = "1px solid red";
+      };
+      wrapper.appendChild(img);
+      wrapper.appendChild(document.createElement("br"));
+    }
+
+    ["A", "B", "C", "D"].forEach(choice => {
+      const label = document.createElement("label");
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = `q${index}`;
+      radio.value = choice;
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
+      wrapper.appendChild(label);
+      wrapper.appendChild(document.createElement("br"));
     });
-  }
+
+    const answerDiv = document.createElement("div");
+    answerDiv.className = "answer";
+    answerDiv.style.display = "none";
+    answerDiv.textContent = `Correct Answer: ${q.correct}`;
+
+    if (q.type === "Practice" && q.answerImage) {
+      const answerImg = document.createElement("img");
+      answerImg.src = q.answerImage;
+      answerImg.alt = "Practice Answer Image";
+      answerImg.onerror = () => {
+        console.warn(`Missing answer image: ${q.answerImage}`);
+        answerImg.alt = "Image not found";
+        answerImg.style.border = "1px solid red";
+      };
+      answerDiv.appendChild(document.createElement("br"));
+      answerDiv.appendChild(answerImg);
+    }
+
+    wrapper.appendChild(answerDiv);
+
+    // ✅ Inject per-question feedback container
+    const feedbackDiv = document.createElement("div");
+    feedbackDiv.className = "feedback";
+    wrapper.appendChild(feedbackDiv);
+
+    questionContainer.appendChild(wrapper);
+  });
+}
 
   function populateVolumeDropdown() {
     const volumes = [...new Set(questionData.map(q => q.volume))];
@@ -1545,6 +1577,21 @@ questionContainer.appendChild(wrapper);
       </div>
     </header>
   </div>
+
+<!-- 🎉 Perfect Score Banner -->
+<div id="perfectScoreBanner" class="celebration-banner" style="display: none;">
+  🎉 Perfect Score! You answered all questions correctly!
+</div>
+
+<!-- 📈 Progress Tracker -->
+<div id="progressTracker" class="progress-tracker">
+  Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
+</div>
+
+<!-- ✅/❌ Feedback Section -->
+<div id="feedback" class="feedback">
+  <!-- Feedback messages will be injected here -->
+</div>
 
 <main>
   <section id="questions">
