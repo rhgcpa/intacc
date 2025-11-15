@@ -68,6 +68,15 @@
   }
 </style>
 
+<style>
+  /* === Score Header Styling === */
+  #scoreHeader {
+    margin: 8px 0 12px;
+    font-weight: 600;
+  }
+  /* === End Score Header Styling === */
+</style>
+
 <script>
   const questionData = [];
   questionData.push(
@@ -19030,6 +19039,9 @@
   let questionContainer, scoreContainer;
   let renderedQuestions = [];
 
+// Global timing state
+let quizStartTime = null;
+
   function shuffleArray(arr) {
     return arr
       .map(a => [Math.random(), a])
@@ -19038,6 +19050,9 @@
   }
 
 function handleSubmit() {
+  // Capture end time
+  const quizEndTime = new Date();
+
   const blocks = document.querySelectorAll(".question-block");
   let correct = 0;
 
@@ -19046,7 +19061,6 @@ function handleSubmit() {
     const correctAnswer = renderedQuestions[index].correct;
     const feedbackDiv = block.querySelector(".feedback");
 
-    console.log(`Selected: ${selected?.value}, Correct: ${correctAnswer}`);
     if (selected && selected.value.trim().toUpperCase() === correctAnswer.trim().toUpperCase()) {
       correct++;
       feedbackDiv.innerHTML = `<p class="correct">Question ${index + 1}: Correct!</p>`;
@@ -19059,7 +19073,36 @@ function handleSubmit() {
 
   const total = blocks.length;
   const percent = ((correct / total) * 100).toFixed(2);
-  scoreContainer.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
+
+  // Guard: if start time is missing, avoid NaN and show score only
+  if (!quizStartTime) {
+    const scoreHeader = document.getElementById("scoreHeader");
+    if (scoreHeader) {
+      scoreHeader.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
+    }
+    updateProgress(total, total);
+    checkPerfectScore(correct, total);
+    return;
+  }
+
+  // Calculate elapsed time
+  const elapsedMs = quizEndTime - quizStartTime;
+  const totalSeconds = Math.floor(elapsedMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  // Average time per item
+  const avgSeconds = Math.floor(totalSeconds / total);
+  const avgMinutes = Math.floor(avgSeconds / 60);
+  const avgRemainingSeconds = avgSeconds % 60;
+
+  // Display at top (above first quiz item)
+  const scoreHeader = document.getElementById("scoreHeader");
+  if (scoreHeader) {
+    scoreHeader.innerHTML =
+      `Score: ${correct}/${total} (${percent}%) in ${minutes} minutes and ${seconds} seconds ` +
+      `(${avgMinutes} minutes and ${avgRemainingSeconds} seconds per item)`;
+  }
 
   updateProgress(total, total);
   checkPerfectScore(correct, total);
@@ -19248,9 +19291,11 @@ renderedQuestions = filtered;
     });
 
     typeSelect.addEventListener("change", () => {
+      // Start timing when quiz type is selected
+      quizStartTime = new Date();
+
       renderQuestions();
     });
-  }
 
   function resetDropdown(dropdown, placeholder) {
     dropdown.innerHTML = "";
@@ -19327,6 +19372,9 @@ renderedQuestions = filtered;
 </div>
 
 <main>
+  <!-- Score header (top of quiz) -->
+  <div id="scoreHeader" style="margin-bottom: 12px; font-weight: 600;"></div>
+
   <section id="questions">
     <!-- Question entries are rendered dynamically -->
   </section>
