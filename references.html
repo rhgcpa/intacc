@@ -6,14 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Navigation bar distributed horizontally */
         .navbar {
             position: sticky;
             top: 0;
             z-index: 1000;
+            display: flex;
+            justify-content: space-around; /* evenly distribute tabs */
+            background: inherit;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
         }
         .navbar a.active {
             font-weight: bold;
         }
+
+        /* Dropdowns */
         .dropdowns {
             display: flex;
             justify-content: center;
@@ -36,10 +43,13 @@
         select {
             min-width: 80px;
         }
+
+        /* Links centered */
         .links {
             margin: 20px auto;
             max-width: 920px;
             padding: 0 16px;
+            text-align: center; /* center all clickable URLs */
         }
         .links a {
             display: block;
@@ -49,6 +59,7 @@
         .links a:hover {
             text-decoration: underline;
         }
+
         .width-measurer {
             position: absolute;
             visibility: hidden;
@@ -74,13 +85,16 @@
         <div class="dropdown-group">
             <span class="dropdown-label">Category:</span>
             <select id="categoryDropdown" onchange="updateSubcategories()">
+                <option value="" disabled selected>Select Category</option>
                 <option value="Textbook">Textbook</option>
                 <option value="Other">Other</option>
             </select>
         </div>
         <div class="dropdown-group">
             <span class="dropdown-label">Subcategory:</span>
-            <select id="subcategoryDropdown" onchange="updateLinks()"></select>
+            <select id="subcategoryDropdown" onchange="updateLinks()">
+                <option value="" disabled selected>Select Subcategory</option>
+            </select>
         </div>
     </div>
 
@@ -155,27 +169,29 @@
             ]
         };
 
-        // Elements
         const categoryDropdown = document.getElementById('categoryDropdown');
         const subcategoryDropdown = document.getElementById('subcategoryDropdown');
         const linksContainer = document.getElementById('linksContainer');
         const widthMeasurer = document.getElementById('widthMeasurer');
 
-        // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
-            updateSubcategories();
-            updateLinks();
+            // Start with placeholder only, no auto-selection
             setSelectWidth(categoryDropdown);
             setSelectWidth(subcategoryDropdown);
         });
 
-        // Update subcategories based on selected category
         function updateSubcategories() {
             const category = categoryDropdown.value;
             const items = subcategories[category] || [];
 
-            // Clear and repopulate subcategory dropdown
             subcategoryDropdown.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = 'Select Subcategory';
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            subcategoryDropdown.appendChild(placeholder);
+
             items.forEach(item => {
                 const opt = document.createElement('option');
                 opt.value = item;
@@ -183,27 +199,18 @@
                 subcategoryDropdown.appendChild(opt);
             });
 
-            // Adjust widths after repopulating
             setSelectWidth(categoryDropdown);
             setSelectWidth(subcategoryDropdown);
-
-            // Refresh links for the first subcategory
-            updateLinks();
+            linksContainer.innerHTML = ''; // clear links until subcategory chosen
         }
 
-        // Render links based on selected subcategory
         function updateLinks() {
             const subcat = subcategoryDropdown.value;
             const items = links[subcat] || [];
 
-            // Clear container
             linksContainer.innerHTML = '';
 
-            if (items.length === 0) {
-                const empty = document.createElement('div');
-                empty.className = 'empty-state';
-                empty.textContent = 'No external links for this selection yet.';
-                linksContainer.appendChild(empty);
+            if (!subcat || items.length === 0) {
                 return;
             }
 
@@ -217,14 +224,12 @@
             });
         }
 
-        // Dynamically set select width based on longest option text
         function setSelectWidth(selectEl) {
             if (!selectEl) return;
             const options = Array.from(selectEl.options);
             const texts = options.map(o => o.textContent || o.innerText || '');
             const longest = texts.reduce((a, b) => (b.length > a.length ? b : a), '');
 
-            // Mirror select typography to measurer
             const style = window.getComputedStyle(selectEl);
             widthMeasurer.style.fontFamily = style.fontFamily;
             widthMeasurer.style.fontSize = style.fontSize;
@@ -233,7 +238,6 @@
             widthMeasurer.style.padding = style.padding;
             widthMeasurer.textContent = longest || selectEl.value || '';
 
-            // Measure and compute final width
             const measured = widthMeasurer.offsetWidth;
             const arrowBuffer = 28;
             const minPaddingBuffer = 12;
