@@ -12,8 +12,8 @@ body.home-section       { --accent-color: #e57373; }
 body.glossary-section   { --accent-color: #64b5f6; }
 body.quizzes-section    { --accent-color: #81c784; }
 body.references-section { --accent-color: #ffd54f; }
-body.visuals-section    { --accent-color: #ba68c8; }
 body.tools-section      { --accent-color: #4db6ac; }
+body.visuals-section    { --accent-color: #ba68c8; }
 
 /* === Persistent Navigation Tabs === */
 nav#main-tabs {
