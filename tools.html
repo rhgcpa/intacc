@@ -1,179 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tools | EXCELlent Intermediate Accounting</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>Tools - EXCELlent Intermediate Accounting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Horizontally distributed navigation tabs */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            background: #f8f8f8;
+            border-bottom: 1px solid #ccc;
+        }
+        .navbar a {
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #333;
+        }
+        .navbar a.active {
+            font-weight: bold;
+            border-bottom: 2px solid darkorange;
+        }
+
+        /* Dropdowns */
+        .dropdowns {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 12px 8px;
+            border-bottom: 1px solid #ccc;
+        }
+        .dropdown-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dropdown-label {
+            font-weight: 600;
+        }
+        select {
+            min-width: 120px;
+        }
+
+        /* Centered links */
+        .links {
+            margin: 20px auto;
+            max-width: 920px;
+            text-align: center;
+        }
+        .links a {
+            display: block;
+            margin: 8px 0;
+            text-decoration: none;
+            color: darkblue;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .width-measurer {
+            position: absolute;
+            visibility: hidden;
+            white-space: nowrap;
+            left: -9999px;
+            top: -9999px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Sticky navigation tabs -->
-  <nav class="site-nav sticky">
-    <ul class="tabs">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="glossary.html">Glossary</a></li>
-      <li><a href="quizzes.html">Quizzes</a></li>
-      <li><a href="references.html">References</a></li>
-      <li><a href="visuals.html">Visuals</a></li>
-      <li class="active"><a href="tools.html">Tools</a></li>
-    </ul>
-  </nav>
+    <!-- Navigation Tabs -->
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="quizzes.html">Quizzes</a>
+        <a href="references.html">References</a>
+        <a href="visuals.html">Visuals</a>
+        <a href="tools.html" class="active">Tools</a>
+    </nav>
 
-  <main class="page page-tools">
-    <header class="page-header">
-      <h1>Tools</h1>
-      <p>Select a volume and chapter to view available illustrations and tools.</p>
-    </header>
-
-    <!-- Centered dropdowns -->
-    <section class="controls controls-center">
-      <div class="control-group">
-        <label for="volumeSelect">Volume</label>
-        <select id="volumeSelect" aria-label="Select volume">
-          <option value="" selected disabled>Select Volume</option>
-          <option value="1">Volume 1</option>
-          <option value="2">Volume 2</option>
-        </select>
-      </div>
-
-      <div class="control-group">
-        <label for="chapterSelect">Chapter</label>
-        <select id="chapterSelect" aria-label="Select chapter" disabled>
-          <option value="" selected disabled>Select Chapter</option>
-        </select>
-      </div>
-    </section>
-
-    <!-- Results -->
-    <section class="results">
-      <h2 class="section-title">Illustrations</h2>
-      <div id="illustrations" class="card-grid">
-        <div class="placeholder">
-          <p>Awaiting selection. Choose Volume and Chapter to display illustrations.</p>
+    <!-- Dropdowns -->
+    <div class="dropdowns">
+        <div class="dropdown-group">
+            <span class="dropdown-label">Volume:</span>
+            <select id="volumeDropdown" onchange="updateChapters()">
+                <option value="" disabled selected>Select Volume</option>
+                <option value="1">Volume 1</option>
+                <option value="2">Volume 2</option>
+            </select>
         </div>
-      </div>
-    </section>
-  </main>
+        <div class="dropdown-group">
+            <span class="dropdown-label">Chapter:</span>
+            <select id="chapterDropdown" onchange="updateIllustrations()">
+                <option value="" disabled selected>Select Chapter</option>
+            </select>
+        </div>
+    </div>
 
-  <footer class="site-footer">
-    <p>&copy; EXCELlent Intermediate Accounting</p>
-  </footer>
+    <!-- Links Section -->
+    <section class="links" id="linksContainer"></section>
 
-  <script>
-    // Chapter ranges
-    const chaptersByVolume = {
-      "1": Array.from({ length: 9 }, (_, i) => i + 1),
-      "2": Array.from({ length: 6 }, (_, i) => i + 1)
-    };
+    <div id="widthMeasurer" class="width-measurer"></div>
 
-    // Illustrations index (Features 6.1–6.15)
-    const illustrationsIndex = {
-      "1": {
-        "1": [
-          "Classification of Cash and Cash Equivalents",
-          "Reconciliation of Reciprocal Opening Balances",
-          "Reconciliation of Reciprocal Closing Balances",
-          "Reconciliation of Receipts and Disbursements"
-        ],
-        "2": [
-          "Classification of Financial Assets",
-          "Regular Way Purchase of Debt Instruments measured at Amortized Cost",
-          "Regular Way Purchase of Financial Assets measured at FVPL",
-          "Regular Way Purchase of Financial Assets measured at FVOCI",
-          "Regular Way Sale of Debt Instruments measured at Amortized Cost",
-          "Regular Way Sale of Financial Assets measured at FVPL",
-          "Regular Way Sale of Debt Instruments measured at FVOCI",
-          "Regular Way Sale of Equity Instruments measured at FVOCI",
-          "Transaction Costs on Financial Assets at FVPL",
-          "Transaction Costs on Equity Instruments at FVOCI",
-          "Transaction Costs on Debt Instruments at Amortized Cost without Fixed Interest Rate",
-          "Transaction Costs on Debt Instruments at Amortized Cost with Below-market Interest",
-          "Transaction Costs on Debt Instruments at Amortized Cost with Above-market Interest",
-          "Subsequent Measurement of Financial Assets",
-          "Amortization Table for Bond Investments with Fixed Interest Rate",
-          "Amortization Table for Bond Investments with Variable Interest Rate",
-          "Amortization Table for Bond Investments with Floating Interest Rate",
-          "Amortization Table for Bond Investments with Expected Prepayment",
-          "Reclassification Adjustments on Debt Instruments",
-          "Reclassification from Amortized Cost to FVOCI",
-          "Reclassification from Amortized Cost to FVPL",
-          "Reclassification from FVOCI to Amortized Cost",
-          "Reclassification from FVOCI to FVPL",
-          "Reclassification from FVPL to Amortized Cost",
-          "Reclassification from FVPL to FVOCI",
-          "Recognition of Loss Allowance and Measurement of Interest Revenue",
-          "Provision Matrix for Lifetime ECLs on Trade Receivables",
-          "Pledge of Trade Receivables",
-          "Assignment of Trade Receivables",
-          "Factoring of Trade Receivables without Recourse",
-          "Factoring of Trade Receivables with Recourse"
-        ],
-        "3": [
-          "Effects of Incoterms 2020 on Inventories of Buyer",
-          "First In First Out Method",
-          "Weighted Average Periodic Method",
-          "Weighted Average Perpetual Method",
-          "Terminologies under the Retail Method",
-          "First In First Out Retail Method",
-          "Weighted Average Retail Method",
-          "Gross Profit Method of Inventory Estimation"
-        ],
-        "4": [
-          "Accounting for Borrowing Costs on Qualifying Assets",
-          "Initial Capitalization of Borrowing Costs on Specific Borrowings",
-          "Subsequent Capitalization of Borrowing Costs on Specific Borrowings",
-          "Initial Capitalization of Borrowing Costs on General Borrowings",
-          "Subsequent Capitalization of Borrowing Costs on General Borrowings",
-          "Initial Capitalization of Borrowing Costs on Specific and General Borrowings",
-          "Subsequent Capitalization of Borrowing Costs on Specific and General Borrowings",
-          "Group Method of Depreciation",
-          "Composite Method of Depreciation",
-          "Sum of Years Digits Method of Depreciation",
-          "Variable Declining Balance Method of Depreciation",
-          "Time-based Depreciation Charges",
-          "Time-based Accumulated Depreciations",
-          "Time-based Carrying Amounts",
-          "Input Method of Depreciation",
-          "Output Method of Depreciation",
-          "Change in Residual Value",
-          "Change in Useful Life",
-          "Change in Depreciation Method",
-          "Terminologies under the Revaluation Model",
-          "Revaluation Surplus by Elimination of Accumulated Depreciation",
-          "Revaluation Surplus by Prorated Restatement of Carrying Amount",
-          "Revaluation Surplus by Gross Restatement to Observable Market Data",
-          "Revaluation Loss by Elimination of Accumulated Depreciation",
-          "Revaluation Loss by Prorated Restatement of Carrying Amount",
-          "Revaluation Loss by Gross Restatement to Observable Market Data",
-          "Depreciation Charge after Revaluation Surplus by Elimination of Accumulated Depreciation",
-          "Depreciation Charge after Revaluation Surplus by Prorated Restatement of Carrying Amount",
-          "Depreciation Charge after Revaluation Surplus by Gross Restatement to Observable Market Data",
-          "Depreciation Charge after Revaluation Loss by Elimination of Accumulated Depreciation",
-          "Depreciation Charge after Revaluation Loss by Prorated Restatement of Carrying Amount",
-          "Depreciation Charge after Revaluation Loss by Gross Restatement to Observable Market Data",
-          "Revaluation Loss after Revaluation Surplus by Elimination of Accumulated Depreciation",
-          "Revaluation Loss after Revaluation Surplus by Prorated Restatement of Carrying Amount",
-          "Revaluation Loss after Revaluation Surplus by Gross Restatement to Observable Market Data",
-          "Revaluation Surplus after Revaluation Loss by Elimination of Accumulated Depreciation",
-          "Revaluation Surplus after Revaluation Loss by Prorated Restatement of Carrying Amount",
-          "Revaluation Surplus after Revaluation Loss by Gross Restatement to Observable Market Data",
-          "Depreciation Table with Revaluation Loss after Revaluation Surplus",
-          "Carrying Amounts with Revaluation Loss after Revaluation Surplus",
-          "Depreciation Table with Revaluation Surplus after Revaluation Loss",
-          "Carrying Amounts with Revaluation Surplus after Revaluation Loss",
-          "Assessment and Testing for Impairment of Assets",
-          "Impairment Loss of CGU without Corporate Assets or Goodwill",
-          "Impairment Loss of CGU with Corporate Assets but without Goodwill",
-          "Impairment Loss of CGU Group with Corporate Assets but without Goodwill",
-          "Direct Method of Allocating Goodwill",
-          "Indirect Method of Allocating Goodwill",
-          "Impairment Loss of CGU without Corporate Assets but with Goodwill",
-          "Impairment Loss of CGU with Corporate Assets and Goodwill",
-          "Impairment Loss of CGU Group with Corporate Assets and Goodwill",
-          "Retrospective Adjustment of Impairment Loss on Goodwill",
-          "Impairment Loss of Reorganized CGUs with Reallocated Goodwill",
-          "Impairment Gain of CGU without Corporate Assets or Goodwill",
-          "Impairment Gain of CGU with Corporate Assets but without Goodwill",
+    <script>
+        const chaptersByVolume = {
+            "1": Array.from({ length: 9 }, (_, i) => i + 1),
+            "2": Array.from({ length: 6 }, (_, i) => i + 1)
+        };
+
+        // Illustrations index (Features 6.1–6.15)
+        const illustrationsIndex = {
+            "1": {
+                "1": ["Classification of Cash and Cash Equivalents","Reconciliation of Reciprocal Opening Balances","Reconciliation of Reciprocal Closing Balances","Reconciliation of Receipts and Disbursements"],
+                "2": ["Classification of Financial Assets","Regular Way Purchase of Debt Instruments measured at Amortized Cost","Regular Way Purchase of Financial Assets measured at FVPL","Regular Way Purchase of Financial Assets measured at FVOCI","Regular Way Sale of Debt Instruments measured at Amortized Cost","Regular Way Sale of Financial Assets measured at FVPL","Regular Way Sale of Debt Instruments measured at FVOCI","Regular Way Sale of Equity Instruments measured at FVOCI","Transaction Costs on Financial Assets at FVPL","Transaction Costs on Equity Instruments at FVOCI","Transaction Costs on Debt Instruments at Amortized Cost without Fixed Interest Rate","Transaction Costs on Debt Instruments at Amortized Cost with Below-market Interest","Transaction Costs on Debt Instruments at Amortized Cost with Above-market Interest","Subsequent Measurement of Financial Assets","Amortization Table for Bond Investments with Fixed Interest Rate","Amortization Table for Bond Investments with Variable Interest Rate","Amortization Table for Bond Investments with Floating Interest Rate","Amortization Table for Bond Investments with Expected Prepayment","Reclassification Adjustments on Debt Instruments","Reclassification from Amortized Cost to FVOCI","Reclassification from Amortized Cost to FVPL","Reclassification from FVOCI to Amortized Cost","Reclassification from FVOCI to FVPL","Reclassification from FVPL to Amortized Cost","Reclassification from FVPL to FVOCI","Recognition of Loss Allowance and Measurement of Interest Revenue","Provision Matrix for Lifetime ECLs on Trade Receivables","Pledge of Trade Receivables","Assignment of Trade Receivables","Factoring of Trade Receivables without Recourse","Factoring of Trade Receivables with Recourse"],
+                "3": ["Effects of Incoterms 2020 on Inventories of Buyer","First In First Out Method","Weighted Average Periodic Method","Weighted Average Perpetual Method","Terminologies under the Retail Method","First In First Out Retail Method","Weighted Average Retail Method","Gross Profit Method of Inventory Estimation"],
+                "4": ["Accounting for Borrowing Costs on Qualifying Assets","Initial Capitalization of Borrowing Costs on Specific Borrowings","Subsequent Capitalization of Borrowing Costs on Specific Borrowings","Initial Capitalization of Borrowing Costs on General Borrowings","Subsequent Capitalization of Borrowing Costs on General Borrowings","Initial Capitalization of Borrowing Costs on Specific and General Borrowings","Subsequent Capitalization of Borrowing Costs on Specific and General Borrowings","Group Method of Depreciation","Composite Method of Depreciation","Sum of Years Digits Method of Depreciation","Variable Declining Balance Method of Depreciation","Time-based Depreciation Charges","Time-based Accumulated Depreciations","Time-based Carrying Amounts","Input Method of Depreciation","Output Method of Depreciation","Change in Residual Value","Change in Useful Life","Change in Depreciation Method","Terminologies under the Revaluation Model","Revaluation Surplus by Elimination of Accumulated Depreciation","Revaluation Surplus by Prorated Restatement of Carrying Amount","Revaluation Surplus by Gross Restatement to Observable Market Data","Revaluation Loss by Elimination of Accumulated Depreciation","Revaluation Loss by Prorated Restatement of Carrying Amount","Revaluation Loss by Gross Restatement to Observable Market Data","Depreciation Charge after Revaluation Surplus by Elimination of Accumulated Depreciation","Depreciation Charge after Revaluation Surplus by Prorated Restatement of Carrying Amount","Depreciation Charge after Revaluation Surplus by Gross Restatement to Observable Market Data","Depreciation Charge after Revaluation Loss by Elimination of Accumulated Depreciation","Depreciation Charge after Revaluation Loss by Prorated Restatement of Carrying Amount","Depreciation Charge after Revaluation Loss by Gross Restatement to Observable Market Data","Revaluation Loss after Revaluation Surplus by Elimination of Accumulated Depreciation","Revaluation Loss after Revaluation Surplus by Prorated Restatement of Carrying Amount","Revaluation Loss after Revaluation Surplus by Gross Restatement to Observable Market Data","Revaluation Surplus after Revaluation Loss by Elimination of Accumulated Depreciation","Revaluation Surplus after Revaluation Loss by Prorated Restatement of Carrying Amount","Revaluation Surplus after Revaluation Loss by Gross Restatement to Observable Market Data","Depreciation Table with Revaluation Loss after Revaluation Surplus","Carrying Amounts with Revaluation Loss after Revaluation Surplus","Depreciation Table with Revaluation Surplus after Revaluation Loss","Carrying Amounts with Revaluation Surplus after Revaluation Loss","Assessment and Testing for Impairment of Assets","Impairment Loss of CGU without Corporate Assets or Goodwill","Impairment Loss of CGU with Corporate Assets but without Goodwill","Impairment Loss of CGU Group with Corporate Assets but without Goodwill","Direct Method of Allocating Goodwill","Indirect Method of Allocating Goodwill","Impairment Loss of CGU without Corporate Assets but with Goodwill","Impairment Loss of CGU with Corporate Assets and Goodwill","Impairment Loss of CGU Group with Corporate Assets and Goodwill","Retrospective Adjustment of Impairment Loss on Goodwill","Impairment Loss of Reorganized CGUs with Reallocated Goodwill","Impairment Gain of CGU without Corporate Assets or Goodwill","Impairment Gain of CGU with Corporate Assets but without Goodwill","Impairment Gain
           "Impairment Gain of CGU Group with Corporate Assets but without Goodwill",
           "Impairment Gain of CGU without Corporate Assets but with Goodwill",
           "Impairment Gain of CGU with Corporate Assets and Goodwill",
@@ -403,101 +347,100 @@
       }
     };
 
-    // --- Elements ---
-    const volumeSelect = document.getElementById('volumeSelect');
-    const chapterSelect = document.getElementById('chapterSelect');
-    const illustrationsContainer = document.getElementById('illustrations');
+    const volumeDropdown = document.getElementById('volumeDropdown');
+    const chapterDropdown = document.getElementById('chapterDropdown');
+    const linksContainer = document.getElementById('linksContainer');
+    const widthMeasurer = document.getElementById('widthMeasurer');
 
-    // --- Helpers ---
-    function clearNode(node) {
-      while (node.firstChild) node.removeChild(node.firstChild);
+    document.addEventListener('DOMContentLoaded', () => {
+        setSelectWidth(volumeDropdown);
+        setSelectWidth(chapterDropdown);
+    });
+
+    function updateChapters() {
+        const volume = volumeDropdown.value;
+        const chapters = chaptersByVolume[volume] || [];
+
+        chapterDropdown.innerHTML = '';
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Select Chapter';
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        chapterDropdown.appendChild(placeholder);
+
+        chapters.forEach(ch => {
+            const opt = document.createElement('option');
+            opt.value = ch;
+            opt.textContent = 'Chapter ' + ch;
+            chapterDropdown.appendChild(opt);
+        });
+
+        setSelectWidth(volumeDropdown);
+        setSelectWidth(chapterDropdown);
+        linksContainer.innerHTML = '';
     }
 
-    // Normalize a title to CamelCase with special characters removed.
+    function updateIllustrations() {
+        const volume = volumeDropdown.value;
+        const chapter = chapterDropdown.value;
+        const items = (illustrationsIndex[volume] || {})[chapter] || [];
+
+        linksContainer.innerHTML = '';
+
+        if (!chapter || items.length === 0) {
+            return;
+        }
+
+        items.forEach(title => {
+            const camel = toCamelCaseFilename(title);
+            const href = buildImagePath(volume, chapter, camel);
+
+            const a = document.createElement('a');
+            a.href = href;
+            a.textContent = title;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            linksContainer.appendChild(a);
+        });
+    }
+
     function toCamelCaseFilename(title) {
-      const cleaned = title
-        .replace(/[^A-Za-z0-9\s]/g, ' ')
-        .split(/\s+/)
-        .filter(Boolean)
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-        .join('');
-      return cleaned;
+        return title
+            .replace(/[^A-Za-z0-9\s]/g, ' ')
+            .split(/\s+/)
+            .filter(Boolean)
+            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+            .join('');
     }
 
-    // Build the file path using provided schema.
     function buildImagePath(volume, chapter, camelCaseTitle) {
-      const vStr = `V${volume}`;
-      const cStr = `C${String(chapter).padStart(2, '0')}`;
-      return `images/tools/Intacc${vStr}${cStr}${camelCaseTitle}.png`;
+        const vStr = 'V' + volume;
+        const cStr = 'C' + String(chapter).padStart(2, '0');
+        return 'images/tools/Intacc' + vStr + cStr + camelCaseTitle + '.png';
     }
 
-    // Render illustration links for the selected volume/chapter.
-    function renderIllustrations(volume, chapter) {
-      clearNode(illustrationsContainer);
+    function setSelectWidth(selectEl) {
+        if (!selectEl) return;
+        const options = Array.from(selectEl.options);
+        const texts = options.map(o => o.textContent || o.innerText || '');
+        const longest = texts.reduce((a, b) => (b.length > a.length ? b : a), '');
 
-      const volData = illustrationsIndex[volume] || {};
-      const titles = volData[chapter] || [];
+        const style = window.getComputedStyle(selectEl);
+        widthMeasurer.style.fontFamily = style.fontFamily;
+        widthMeasurer.style.fontSize = style.fontSize;
+        widthMeasurer.style.fontWeight = style.fontWeight;
+        widthMeasurer.style.letterSpacing = style.letterSpacing;
+        widthMeasurer.style.padding = style.padding;
+        widthMeasurer.textContent = longest || selectEl.value || '';
 
-      if (!titles.length) {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'placeholder';
-        placeholder.innerHTML = `
-          <p>No illustrations registered yet for Volume ${volume}, Chapter ${chapter}.
-          Once entries are added, links will appear here.</p>`;
-        illustrationsContainer.appendChild(placeholder);
-        return;
-      }
+        const measured = widthMeasurer.offsetWidth;
+        const arrowBuffer = 28;
+        const minPaddingBuffer = 12;
+        const finalWidth = Math.max(80, measured + arrowBuffer + minPaddingBuffer);
 
-      const list = document.createElement('div');
-      list.className = 'card-list';
-
-      titles.forEach(title => {
-        const camel = toCamelCaseFilename(title);
-        const href = buildImagePath(volume, chapter, camel);
-
-        const item = document.createElement('a');
-        item.className = 'card-link';
-        item.href = href;
-        item.target = '_blank';
-        item.rel = 'noopener';
-        item.textContent = title;
-
-        list.appendChild(item);
-      });
-
-      illustrationsContainer.appendChild(list);
+        selectEl.style.width = finalWidth + 'px';
     }
-
-    // Populate chapter dropdown based on selected volume.
-    function populateChapters(volume) {
-      chapterSelect.disabled = false;
-      chapterSelect.innerHTML = '<option value="" selected disabled>Select Chapter</option>';
-
-      const chapters = chaptersByVolume[volume] || [];
-      chapters.forEach(ch => {
-        const opt = document.createElement('option');
-        opt.value = String(ch);
-        opt.textContent = `Chapter ${ch}`;
-        chapterSelect.appendChild(opt);
-      });
-    }
-
-    // --- Event wiring ---
-    volumeSelect.addEventListener('change', () => {
-      const vol = volumeSelect.value;
-      populateChapters(vol);
-      clearNode(illustrationsContainer);
-      const placeholder = document.createElement('div');
-      placeholder.className = 'placeholder';
-      placeholder.innerHTML = '<p>Select a chapter to display illustrations.</p>';
-      illustrationsContainer.appendChild(placeholder);
-    });
-
-    chapterSelect.addEventListener('change', () => {
-      const vol = volumeSelect.value;
-      const ch = chapterSelect.value;
-      if (vol && ch) renderIllustrations(vol, ch);
-    });
-  </script>
+    </script>
 </body>
 </html>
