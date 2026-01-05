@@ -11,8 +11,8 @@
 - 📘 Glossary with sticky controls, multilingual search, alphabetical navigation, and reset/isolation logic  
 - 🧠 Quizzes tab *(in development)* with interactive, hierarchical assessments  
 - 📄 References tab linking directly to IFRS Accounting Standards  
-- 🎨 Visuals tab with comic-style presentations for conceptual clarity  
 - 🔧 Tools tab featuring diagrams, illustrations, and newsletter signup
+- 🎨 Visuals tab with comic-style presentations for conceptual clarity  
 
 ---
 
@@ -37,8 +37,8 @@ rhgcpa.github.io/intacc/
 ├── glossary.html      # Glossary tab with search and alphabetical index
 ├── quizzes.html       # Quizzes tab (in development)
 ├── references.html    # IFRS links and guidance
-├── visuals.html       # Comic-style visual aids
 ├── tools.html         # Diagrams, newsletter, and learning extras
+├── visuals.html       # Comic-style visual aids
 ├── README.md          # Project overview and documentation
 ├── assets/            # Fonts, images, and shared styles (optional)
 └── css/               # Modular stylesheets (optional)
