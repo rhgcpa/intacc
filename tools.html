@@ -1,176 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Tools - EXCELlent Intermediate Accounting</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-around;
-            background: #f8f8f8;
-            border-bottom: 1px solid #ccc;
-        }
-        .navbar a { padding: 12px 16px; text-decoration: none; color: #333; }
-        .navbar a.active { font-weight: bold; border-bottom: 2px solid darkorange; }
-
-        .dropdowns {
-            display: flex; justify-content: center; gap: 16px;
-            padding: 12px 8px; border-bottom: 1px solid #ccc;
-        }
-        .dropdown-group { display: flex; align-items: center; gap: 8px; }
-        .dropdown-label { font-weight: 600; }
-        select { min-width: 120px; }
-
-        .links { margin: 20px auto; max-width: 920px; text-align: center; }
-        .links a { display: block; margin: 8px 0; text-decoration: none; color: darkblue; }
-        .links a:hover { text-decoration: underline; }
-
-        .width-measurer {
-            position: absolute; visibility: hidden; white-space: nowrap;
-            left: -9999px; top: -9999px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Tools Test</title>
 </head>
 <body>
-    <!-- Navigation Tabs -->
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="glossary.html">Glossary</a>
-        <a href="quizzes.html">Quizzes</a>
-        <a href="references.html">References</a>
-        <a href="visuals.html">Visuals</a>
-        <a href="tools.html" class="active">Tools</a>
-    </nav>
+  <select id="volumeDropdown" onchange="updateChapters()">
+    <option value="" disabled selected>Select Volume</option>
+    <option value="1">Volume 1</option>
+  </select>
 
-    <!-- Dropdowns -->
-    <div class="dropdowns">
-        <div class="dropdown-group">
-            <span class="dropdown-label">Volume:</span>
-            <select id="volumeDropdown" onchange="updateChapters()">
-                <option value="" disabled selected>Select Volume</option>
-                <option value="1">Volume 1</option>
-            </select>
-        </div>
-        <div class="dropdown-group">
-            <span class="dropdown-label">Chapter:</span>
-            <select id="chapterDropdown" onchange="updateIllustrations()">
-                <option value="" disabled selected>Select Chapter</option>
-            </select>
-        </div>
-    </div>
+  <select id="chapterDropdown" onchange="updateIllustrations()">
+    <option value="" disabled selected>Select Chapter</option>
+  </select>
 
-    <!-- Links Section -->
-    <section class="links" id="linksContainer"></section>
-    <div id="widthMeasurer" class="width-measurer"></div>
+  <div id="linksContainer"></div>
 
-    <script>
-        const chaptersByVolume = { "1": [1] };
+  <script>
+    const chaptersByVolume = { "1": [1] };
+    const illustrationsIndex = { "1": { "1": ["Classification of Cash and Cash Equivalents"] } };
 
-        const illustrationsIndex = {
-            "1": {
-                "1": [
-                    "Classification of Cash and Cash Equivalents",
-                    "Reconciliation of Reciprocal Opening Balances",
-                    "Reconciliation of Reciprocal Closing Balances",
-                    "Reconciliation of Receipts and Disbursements"
-                ]
-            }
-        };
+    function updateChapters() {
+      const volume = document.getElementById('volumeDropdown').value;
+      const chapterDropdown = document.getElementById('chapterDropdown');
+      chapterDropdown.innerHTML = '<option value="" disabled selected>Select Chapter</option>';
+      (chaptersByVolume[volume] || []).forEach(ch => {
+        const opt = document.createElement('option');
+        opt.value = ch;
+        opt.textContent = 'Chapter ' + ch;
+        chapterDropdown.appendChild(opt);
+      });
+    }
 
-        const volumeDropdown = document.getElementById('volumeDropdown');
-        const chapterDropdown = document.getElementById('chapterDropdown');
-        const linksContainer = document.getElementById('linksContainer');
-        const widthMeasurer = document.getElementById('widthMeasurer');
-
-        document.addEventListener('DOMContentLoaded', () => {
-            setSelectWidth(volumeDropdown);
-            setSelectWidth(chapterDropdown);
-        });
-
-        function updateChapters() {
-            const volume = volumeDropdown.value;
-            const chapters = chaptersByVolume[volume] || [];
-
-            chapterDropdown.innerHTML = '';
-            const placeholder = document.createElement('option');
-            placeholder.value = '';
-            placeholder.textContent = 'Select Chapter';
-            placeholder.disabled = true;
-            placeholder.selected = true;
-            chapterDropdown.appendChild(placeholder);
-
-            chapters.forEach(ch => {
-                const opt = document.createElement('option');
-                opt.value = ch;
-                opt.textContent = 'Chapter ' + ch;
-                chapterDropdown.appendChild(opt);
-            });
-
-            setSelectWidth(volumeDropdown);
-            setSelectWidth(chapterDropdown);
-            linksContainer.innerHTML = '';
-        }
-
-        function updateIllustrations() {
-            const volume = volumeDropdown.value;
-            const chapter = chapterDropdown.value;
-            const items = (illustrationsIndex[volume] || {})[chapter] || [];
-
-            linksContainer.innerHTML = '';
-
-            if (!chapter || items.length === 0) return;
-
-            items.forEach(title => {
-                const camel = toCamelCaseFilename(title);
-                const href = buildImagePath(volume, chapter, camel);
-
-                const a = document.createElement('a');
-                a.href = href;
-                a.textContent = title;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                linksContainer.appendChild(a);
-            });
-        }
-
-        function toCamelCaseFilename(title) {
-            return title
-                .replace(/[^A-Za-z0-9\s]/g, ' ')
-                .split(/\s+/)
-                .filter(Boolean)
-                .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                .join('');
-        }
-
-        function buildImagePath(volume, chapter, camelCaseTitle) {
-            const vStr = 'V' + volume;
-            const cStr = 'C' + String(chapter).padStart(2, '0');
-            return 'images/tools/Intacc' + vStr + cStr + camelCaseTitle + '.png';
-        }
-
-        function setSelectWidth(selectEl) {
-            if (!selectEl) return;
-            const options = Array.from(selectEl.options);
-            const texts = options.map(o => o.textContent || o.innerText || '');
-            const longest = texts.reduce((a, b) => (b.length > a.length ? b : a), '');
-            const style = window.getComputedStyle(selectEl);
-            widthMeasurer.style.fontFamily = style.fontFamily;
-            widthMeasurer.style.fontSize = style.fontSize;
-            widthMeasurer.style.fontWeight = style.fontWeight;
-            widthMeasurer.style.letterSpacing = style.letterSpacing;
-            widthMeasurer.style.padding = style.padding;
-            widthMeasurer.textContent = longest || selectEl.value || '';
-            const measured = widthMeasurer.offsetWidth;
-            const arrowBuffer = 28;
-            const minPaddingBuffer = 12;
-            const finalWidth = Math.max(80, measured + arrowBuffer + minPaddingBuffer);
-            selectEl.style.width = finalWidth + 'px';
-        }
-    </script>
+    function updateIllustrations() {
+      const volume = document.getElementById('volumeDropdown').value;
+      const chapter = document.getElementById('chapterDropdown').value;
+      const items = (illustrationsIndex[volume] || {})[chapter] || [];
+      const linksContainer = document.getElementById('linksContainer');
+      linksContainer.innerHTML = '';
+      items.forEach(title => {
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = title;
+        linksContainer.appendChild(a);
+      });
+    }
+  </script>
 </body>
 </html>
