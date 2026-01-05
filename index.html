@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>EXCELlent Intermediate Accounting</title>
+  <!-- Link to external stylesheet -->
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: Bahnschrift, 'Segoe UI', 'Arial', sans-serif;
@@ -28,24 +30,6 @@
     /* Exception: enforce Perpetua font for repository title */
     #repo-title {
       font-family: 'Perpetua', 'Georgia', serif;
-    }
-
-    nav {
-      background: #2c3e50;
-      padding: 10px;
-      text-align: center;
-    }
-
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      font-weight: bold;
-      font-family: Bahnschrift, 'Segoe UI', 'Arial', sans-serif;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
     }
 
     section {
@@ -90,19 +74,23 @@
     }
   </style>
 </head>
-<body>
+<body class="home-section">
 
   <header>
     <h1><span id="repo-title">EXCELlent Intermediate Accounting</span></h1>
     <p>Textbook companion website for free, multimedia-rich resources</p>
   </header>
 
-  <nav>
-    <a href="glossary.html">Glossary</a>
-    <a href="quizzes.html">Quizzes</a>
-    <a href="references.html">References</a>
-    <a href="tools.html">Tools</a>
-    <a href="visuals.html">Visuals</a>
+  <!-- Updated nav with classes and active tab -->
+  <nav id="main-tabs">
+    <ul>
+      <li><a href="index.html" class="home-tab active">Home</a></li>
+      <li><a href="glossary.html" class="glossary-tab">Glossary</a></li>
+      <li><a href="quizzes.html" class="quizzes-tab">Quizzes</a></li>
+      <li><a href="references.html" class="references-tab">References</a></li>
+      <li><a href="tools.html" class="tools-tab">Tools</a></li>
+      <li><a href="visuals.html" class="visuals-tab">Visuals</a></li>
+    </ul>
   </nav>
 
   <section>
