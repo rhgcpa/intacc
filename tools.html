@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Horizontally distributed navigation tabs */
         .navbar {
             position: sticky;
             top: 0;
@@ -16,58 +15,24 @@
             background: #f8f8f8;
             border-bottom: 1px solid #ccc;
         }
-        .navbar a {
-            padding: 12px 16px;
-            text-decoration: none;
-            color: #333;
-        }
-        .navbar a.active {
-            font-weight: bold;
-            border-bottom: 2px solid darkorange;
-        }
+        .navbar a { padding: 12px 16px; text-decoration: none; color: #333; }
+        .navbar a.active { font-weight: bold; border-bottom: 2px solid darkorange; }
 
-        /* Dropdowns */
         .dropdowns {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            padding: 12px 8px;
-            border-bottom: 1px solid #ccc;
+            display: flex; justify-content: center; gap: 16px;
+            padding: 12px 8px; border-bottom: 1px solid #ccc;
         }
-        .dropdown-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .dropdown-label {
-            font-weight: 600;
-        }
-        select {
-            min-width: 120px;
-        }
+        .dropdown-group { display: flex; align-items: center; gap: 8px; }
+        .dropdown-label { font-weight: 600; }
+        select { min-width: 120px; }
 
-        /* Centered links */
-        .links {
-            margin: 20px auto;
-            max-width: 920px;
-            text-align: center;
-        }
-        .links a {
-            display: block;
-            margin: 8px 0;
-            text-decoration: none;
-            color: darkblue;
-        }
-        .links a:hover {
-            text-decoration: underline;
-        }
+        .links { margin: 20px auto; max-width: 920px; text-align: center; }
+        .links a { display: block; margin: 8px 0; text-decoration: none; color: darkblue; }
+        .links a:hover { text-decoration: underline; }
 
         .width-measurer {
-            position: absolute;
-            visibility: hidden;
-            white-space: nowrap;
-            left: -9999px;
-            top: -9999px;
+            position: absolute; visibility: hidden; white-space: nowrap;
+            left: -9999px; top: -9999px;
         }
     </style>
 </head>
@@ -89,7 +54,6 @@
             <select id="volumeDropdown" onchange="updateChapters()">
                 <option value="" disabled selected>Select Volume</option>
                 <option value="1">Volume 1</option>
-                <option value="2">Volume 2</option>
             </select>
         </div>
         <div class="dropdown-group">
@@ -102,345 +66,111 @@
 
     <!-- Links Section -->
     <section class="links" id="linksContainer"></section>
-
     <div id="widthMeasurer" class="width-measurer"></div>
 
     <script>
-        const chaptersByVolume = {
-            "1": Array.from({ length: 9 }, (_, i) => i + 1),
-            "2": Array.from({ length: 6 }, (_, i) => i + 1)
-        };
+        const chaptersByVolume = { "1": [1] };
 
-        // Illustrations index (Features 6.1–6.15)
         const illustrationsIndex = {
             "1": {
-                "1": ["Classification of Cash and Cash Equivalents","Reconciliation of Reciprocal Opening Balances","Reconciliation of Reciprocal Closing Balances","Reconciliation of Receipts and Disbursements"],
-                "2": ["Classification of Financial Assets","Regular Way Purchase of Debt Instruments measured at Amortized Cost","Regular Way Purchase of Financial Assets measured at FVPL","Regular Way Purchase of Financial Assets measured at FVOCI","Regular Way Sale of Debt Instruments measured at Amortized Cost","Regular Way Sale of Financial Assets measured at FVPL","Regular Way Sale of Debt Instruments measured at FVOCI","Regular Way Sale of Equity Instruments measured at FVOCI","Transaction Costs on Financial Assets at FVPL","Transaction Costs on Equity Instruments at FVOCI","Transaction Costs on Debt Instruments at Amortized Cost without Fixed Interest Rate","Transaction Costs on Debt Instruments at Amortized Cost with Below-market Interest","Transaction Costs on Debt Instruments at Amortized Cost with Above-market Interest","Subsequent Measurement of Financial Assets","Amortization Table for Bond Investments with Fixed Interest Rate","Amortization Table for Bond Investments with Variable Interest Rate","Amortization Table for Bond Investments with Floating Interest Rate","Amortization Table for Bond Investments with Expected Prepayment","Reclassification Adjustments on Debt Instruments","Reclassification from Amortized Cost to FVOCI","Reclassification from Amortized Cost to FVPL","Reclassification from FVOCI to Amortized Cost","Reclassification from FVOCI to FVPL","Reclassification from FVPL to Amortized Cost","Reclassification from FVPL to FVOCI","Recognition of Loss Allowance and Measurement of Interest Revenue","Provision Matrix for Lifetime ECLs on Trade Receivables","Pledge of Trade Receivables","Assignment of Trade Receivables","Factoring of Trade Receivables without Recourse","Factoring of Trade Receivables with Recourse"],
-                "3": ["Effects of Incoterms 2020 on Inventories of Buyer","First In First Out Method","Weighted Average Periodic Method","Weighted Average Perpetual Method","Terminologies under the Retail Method","First In First Out Retail Method","Weighted Average Retail Method","Gross Profit Method of Inventory Estimation"],
-                "4": ["Accounting for Borrowing Costs on Qualifying Assets","Initial Capitalization of Borrowing Costs on Specific Borrowings","Subsequent Capitalization of Borrowing Costs on Specific Borrowings","Initial Capitalization of Borrowing Costs on General Borrowings","Subsequent Capitalization of Borrowing Costs on General Borrowings","Initial Capitalization of Borrowing Costs on Specific and General Borrowings","Subsequent Capitalization of Borrowing Costs on Specific and General Borrowings","Group Method of Depreciation","Composite Method of Depreciation","Sum of Years Digits Method of Depreciation","Variable Declining Balance Method of Depreciation","Time-based Depreciation Charges","Time-based Accumulated Depreciations","Time-based Carrying Amounts","Input Method of Depreciation","Output Method of Depreciation","Change in Residual Value","Change in Useful Life","Change in Depreciation Method","Terminologies under the Revaluation Model","Revaluation Surplus by Elimination of Accumulated Depreciation","Revaluation Surplus by Prorated Restatement of Carrying Amount","Revaluation Surplus by Gross Restatement to Observable Market Data","Revaluation Loss by Elimination of Accumulated Depreciation","Revaluation Loss by Prorated Restatement of Carrying Amount","Revaluation Loss by Gross Restatement to Observable Market Data","Depreciation Charge after Revaluation Surplus by Elimination of Accumulated Depreciation","Depreciation Charge after Revaluation Surplus by Prorated Restatement of Carrying Amount","Depreciation Charge after Revaluation Surplus by Gross Restatement to Observable Market Data","Depreciation Charge after Revaluation Loss by Elimination of Accumulated Depreciation","Depreciation Charge after Revaluation Loss by Prorated Restatement of Carrying Amount","Depreciation Charge after Revaluation Loss by Gross Restatement to Observable Market Data","Revaluation Loss after Revaluation Surplus by Elimination of Accumulated Depreciation","Revaluation Loss after Revaluation Surplus by Prorated Restatement of Carrying Amount","Revaluation Loss after Revaluation Surplus by Gross Restatement to Observable Market Data","Revaluation Surplus after Revaluation Loss by Elimination of Accumulated Depreciation","Revaluation Surplus after Revaluation Loss by Prorated Restatement of Carrying Amount","Revaluation Surplus after Revaluation Loss by Gross Restatement to Observable Market Data","Depreciation Table with Revaluation Loss after Revaluation Surplus","Carrying Amounts with Revaluation Loss after Revaluation Surplus","Depreciation Table with Revaluation Surplus after Revaluation Loss","Carrying Amounts with Revaluation Surplus after Revaluation Loss","Assessment and Testing for Impairment of Assets","Impairment Loss of CGU without Corporate Assets or Goodwill","Impairment Loss of CGU with Corporate Assets but without Goodwill","Impairment Loss of CGU Group with Corporate Assets but without Goodwill","Direct Method of Allocating Goodwill","Indirect Method of Allocating Goodwill","Impairment Loss of CGU without Corporate Assets but with Goodwill","Impairment Loss of CGU with Corporate Assets and Goodwill","Impairment Loss of CGU Group with Corporate Assets and Goodwill","Retrospective Adjustment of Impairment Loss on Goodwill","Impairment Loss of Reorganized CGUs with Reallocated Goodwill","Impairment Gain of CGU without Corporate Assets or Goodwill","Impairment Gain of CGU with Corporate Assets but without Goodwill","Impairment Gain
-          "Impairment Gain of CGU Group with Corporate Assets but without Goodwill",
-          "Impairment Gain of CGU without Corporate Assets but with Goodwill",
-          "Impairment Gain of CGU with Corporate Assets and Goodwill",
-          "Impairment Gain of CGU Group with Corporate Assets and Goodwill",
-          "Subsequent Expenditures on Property, Plant, and Equipment",
-          "Major Inspection with Indeterminable Carrying Amount",
-          "Major Inspection with Determinable Carrying Amount",
-          "Replacement Cost with Indeterminable Carrying Amount",
-          "Replacement Cost with Determinable Carrying Amount",
-          "Betterment Cost with Indeterminable Carrying Amount",
-          "Betterment Cost with Determinable Carrying Amount",
-          "Exchange without Cash and Commercial Substance",
-          "Exchange with Cash Received but without Commercial Substance",
-          "Exchange with Cash Paid but without Commercial Substance",
-          "Exchange without Cash but with Commercial Substance",
-          "Exchange with Cash Received and Commercial Substance",
-          "Exchange with Cash Paid and Commercial Substance"
-        ],
-        "5": [
-          "Accounting for Transfer from Inventories",
-          "Accounting for Transfer from Property, Plant, and Equipment under Cost Model",
-          "Accounting for Transfer from Property, Plant, and Equipment under Revaluation Model",
-          "Accounting for Transfer to Inventories",
-          "Accounting for Transfer to Property, Plant, and Equipment"
-        ],
-        "6": [
-          "Classification of Software Components of Embedded System",
-          "Classification of Categories of Broadcast Rights",
-          "Amortization of Patents",
-          "Amortization of Registered Utility Models",
-          "Amortization of Registered Industrial Designs with Insignificant Renewal Fee",
-          "Amortization of Registered Industrial Designs with Significant Renewal Fee",
-          "Amortization of Registered Marks with Insignificant Renewal Fee",
-          "Amortization of Registered Marks with Significant Renewal Fee"
-        ],
-        "7": [
-          "Examples of Agricultural Assets",
-          "Changes in FVLCS of Broiler Breeders",
-          "Changes in FVLCS of Broiler Starters",
-          "Changes in FVLCS of Broiler Finishers"
-        ],
-        "8": [
-          "Impairment Loss on Classification Date of Disposal Group Held for Sale",
-          "Impairment Gain on Reporting Date of Disposal Group Held for Sale"
-        ],
-        "9": [
-          "Income from Grants Related to Investment Property under Fair Value Model",
-          "Repayment of Grants Related to Investment Property under Fair Value Model",
-          "Income from Grants Related to Investment Property under Cost Model",
-          "Repayment of Grants Related to Investment Property under Cost Model",
-          "Income from Grants Related to Biological Assets at FVLCS",
-          "Repayment of Grants Related to Biological Assets at FVLCS",
-          "Income from Grants Related to Depreciable Assets under Gross Method",
-          "Repayment of Grants Related to Depreciable Assets under Gross Method",
-          "Income from Grants Related to Depreciable Assets under Net Method",
-          "Repayment of Grants Related to Depreciable Assets under Net Method",
-          "Income from Grants Related to Immediate Financial Support",
-          "Income from Grants Related to Income under Gross Method",
-          "Repayment of Grants Related to Income under Gross Method",
-          "Income from Grants Related to Income under Net Method",
-          "Impairment Loss of Reclassified Exploration and Evaluation Assets and Corporate Assets",
-          "Impairment Loss of Reclassified Exploration and Evaluation Assets, Corporate Assets, and Goodwill",
-          "Mining Production Costs allocated solely to Raw Materials Inventory",
-          "Mining Production Costs allocated to Raw Materials Inventory and Stripping Activity Assets",
-          "Subsequent Measurement of Mining Production Assets without Stripping Activity Assets",
-          "Subsequent Measurement of Mining Production Assets with Stripping Activity Assets"
-        ]
-      },
-      "2": {
-        "1": [
-          "Transaction Costs on Financial Liabilities at FVPL",
-          "Transaction Costs on Financial Liabilities at Amortized Cost without Stated Interest Rate",
-          "Transaction Costs on Financial Liabilities at Amortized Cost with Below-market Interest",
-          "Transaction Costs on Financial Liabilities at Amortized Cost with Above-market Interest",
-          "Subsequent Measurement of Financial Liabilities",
-          "Amortization Table for Bonds Payable with Fixed Interest Rate",
-          "Amortization Table for Bonds Payable with Below-market Interest",
-          "Amortization Table for Bonds Payable with Above-market Interest",
-          "Amortization Table for Bonds Payable with Expected Prepayment",
-          "Exchange or Modification of Financial Liabilities",
-          "Minor Breach of Covenants",
-          "Major Breach of Covenants",
-          "Minor Reduction of Interest",
-          "Major Reduction of Interest",
-          "Minor Extension of Maturity",
-          "Major Extension of Maturity"
-        ],
-        "2": [
-          "Provision for Restructuring Costs",
-          "Provision for Onerous Contracts with Customers",
-          "Increase in Provision for Decommissioning Costs under Cost Model",
-          "Increase in Provision for Decommissioning Costs under Revaluation Model",
-          "Decrease in Provision for Decommissioning Costs under Cost Model",
-          "Decrease in Provision for Decommissioning Costs under Revaluation Model",
-          "Provision for Assurance-type Warranties",
-          "Refund Liabilities for Prompt Settlement Discounts",
-          "Refund Liabilities for Inferior Services Rendered",
-          "Refund Liabilities for Retrospective Price Reductions",
-          "Refund Liabilities Settled with Cash",
-          "Refund Liabilities Payable to Customers",
-          "Refund Liabilities Settled with Another Product"
-        ],
-        "3": [
-          "Assessment of Whether the Contract contains Lease",
-          "Identification by Lessee of Separate Components of the Lease",
-          "Allocation without Related Assets and without Practical Expedient of Lessee",
-          "Allocation without Related Assets but with Practical Expedient of Lessee",
-          "Allocation with Related Assets but without Practical Expedient of Lessee",
-          "Allocation with Related Assets and with Practical Expedient of Lessee",
-          "Allocation with Discount allocated to Some Components by Lessor",
-          "Allocation with Discount allocated to All Components by Lessor",
-          "Allocation with Highly Variable Stand-alone Prices and Discount allocated to Some Components by Lessor",
-          "Allocation with Highly Variable Stand-alone Prices and Discount allocated to All Components by Lessor",
-          "Increase in Expected Residual Value, Lessee with Recognition Exemption, and Operating Lease by Lessor",
-          "Increase in Expected Residual Value, Lessee without Recognition Exemption, and Finance Lease by Lessor (except Manufacturer or Dealer)",
-          "Increase in Expected Residual Value, Lessee without Recognition Exemption, and Finance Lease by Manufacturer (or Dealer) Lessor",
-          "Decrease in Expected Residual Value, Lessee with Recognition Exemption, and Operating Lease by Lessor",
-          "Decrease in Expected Residual Value, Lessee without Recognition Exemption, and Finance Lease by Lessor (except Manufacturer or Dealer)",
-          "Decrease in Expected Residual Value, Lessee without Recognition Exemption, and Finance Lease by Manufacturer (or Dealer) Lessor",
-          "Increase in Lease Term, Lessee with Recognition Exemption, and Operating Lease by Lessor",
-          "Increase in Lease Term, Lessee without Recognition Exemption, and Finance Lease by Lessor (except Manufacturer or Dealer)",
-          "Increase in Lease Term, Lessee without Recognition Exemption, and Finance Lease by Manufacturer (or Dealer) Lessor",
-          "Decrease in Lease Term, Lessee with Recognition Exemption, and Operating Lease by Lessor",
-          "Decrease in Lease Term, Lessee without Recognition Exemption, and Finance Lease by Lessor (except Manufacturer or Dealer)",
-          "Decrease in Lease Term, Lessee without Recognition Exemption, and Finance Lease by Manufacturer (or Dealer) Lessor",
-          "Proportionate Increase in Fixed Payments and Identified Assets, Lessee with Recognition Exemption, and Operating Lease by Lessor",
-          "Proportionate Increase in Fixed Payments and Identified Assets, Lessee without Recognition Exemption, and Finance Lease by Lessor (except Manufacturer or Dealer)",
-          "Proportionate Increase in Fixed Payments and Identified Assets, Lessee without Recognition Exemption, and Finance Lease by Manufacturer (or Dealer) Lessor",
-          "Disproportionate Increase in Fixed Payments and Identified Assets, Lessee without Recognition Exemption, and Finance Lease by Lessor (except Manufacturer or Dealer)",
-          "Decrease in Fixed Payments with Decrease in Identified Assets, Lessee with Recognition Exemption, and Operating Lease by Lessor",
-          "Decrease in Fixed Payments with Decrease in Identified Assets, Lessee without Recognition Exemption, and Finance Lease by Lessor (except Manufacturer or Dealer)",
-          "Decrease in Fixed Payments with Decrease in Identified Assets, Lessee without Recognition Exemption, and Finance Lease by Manufacturer (or Dealer) Lessor",
-          "Decrease in Fixed Payments without Decrease in Identified Assets, Lessee without Recognition Exemption, and Finance Lease by Lessor (except Manufacturer or Dealer)",
-          "Sale and Leaseback equal to Fair Value",
-          "Sale and Leaseback at above Fair Value",
-          "Sale and Leaseback at below Fair Value",
-          "Financing Transaction equal to Fair Value",
-          "Financing Transaction at above Fair Value",
-          "Financing Transaction at below Fair Value"
-        ],
-        "4": [
-          "Effects of Contributions by Employees (or Third Parties)",
-          "Defined Benefits without Contributions by Employees",
-          "Defined Benefits with Contributions by Employees",
-          "Cash Refund as Proportion of Defined Benefit Surplus",
-          "Cash Refund as Fixed Amount",
-          "Decrease in Future Contributions without Share of Employees",
-          "Decrease in Future Contributions with Share of Employees",
-          "Cash Refund with MFR for Defined Benefit Surplus",
-          "Cash Refund with MFR for Defined Benefit Deficit",
-          "Decrease in Future Contributions with MFR for Future Services",
-          "Decrease in Future Contributions with MFR for Existing Shortfall",
-          "Decrease in Future Contributions with Prepayment and MFR for Future Services",
-          "Decrease in Future Contributions with Prepayment and MFR for Existing Shortfall"
-        ],
-        "5": [
-          "Taxes on Debt Instruments at Amortized Cost",
-          "Taxes on Debt Instruments at FVOCI",
-          "Taxes on Debt Instruments at FVPL",
-          "Taxes on Borrowing Costs capitalized under Cost Model",
-          "Taxes on Borrowing Costs capitalized under Revaluation Model"
-        ],
-        "6": [
-          "Classification of Exchanges of Equity Instruments",
-          "Issuance of Shares before Sale to Highest Bidder",
-          "Issuance of Shares after Sale to Highest Bidder",
-          "Conversion of Instruments at Maturity",
-          "Early Repurchase with Original Conversion Privileges",
-          "Modification to Induce Early Conversion",
-          "Reissuance of Treasury Shares",
-          "Retirement of Treasury Shares",
-          "Net Cash Settlement of Forward Contracts",
-          "Net Share Settlement of Forward Contracts",
-          "Gross Physical Settlement of Forward Contracts",
-          "Net Cash Settlement of Call Options",
-          "Net Share Settlement of Call Options",
-          "Gross Physical Settlement of Call Options",
-          "Net Cash Settlement of Put Options",
-          "Net Share Settlement of Put Options",
-          "Gross Physical Settlement of Put Options",
-          "Retrospective Restatement of Inventories for All Prior Periods Presented",
-          "Retrospective Restatement of Property, Plant, and Equipment for All Prior Periods Presented",
-          "Retrospective Restatement of Investment Property for All Prior Periods Presented",
-          "Retrospective Application to Inventories for All Prior Periods Presented",
-          "Retrospective Application to Property, Plant, and Equipment for All Prior Periods Presented",
-          "Retrospective Application to Investment Property for All Prior Periods Presented",
-          "Retrospective Restatement of Inventories from Earliest Prior Period Practicable",
-          "Retrospective Restatement of Property, Plant, and Equipment from Earliest Prior Period Practicable",
-          "Retrospective Restatement of Investment Property from Earliest Prior Period Practicable",
-          "Retrospective Application to Inventories from Earliest Prior Period Practicable",
-          "Retrospective Application to Property, Plant, and Equipment from Earliest Prior Period Practicable",
-          "Retrospective Application to Investment Property from Earliest Prior Period Practicable",
-          "Effects of Share Subscriptions on Shareholders’ Equity",
-          "Effects of Subscription Payments on Shareholders’ Equity",
-          "Effects of Reacquisition of Treasury Shares on Shareholders’ Equity",
-          "Effects of Reissuance of Treasury Shares on Shareholders’ Equity",
-          "Effects of Retirement of Treasury Shares on Shareholders’ Equity",
-          "Effects of Share Dividends on Shareholders’ Equity",
-          "Effects of Share Split on Shareholders’ Equity",
-          "Effects of Reverse Split on Shareholders’ Equity",
-          "Effects of Increase in Authorized Capital on Shareholders’ Equity",
-          "Effects of Decrease in Authorized Capital on Shareholders’ Equity",
-          "Effects of Quasi-reorganization (by APIC Deduction) on Shareholders’ Equity",
-          "Effects of Quasi-reorganization (by APIC Infusion) on Shareholders’ Equity",
-          "Reconciliation of Retained Earnings available for Dividends",
-          "DPS and BVPS with Noncumulative and Nonparticipating Preferred Shares",
-          "DPS and BVPS with Noncumulative but Partially Participating Preferred Shares",
-          "DPS and BVPS with Noncumulative but Fully Participating Preferred Shares",
-          "DPS and BVPS with Cumulative but Nonparticipating Preferred Shares",
-          "DPS and BVPS with Cumulative and Partially Participating Preferred Shares",
-          "DPS and BVPS with Cumulative and Fully Participating Preferred Shares",
-          "Equity-settled Share-based Payments with Non-compete Period",
-          "Equity-settled Share-based Payments with Service Period",
-          "Equity-settled Share-based Payments with Graded Vesting",
-          "Equity-settled Share-based Payments with Variable Non-market Condition",
-          "Equity-settled Share-based Payments with Variable Number of Shares",
-          "Equity-settled Share-based Payments with Variable Exercise Price",
-          "Equity-settled Share-based Payments with Fixed Market Condition",
-          "Equity-settled Share-based Payments with Variable Market Condition",
-          "Cash-settled Share-based Payments with Service Period",
-          "Cash-settled Share-based Payments with Fixed Non-market Condition",
-          "Chosen Cash Settlement in Choice of Settlement by Employees",
-          "Chosen Equity Settlement in Choice of Settlement by Employees",
-          "Chosen Cash Settlement in Choice of Settlement by Entity",
-          "Chosen Equity Settlement in Choice of Settlement by Entity"
-        ]
-      }
-    };
+                "1": [
+                    "Classification of Cash and Cash Equivalents",
+                    "Reconciliation of Reciprocal Opening Balances",
+                    "Reconciliation of Reciprocal Closing Balances",
+                    "Reconciliation of Receipts and Disbursements"
+                ]
+            }
+        };
 
-    const volumeDropdown = document.getElementById('volumeDropdown');
-    const chapterDropdown = document.getElementById('chapterDropdown');
-    const linksContainer = document.getElementById('linksContainer');
-    const widthMeasurer = document.getElementById('widthMeasurer');
+        const volumeDropdown = document.getElementById('volumeDropdown');
+        const chapterDropdown = document.getElementById('chapterDropdown');
+        const linksContainer = document.getElementById('linksContainer');
+        const widthMeasurer = document.getElementById('widthMeasurer');
 
-    document.addEventListener('DOMContentLoaded', () => {
-        setSelectWidth(volumeDropdown);
-        setSelectWidth(chapterDropdown);
-    });
-
-    function updateChapters() {
-        const volume = volumeDropdown.value;
-        const chapters = chaptersByVolume[volume] || [];
-
-        chapterDropdown.innerHTML = '';
-        const placeholder = document.createElement('option');
-        placeholder.value = '';
-        placeholder.textContent = 'Select Chapter';
-        placeholder.disabled = true;
-        placeholder.selected = true;
-        chapterDropdown.appendChild(placeholder);
-
-        chapters.forEach(ch => {
-            const opt = document.createElement('option');
-            opt.value = ch;
-            opt.textContent = 'Chapter ' + ch;
-            chapterDropdown.appendChild(opt);
+        document.addEventListener('DOMContentLoaded', () => {
+            setSelectWidth(volumeDropdown);
+            setSelectWidth(chapterDropdown);
         });
 
-        setSelectWidth(volumeDropdown);
-        setSelectWidth(chapterDropdown);
-        linksContainer.innerHTML = '';
-    }
+        function updateChapters() {
+            const volume = volumeDropdown.value;
+            const chapters = chaptersByVolume[volume] || [];
 
-    function updateIllustrations() {
-        const volume = volumeDropdown.value;
-        const chapter = chapterDropdown.value;
-        const items = (illustrationsIndex[volume] || {})[chapter] || [];
+            chapterDropdown.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = 'Select Chapter';
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            chapterDropdown.appendChild(placeholder);
 
-        linksContainer.innerHTML = '';
+            chapters.forEach(ch => {
+                const opt = document.createElement('option');
+                opt.value = ch;
+                opt.textContent = 'Chapter ' + ch;
+                chapterDropdown.appendChild(opt);
+            });
 
-        if (!chapter || items.length === 0) {
-            return;
+            setSelectWidth(volumeDropdown);
+            setSelectWidth(chapterDropdown);
+            linksContainer.innerHTML = '';
         }
 
-        items.forEach(title => {
-            const camel = toCamelCaseFilename(title);
-            const href = buildImagePath(volume, chapter, camel);
+        function updateIllustrations() {
+            const volume = volumeDropdown.value;
+            const chapter = chapterDropdown.value;
+            const items = (illustrationsIndex[volume] || {})[chapter] || [];
 
-            const a = document.createElement('a');
-            a.href = href;
-            a.textContent = title;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            linksContainer.appendChild(a);
-        });
-    }
+            linksContainer.innerHTML = '';
 
-    function toCamelCaseFilename(title) {
-        return title
-            .replace(/[^A-Za-z0-9\s]/g, ' ')
-            .split(/\s+/)
-            .filter(Boolean)
-            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-            .join('');
-    }
+            if (!chapter || items.length === 0) return;
 
-    function buildImagePath(volume, chapter, camelCaseTitle) {
-        const vStr = 'V' + volume;
-        const cStr = 'C' + String(chapter).padStart(2, '0');
-        return 'images/tools/Intacc' + vStr + cStr + camelCaseTitle + '.png';
-    }
+            items.forEach(title => {
+                const camel = toCamelCaseFilename(title);
+                const href = buildImagePath(volume, chapter, camel);
 
-    function setSelectWidth(selectEl) {
-        if (!selectEl) return;
-        const options = Array.from(selectEl.options);
-        const texts = options.map(o => o.textContent || o.innerText || '');
-        const longest = texts.reduce((a, b) => (b.length > a.length ? b : a), '');
+                const a = document.createElement('a');
+                a.href = href;
+                a.textContent = title;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                linksContainer.appendChild(a);
+            });
+        }
 
-        const style = window.getComputedStyle(selectEl);
-        widthMeasurer.style.fontFamily = style.fontFamily;
-        widthMeasurer.style.fontSize = style.fontSize;
-        widthMeasurer.style.fontWeight = style.fontWeight;
-        widthMeasurer.style.letterSpacing = style.letterSpacing;
-        widthMeasurer.style.padding = style.padding;
-        widthMeasurer.textContent = longest || selectEl.value || '';
+        function toCamelCaseFilename(title) {
+            return title
+                .replace(/[^A-Za-z0-9\s]/g, ' ')
+                .split(/\s+/)
+                .filter(Boolean)
+                .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                .join('');
+        }
 
-        const measured = widthMeasurer.offsetWidth;
-        const arrowBuffer = 28;
-        const minPaddingBuffer = 12;
-        const finalWidth = Math.max(80, measured + arrowBuffer + minPaddingBuffer);
+        function buildImagePath(volume, chapter, camelCaseTitle) {
+            const vStr = 'V' + volume;
+            const cStr = 'C' + String(chapter).padStart(2, '0');
+            return 'images/tools/Intacc' + vStr + cStr + camelCaseTitle + '.png';
+        }
 
-        selectEl.style.width = finalWidth + 'px';
-    }
+        function setSelectWidth(selectEl) {
+            if (!selectEl) return;
+            const options = Array.from(selectEl.options);
+            const texts = options.map(o => o.textContent || o.innerText || '');
+            const longest = texts.reduce((a, b) => (b.length > a.length ? b : a), '');
+            const style = window.getComputedStyle(selectEl);
+            widthMeasurer.style.fontFamily = style.fontFamily;
+            widthMeasurer.style.fontSize = style.fontSize;
+            widthMeasurer.style.fontWeight = style.fontWeight;
+            widthMeasurer.style.letterSpacing = style.letterSpacing;
+            widthMeasurer.style.padding = style.padding;
+            widthMeasurer.textContent = longest || selectEl.value || '';
+            const measured = widthMeasurer.offsetWidth;
+            const arrowBuffer = 28;
+            const minPaddingBuffer = 12;
+            const finalWidth = Math.max(80, measured + arrowBuffer + minPaddingBuffer);
+            selectEl.style.width = finalWidth + 'px';
+        }
     </script>
 </body>
 </html>
