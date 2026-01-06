@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Glossary</title>
+  <!-- Link to external stylesheet -->
+  <link rel="stylesheet" href="style.css">
   <style>
     :root {
       --accent-color: #64b5f6;
@@ -24,28 +26,6 @@
       padding: 10px;
       border-bottom: 1px solid #ccc;
     }
-
-    #menuBar {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      padding-bottom: 10px;
-    }
-
-    #menuBar a {
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 12px;
-      border-radius: 4px;
-      color: white;
-    }
-
-    #menuBar a:nth-child(1) { background-color: #e57373; }
-    #menuBar a:nth-child(2) { background-color: #64b5f6; }
-    #menuBar a:nth-child(3) { background-color: #81c784; }
-    #menuBar a:nth-child(4) { background-color: #ffd54f; color: black; }
-    #menuBar a:nth-child(5) { background-color: #ba68c8; }
-    #menuBar a:nth-child(6) { background-color: #4db6ac; }
 
     .search-reset-wrapper {
       display: flex;
@@ -127,14 +107,17 @@
 <body class="glossary-section">
 
   <div id="topControls">
-    <div id="menuBar">
-      <a href="index.html">Home</a>
-      <a href="glossary.html" class="active">Glossary</a>
-      <a href="quizzes.html">Quizzes</a>
-      <a href="references.html">References</a>
-      <a href="tools.html">Tools</a>
-      <a href="visuals.html">Visuals</a>
-    </div>
+    <!-- Updated nav with classes and active tab -->
+    <nav id="main-tabs">
+      <ul>
+        <li><a href="index.html" class="home-tab">Home</a></li>
+        <li><a href="glossary.html" class="glossary-tab active">Glossary</a></li>
+        <li><a href="quizzes.html" class="quizzes-tab">Quizzes</a></li>
+        <li><a href="references.html" class="references-tab">References</a></li>
+        <li><a href="tools.html" class="tools-tab">Tools</a></li>
+        <li><a href="visuals.html" class="visuals-tab">Visuals</a></li>
+      </ul>
+    </nav>
 
     <div class="search-reset-wrapper">
       <input type="text" id="searchBox" placeholder="Search glossary terms...">
@@ -1854,4 +1837,3 @@
   </script>
 </body>
 </html>
-
