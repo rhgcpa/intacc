@@ -31,6 +31,7 @@ nav#main-tabs ul {
   display: flex;
   gap: 1em;
   flex-wrap: wrap;
+  justify-content: center;   /* ✅ Center tabs horizontally */
 }
 
 nav#main-tabs li a {
@@ -40,36 +41,21 @@ nav#main-tabs li a {
   font-weight: bold;
   color: white;
   font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
+  transition: all 0.3s ease;   /* ✅ Smooth hover/active transitions */
 }
 
 /* Individual tab colors */
-nav#main-tabs li a.home-tab {
-  background-color: #8B0000;   /* Dark red */
-}
+nav#main-tabs li a.home-tab       { background-color: #8B0000; }   /* Dark red */
+nav#main-tabs li a.glossary-tab   { background-color: #006400; }   /* Dark green */
+nav#main-tabs li a.quizzes-tab    { background-color: #00008B; }   /* Dark blue */
+nav#main-tabs li a.references-tab { background-color: #8B008B; }   /* Dark magenta */
+nav#main-tabs li a.tools-tab      { background-color: #9B870C; }   /* Dark yellow */
+nav#main-tabs li a.visuals-tab    { background-color: #008B8B; }   /* Dark cyan */
 
-nav#main-tabs li a.glossary-tab {
-  background-color: #006400;   /* Dark green */
-}
-
-nav#main-tabs li a.quizzes-tab {
-  background-color: #00008B;   /* Dark blue */
-}
-
-nav#main-tabs li a.references-tab {
-  background-color: #8B008B;   /* Dark magenta */
-}
-
-nav#main-tabs li a.tools-tab {
-  background-color: #9B870C;   /* Dark yellow */
-}
-
-nav#main-tabs li a.visuals-tab {
-  background-color: #008B8B;   /* Dark cyan */
-}
-
-/* Hover effect */
+/* Hover effect with scale-up */
 nav#main-tabs li a:hover {
   opacity: 0.85;
+  transform: scale(1.05);   /* ✅ Slight enlargement on hover */
 }
 
 /* Active tab highlight */
@@ -92,8 +78,9 @@ nav#main-tabs li a.active {
 /* === Menu Bar (Legacy or Alternate Layout) === */
 #menuBar {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;   /* ✅ Center legacy menu */
   flex-wrap: wrap;
+  gap: 1em;                  /* ✅ Consistent spacing with main tabs */
   padding: 10px 0;
 }
 
@@ -104,6 +91,13 @@ nav#main-tabs li a.active {
   font-weight: bold;
   color: white;
   font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
+  transition: all 0.3s ease;   /* ✅ Smooth hover/active transitions */
+}
+
+/* Hover effect with scale-up */
+#menuBar a:hover {
+  opacity: 0.85;
+  transform: scale(1.05);   /* ✅ Slight enlargement on hover */
 }
 
 /* Legacy tab colors aligned with new scheme */
@@ -156,6 +150,7 @@ nav#main-tabs li a.active {
   cursor: pointer;
   font-weight: bold;
   font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
+  transition: background-color 0.3s ease;   /* ✅ Smooth hover transition */
 }
 
 #resetButton:hover {
@@ -179,8 +174,14 @@ nav#main-tabs li a.active {
   font-weight: bold;
   color: #333;
   font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
+  transition: all 0.3s ease;   /* ✅ Smooth hover transitions */
 }
 
+#alphaNav a:hover {
+  transform: scale(1.05);   /* ✅ Slight enlargement on hover */
+}
+
+/* Glossary section overrides */
 body.glossary-section #alphaNav a {
   background-color: var(--accent-color) !important;
   color: white !important;
@@ -188,6 +189,7 @@ body.glossary-section #alphaNav a {
 
 body.glossary-section #alphaNav a:hover {
   background-color: #1976d2 !important;
+  transform: scale(1.05);   /* ✅ Keep scale effect */
 }
 
 /* === Glossary Entries === */
