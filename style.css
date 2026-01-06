@@ -256,3 +256,43 @@ body.glossary-section dd {
 .feedback p.incorrect {
   color: #c62828; /* Red */
 }
+
+/* === Quiz Controls Final Styling === */
+.quiz-controls {
+  display: flex;
+  justify-content: center;        /* Center horizontally */
+  flex-wrap: wrap;                /* Wrap neatly on smaller screens */
+  gap: 12px;                      /* Space between dropdowns and buttons */
+  margin: 20px 0;                 /* Vertical spacing from header border */
+  padding: 12px;                  /* Inner spacing for highlight area */
+  background-color: #f5f5f5;      /* Light gray highlight background */
+  border-radius: 6px;             /* Rounded corners for a polished look */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* Subtle shadow effect */
+  transition: all 0.3s ease;      /* Smooth animation for shadow & background */
+}
+
+.quiz-controls:hover {
+  background-color: #eeeeee;      /* ✅ Slightly lighter background on hover */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25); /* ✅ Stronger shadow on hover */
+}
+
+.quiz-controls select {
+  padding: 6px 10px;
+  font-size: 16px;
+  font-family: Bahnschrift, 'Segoe UI', 'Arial', 'Noto Sans', sans-serif;
+  width: auto;                    /* Keeps dynamic width based on widest option */
+}
+
+.quiz-controls button {
+  padding: 6px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quiz-controls button:hover {
+  transform: scale(1.05);         /* Matches tab hover effect */
+  opacity: 0.85;
+}
