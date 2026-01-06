@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visuals - EXCELlent Intermediate Accounting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dropdowns {
+            display: flex; 
+            justify-content: center; 
+            gap: 16px;
+            padding: 12px 8px; 
+            border-bottom: 1px solid #ccc;
+        }
+        .dropdown-group { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
+        .dropdown-label { 
+            font-weight: 600; 
+        }
+        select { 
+            min-width: 120px; 
+        }
+
+        .links { 
+            margin: 20px auto; 
+            max-width: 920px; 
+            text-align: center; 
+        }
+        .links a { 
+            display: block; 
+            margin: 12px 0; 
+            text-decoration: none; 
+            color: darkblue; 
+            font-weight: bold;
+        }
+        .links a:hover { 
+            text-decoration: underline; 
+        }
+
+        .width-measurer {
+            position: absolute; 
+            visibility: hidden; 
+            white-space: nowrap;
+            left: -9999px; 
+            top: -9999px;
+        }
+
+        /* Embedded YouTube videos styling */
+        .video-container {
+            margin: 20px auto;
+            max-width: 920px;
+            text-align: center;
+        }
+        .video-container iframe {
+            width: 100%;
+            max-width: 720px;
+            height: 405px;
+            border: none;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="visuals-section">
+    <!-- Updated Navigation Tabs -->
+    <nav id="main-tabs">
+        <ul>
+            <li><a href="index.html" class="home-tab">Home</a></li>
+            <li><a href="glossary.html" class="glossary-tab">Glossary</a></li>
+            <li><a href="quizzes.html" class="quizzes-tab">Quizzes</a></li>
+            <li><a href="references.html" class="references-tab">References</a></li>
+            <li><a href="tools.html" class="tools-tab">Tools</a></li>
+            <li><a href="visuals.html" class="visuals-tab active">Visuals</a></li>
+        </ul>
+    </nav>
+
+    <!-- Dropdowns for filtering presentations -->
+    <div class="dropdowns">
+        <div class="dropdown-group">
+            <span class="dropdown-label">Volume:</span>
+            <select id="volumeSelect">
+                <option value="vol1">Volume 1</option>
+                <option value="vol2">Volume 2</option>
+                <option value="vol3">Volume 3</option>
+            </select>
+        </div>
+        <div class="dropdown-group">
+            <span class="dropdown-label">Chapter:</span>
+            <select id="chapterSelect">
+                <option value="ch1">Chapter 1</option>
+                <option value="ch2">Chapter 2</option>
+                <option value="ch3">Chapter 3</option>
+                <!-- Add more chapters as needed -->
+            </select>
+        </div>
+    </div>
+
+    <!-- Links to YouTube presentations -->
+    <div class="links">
+        <a href="https://www.youtube.com/watch?v=VIDEO_ID_1" target="_blank">Presentation 1: Introduction to Accounting Concepts</a>
+        <a href="https://www.youtube.com/watch?v=VIDEO_ID_2" target="_blank">Presentation 2: Financial Statements Overview</a>
+        <a href="https://www.youtube.com/watch?v=VIDEO_ID_3" target="_blank">Presentation 3: Adjusting Entries Explained</a>
+    </div>
+
+    <!-- Embedded YouTube videos -->
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="Presentation 1"></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="Presentation 2"></iframe>
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" title="Presentation 3"></iframe>
+    </div>
+
+    <footer>
+        <p style="text-align:center; margin:20px; font-size:0.9em; color:#7f8c8d;">
+            &copy; 2026 Robert H. Gascon | Built with GitHub Pages
+        </p>
+    </footer>
+</body>
+</html>
