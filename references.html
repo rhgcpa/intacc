@@ -4,28 +4,9 @@
     <meta charset="UTF-8">
     <title>References - EXCELlent Intermediate Accounting</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Horizontally distributed navigation tabs */
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-around; /* evenly distribute tabs */
-            background: #f8f8f8;
-            border-bottom: 1px solid #ccc;
-        }
-        .navbar a {
-            padding: 12px 16px;
-            text-decoration: none;
-            color: #333;
-        }
-        .navbar a.active {
-            font-weight: bold;
-            border-bottom: 2px solid darkorange;
-        }
-
         /* Dropdowns */
         .dropdowns {
             display: flex;
@@ -71,15 +52,17 @@
         }
     </style>
 </head>
-<body>
-    <!-- Navigation Tabs -->
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="glossary.html">Glossary</a>
-        <a href="quizzes.html">Quizzes</a>
-        <a href="references.html" class="active">References</a>
-        <a href="tools.html">Tools</a>
-        <a href="visuals.html">Visuals</a>
+<body class="references-section">
+    <!-- Updated Navigation Tabs -->
+    <nav id="main-tabs">
+        <ul>
+            <li><a href="index.html" class="home-tab">Home</a></li>
+            <li><a href="glossary.html" class="glossary-tab">Glossary</a></li>
+            <li><a href="quizzes.html" class="quizzes-tab">Quizzes</a></li>
+            <li><a href="references.html" class="references-tab active">References</a></li>
+            <li><a href="tools.html" class="tools-tab">Tools</a></li>
+            <li><a href="visuals.html" class="visuals-tab">Visuals</a></li>
+        </ul>
     </nav>
 
     <!-- Dropdowns -->
