@@ -7,38 +7,6 @@
   <link rel="stylesheet" href="style.css" />
 
 <style>
-  /* === Local Tab Styling Override: Force Horizontal Layout for .tabs === */
-  header.sticky-header nav ul.tabs {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #f9f9f9;
-    padding: 10px 0;
-    border-bottom: 1px solid #ccc;
-    list-style-type: none;
-    margin: 0;
-  }
-
-  header.sticky-header nav ul.tabs li {
-    margin: 0 12px;
-  }
-
-  header.sticky-header nav ul.tabs li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    font-size: 14px;
-  }
-
-  header.sticky-header nav ul.tabs li a:hover {
-    color: #0078D7;
-    text-decoration: underline;
-  }
-  /* === End Local Tab Styling Override === */
-</style>
-
-<style>
   /* === Sticky Controls Styling === */
   #sticky-controls {
     position: sticky;
@@ -86,6 +54,21 @@
   }
   /* === End Score Header Styling === */
 </style>
+</head>
+
+<body class="quizzes-section">
+
+  <!-- Updated nav with classes and active tab -->
+  <nav id="main-tabs">
+    <ul>
+      <li><a href="index.html" class="home-tab">Home</a></li>
+      <li><a href="glossary.html" class="glossary-tab">Glossary</a></li>
+      <li><a href="quizzes.html" class="quizzes-tab active">Quizzes</a></li>
+      <li><a href="references.html" class="references-tab">References</a></li>
+      <li><a href="tools.html" class="tools-tab">Tools</a></li>
+      <li><a href="visuals.html" class="visuals-tab">Visuals</a></li>
+    </ul>
+  </nav>
 
 <script>
   const questionData = [];
