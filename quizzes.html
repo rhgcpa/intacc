@@ -19338,19 +19338,9 @@ renderedQuestions = filtered;
 </script>
 
 </head>
-<body>
+<body class="quizzes-section">
   <div id="sticky-controls">
     <header class="sticky-header">
-      <nav>
-        <ul class="tabs">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="glossary.html">Glossary</a></li>
-          <li><a href="quizzes.html" class="active">Quizzes</a></li>
-          <li><a href="references.html">References</a></li>
-          <li><a href="tools.html">Tools</a></li>
-          <li><a href="visuals.html">Visuals</a></li>
-        </ul>
-      </nav>
       <div class="controls">
         <select id="volume">
           <option value="">Select Volume</option>
@@ -19370,28 +19360,28 @@ renderedQuestions = filtered;
     </header>
   </div>
 
-<!-- 🎉 Perfect Score Banner -->
-<div id="perfectScoreBanner" class="celebration-banner" style="display: none;">
-  🎉 Perfect Score! You answered all questions correctly!
-</div>
+  <!-- 🎉 Perfect Score Banner -->
+  <div id="perfectScoreBanner" class="celebration-banner" style="display: none;">
+    🎉 Perfect Score! You answered all questions correctly!
+  </div>
 
-<!-- 📈 Progress Tracker -->
-<div id="progressTracker" class="progress-tracker" style="display: none;"></div>
+  <!-- 📈 Progress Tracker -->
+  <div id="progressTracker" class="progress-tracker" style="display: none;"></div>
 
-<!-- ✅/❌ Feedback Section -->
-<div id="feedback" class="feedback">
-  <!-- Feedback messages will be injected here -->
-</div>
+  <!-- ✅/❌ Feedback Section -->
+  <div id="feedback" class="feedback">
+    <!-- Feedback messages will be injected here -->
+  </div>
 
-<main>
-  <!-- Score header (top of quiz) -->
-  <div id="scoreHeader" style="margin-bottom: 12px; font-weight: 600;"></div>
+  <main>
+    <!-- Score header (top of quiz) -->
+    <div id="scoreHeader" style="margin-bottom: 12px; font-weight: 600;"></div>
 
-  <section id="questions">
-    <!-- Question entries are rendered dynamically -->
-  </section>
-  <section id="score"></section>
-</main>
+    <section id="questions">
+      <!-- Question entries are rendered dynamically -->
+    </section>
+    <section id="score"></section>
+  </main>
 
 </body>
 <!-- Trigger rebuild -->
