@@ -7,7 +7,7 @@
     <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Dropdowns */
+        /* Dropdowns layout */
         .dropdowns {
             display: flex;
             justify-content: center;
@@ -23,25 +23,15 @@
         .dropdown-label {
             font-weight: 600;
         }
-        select {
-            min-width: 120px;
-        }
-
-        /* Centered links */
+        /* Removed inline select styling — handled globally via .tab-control */
+        
+        /* Centered links layout */
         .links {
             margin: 20px auto;
             max-width: 920px;
             text-align: center;
         }
-        .links a {
-            display: block;
-            margin: 8px 0;
-            text-decoration: none;
-            color: darkblue;
-        }
-        .links a:hover {
-            text-decoration: underline;
-        }
+        /* Removed inline link colors — handled globally via .tab-control */
 
         .width-measurer {
             position: absolute;
@@ -69,7 +59,7 @@
     <div class="dropdowns">
         <div class="dropdown-group">
             <span class="dropdown-label">Category:</span>
-            <select id="categoryDropdown" onchange="updateSubcategories()">
+            <select id="categoryDropdown" class="tab-control" onchange="updateSubcategories()">
                 <option value="" disabled selected>Select Category</option>
                 <option value="Textbook">Textbook</option>
                 <option value="Other">Other</option>
@@ -77,14 +67,17 @@
         </div>
         <div class="dropdown-group">
             <span class="dropdown-label">Subcategory:</span>
-            <select id="subcategoryDropdown" onchange="updateLinks()">
+            <select id="subcategoryDropdown" class="tab-control" onchange="updateLinks()">
                 <option value="" disabled selected>Select Subcategory</option>
             </select>
         </div>
     </div>
 
     <!-- Links Section -->
-    <section class="links" id="linksContainer"></section>
+    <section class="links" id="linksContainer">
+        <!-- Example link -->
+        <a href="ref1.html" class="tab-control">Reference 1</a>
+    </section>
 
     <div id="widthMeasurer" class="width-measurer"></div>
 
