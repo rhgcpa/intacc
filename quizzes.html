@@ -19111,6 +19111,13 @@
     questionContainer.innerHTML = "";
     scoreContainer.innerHTML = "";
     document.getElementById("progressTracker").style.display = "none";
+
+    // 🧹 Clear the score header so it disappears after reset
+    const scoreHeader = document.getElementById("scoreHeader");
+    if (scoreHeader) {
+      scoreHeader.innerHTML = "";
+    }
+
     populateVolumeDropdown();
   }
 
