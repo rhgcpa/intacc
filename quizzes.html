@@ -17,7 +17,6 @@
       border-bottom: 1px solid #ccc;
     }
 
-    /* Keep margin rules for any future controls */
     #sticky-controls select,
     #sticky-controls button,
     #sticky-controls .tab-bar {
@@ -71,9 +70,35 @@
     </ul>
   </nav>
 
-  <!-- Sticky controls area (currently empty, ready for future controls if needed) -->
+  <!-- Sticky controls area -->
   <div id="sticky-controls">
-    <!-- Controls removed as requested -->
+    <!-- ✅ Wanted dropdowns -->
+    <select id="volumeDropdown" class="tab-control">
+      <option value="" disabled selected>Select Volume</option>
+      <option value="1">Volume 1</option>
+      <option value="2">Volume 2</option>
+    </select>
+
+    <select id="chapterDropdown" class="tab-control">
+      <option value="" disabled selected>Select Chapter</option>
+      <!-- Add chapters -->
+    </select>
+
+    <select id="topicDropdown" class="tab-control">
+      <option value="" disabled selected>Select Topic</option>
+      <!-- Add topics -->
+    </select>
+
+    <select id="typeDropdown" class="tab-control">
+      <option value="" disabled selected>Select Type</option>
+      <option value="theory">Theory</option>
+      <option value="practice">Practice</option>
+      <option value="both">Both</option>
+    </select>
+
+    <!-- ✅ Wanted buttons -->
+    <button type="submit" class="tab-control">Submit</button>
+    <button type="reset" class="tab-control">Reset</button>
   </div>
 
 <script>
