@@ -296,3 +296,92 @@ body.glossary-section dd {
   transform: scale(1.05);         /* Matches tab hover effect */
   opacity: 0.85;
 }
+
+/* === Tab-Specific Control Consistency === */
+
+/* Home tab controls */
+body.home-section #resetButton,
+body.home-section #alphaNav a,
+body.home-section .quiz-controls button {
+  background-color: #8B0000; /* Dark red */
+  color: white;
+  font-weight: bold;
+}
+body.home-section #alphaNav a:hover,
+body.home-section #resetButton:hover,
+body.home-section .quiz-controls button:hover {
+  background-color: #A52A2A; /* Slightly lighter/darker red */
+}
+
+/* Glossary tab controls */
+body.glossary-section #resetButton,
+body.glossary-section #alphaNav a {
+  background-color: #006400; /* Dark green */
+  color: white;
+  font-weight: bold;
+}
+body.glossary-section #alphaNav a:hover,
+body.glossary-section #resetButton:hover {
+  background-color: #228B22; /* Forest green hover */
+}
+/* Glossary terms exception */
+body.glossary-section dt {
+  color: #006400 !important; /* Dark green text */
+  font-weight: bold;
+}
+
+/* Quizzes tab controls */
+body.quizzes-section #resetButton,
+body.quizzes-section #alphaNav a,
+body.quizzes-section .quiz-controls button {
+  background-color: #00008B; /* Dark blue */
+  color: white;
+  font-weight: bold;
+}
+body.quizzes-section #alphaNav a:hover,
+body.quizzes-section #resetButton:hover,
+body.quizzes-section .quiz-controls button:hover {
+  background-color: #1E3A8A; /* Slightly lighter blue */
+}
+
+/* References tab controls */
+body.references-section #resetButton,
+body.references-section #alphaNav a,
+body.references-section .quiz-controls button {
+  background-color: #8B008B; /* Dark magenta */
+  color: white;
+  font-weight: bold;
+}
+body.references-section #alphaNav a:hover,
+body.references-section #resetButton:hover,
+body.references-section .quiz-controls button:hover {
+  background-color: #A020F0; /* Purple hover */
+}
+
+/* Tools tab controls */
+body.tools-section #resetButton,
+body.tools-section #alphaNav a,
+body.tools-section .quiz-controls button {
+  background-color: #9B870C; /* Dark yellow */
+  color: white;
+  font-weight: bold;
+}
+body.tools-section #alphaNav a:hover,
+body.tools-section #resetButton:hover,
+body.tools-section .quiz-controls button:hover {
+  background-color: #B8860B; /* Goldenrod hover */
+}
+
+/* Visuals tab controls */
+body.visuals-section #resetButton,
+body.visuals-section #alphaNav a,
+body.visuals-section .quiz-controls button {
+  background-color: #008B8B; /* Dark cyan */
+  color: white;
+  font-weight: bold;
+}
+body.visuals-section #alphaNav a:hover,
+body.visuals-section #resetButton:hover,
+body.visuals-section .quiz-controls button:hover {
+  background-color: #20B2AA; /* Light sea green hover */
+}
