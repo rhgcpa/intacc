@@ -6,54 +6,54 @@
   <title>Quizzes | EXCELlent Intermediate Accounting</title>
   <link rel="stylesheet" href="style.css" />
 
-<style>
-  /* === Sticky Controls Styling === */
-  #sticky-controls {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background-color: #ffffff;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-  }
+  <style>
+    /* === Sticky Controls Styling === */
+    #sticky-controls {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #ffffff;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
 
-  #sticky-controls select,
-  #sticky-controls button,
-  #sticky-controls .tab-bar {
-    margin: 5px;
-  }
-  /* === End Sticky Controls Styling === */
-</style>
+    #sticky-controls select,
+    #sticky-controls button,
+    #sticky-controls .tab-bar {
+      margin: 5px;
+    }
+    /* === End Sticky Controls Styling === */
+  </style>
 
-<style>
-  /* === Excel Screenshot Styling === */
-  .excel-screenshot {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ccc;
-    margin: 10px 0;
-    display: block;
-  }
-</style>
+  <style>
+    /* === Excel Screenshot Styling === */
+    .excel-screenshot {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      margin: 10px 0;
+      display: block;
+    }
+  </style>
 
-<style>
-  /* === Score Header Styling === */
-  #scoreHeader {
-    margin: 8px 0 12px;
-    font-weight: 600;
-    color: orange;                 /* 🚦 Traffic‑light theme */
-    background-color: #fff3e0;     /* pale orange highlight */
-    padding: 6px 10px;
-    border-radius: 4px;
-    transition: color 0.3s ease, box-shadow 0.3s ease; /* smooth hover transition */
-  }
+  <style>
+    /* === Score Header Styling === */
+    #scoreHeader {
+      margin: 8px 0 12px;
+      font-weight: 600;
+      color: orange;                 /* 🚦 Traffic‑light theme */
+      background-color: #fff3e0;     /* pale orange highlight */
+      padding: 6px 10px;
+      border-radius: 4px;
+      transition: color 0.3s ease, box-shadow 0.3s ease; /* smooth hover transition */
+    }
 
-  #scoreHeader:hover {
-    color: #cc5500;                /* darker burnt orange on hover */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* subtle raised effect */
-  }
-  /* === End Score Header Styling === */
-</style>
+    #scoreHeader:hover {
+      color: #cc5500;                /* darker burnt orange on hover */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* subtle raised effect */
+    }
+    /* === End Score Header Styling === */
+  </style>
 </head>
 
 <body class="quizzes-section">
@@ -69,6 +69,17 @@
       <li><a href="visuals.html" class="visuals-tab">Visuals</a></li>
     </ul>
   </nav>
+
+  <!-- Sticky controls area -->
+  <div id="sticky-controls">
+    <select class="tab-control">
+      <option value="practice">Practice</option>
+      <option value="theory">Theory</option>
+      <option value="both">Both</option>
+    </select>
+    <button type="submit" class="tab-control">Submit</button>
+    <button type="reset" class="tab-control">Reset</button>
+  </div>
 
 <script>
   const questionData = [];
