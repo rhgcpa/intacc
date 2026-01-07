@@ -70,32 +70,6 @@
     </ul>
   </nav>
 
-<!-- Sticky controls area -->
-<div id="sticky-controls">
-  <header class="sticky-header">
-    <div class="controls quiz-controls">
-      <select id="volume">
-        <option value="" disabled selected>Select Volume</option>
-      </select>
-
-      <select id="chapter">
-        <option value="" disabled selected>Select Chapter</option>
-      </select>
-
-      <select id="topic">
-        <option value="" disabled selected>Select Topic</option>
-      </select>
-
-      <select id="type">
-        <option value="" disabled selected>Select Type</option>
-      </select>
-
-      <button id="submitBtn">Submit</button>
-      <button id="resetBtn">Reset</button>
-    </div>
-  </header>
-</div>
-
 <script>
   const questionData = [];
   questionData.push(
@@ -19058,8 +19032,8 @@
   let questionContainer, scoreContainer;
   let renderedQuestions = [];
 
-// Global timing state
-let quizStartTime = null;
+  // Global timing state
+  let quizStartTime = null;
 
   function shuffleArray(arr) {
     return arr
@@ -19068,319 +19042,290 @@ let quizStartTime = null;
       .map(a => a[1]);
   }
 
-function handleSubmit() {
-  console.log("✅ Enhanced handleSubmit is running");
+  function handleSubmit() {
+    console.log("✅ Enhanced handleSubmit is running");
 
-  // Capture end time
-  const quizEndTime = new Date();
-  console.log("quizStartTime:", quizStartTime, "quizEndTime:", quizEndTime);
+    // Capture end time
+    const quizEndTime = new Date();
 
-  const blocks = document.querySelectorAll(".question-block");
-  let correct = 0;
+    const blocks = document.querySelectorAll(".question-block");
+    let correct = 0;
 
-  blocks.forEach((block, index) => {
-    const selected = block.querySelector(`input[name="q${index}"]:checked`);
-    const correctAnswer = renderedQuestions[index].correct;
-    const feedbackDiv = block.querySelector(".feedback");
+    blocks.forEach((block, index) => {
+      const selected = block.querySelector(`input[name="q${index}"]:checked`);
+      const correctAnswer = renderedQuestions[index].correct;
+      const feedbackDiv = block.querySelector(".feedback");
 
-    console.log(`Selected: ${selected?.value}, Correct: ${correctAnswer}`);
-    if (selected && selected.value.trim().toUpperCase() === correctAnswer.trim().toUpperCase()) {
-      correct++;
-      feedbackDiv.innerHTML = `<p class="correct">Question ${index + 1}: Correct!</p>`;
-    } else {
-      feedbackDiv.innerHTML = `<p class="incorrect">Question ${index + 1}: Incorrect.</p>`;
-    }
+      if (selected && selected.value.trim().toUpperCase() === correctAnswer.trim().toUpperCase()) {
+        correct++;
+        feedbackDiv.innerHTML = `<p class="correct">Question ${index + 1}: Correct!</p>`;
+      } else {
+        feedbackDiv.innerHTML = `<p class="incorrect">Question ${index + 1}: Incorrect.</p>`;
+      }
 
-    block.querySelector(".answer").style.display = "block";
-  });
-
-  const total = blocks.length;
-  const percent = ((correct / total) * 100).toFixed(2);
-
-  // Guard: if start time is missing, avoid NaN and show score only
-  if (!quizStartTime) {
-    console.warn("⚠️ quizStartTime is null — showing basic score only");
-    const scoreHeader = document.getElementById("scoreHeader");
-    if (scoreHeader) {
-      scoreHeader.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
-    } else {
-      console.warn("⚠️ scoreHeader not found in DOM");
-    }
-    updateProgress(total, total);
-    checkPerfectScore(correct, total);
-    return;
-  }
-
-  // Calculate elapsed time
-  const elapsedMs = quizEndTime - quizStartTime;
-  const totalSeconds = Math.floor(elapsedMs / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  console.log(`⏱ Elapsed: ${minutes}m ${seconds}s, Total Seconds: ${totalSeconds}`);
-
-  // Average time per item
-  const avgSeconds = Math.floor(totalSeconds / total);
-  const avgMinutes = Math.floor(avgSeconds / 60);
-  const avgRemainingSeconds = avgSeconds % 60;
-
-  console.log(`📊 Average per item: ${avgMinutes}m ${avgRemainingSeconds}s`);
-
-  // Display at top (above first quiz item)
-  const scoreHeader = document.getElementById("scoreHeader");
-  if (scoreHeader) {
-    scoreHeader.innerHTML =
-      `Score: ${correct}/${total} (${percent}%) in ${minutes} minutes and ${seconds} seconds ` +
-      `(${avgMinutes} minutes and ${avgRemainingSeconds} seconds per item)`;
-    console.log("✅ scoreHeader updated");
-  } else {
-    console.warn("⚠️ scoreHeader not found in DOM");
-  }
-
-  updateProgress(total, total);
-  checkPerfectScore(correct, total);
-}
-
-function handleReset() {
-  resetDropdown(volumeSelect, "Select Volume");
-  resetDropdown(chapterSelect, "Select Chapter");
-  resetDropdown(topicSelect, "Select Topic");
-  resetDropdown(typeSelect, "Select Type");
-  questionContainer.innerHTML = "";
-  scoreContainer.innerHTML = "";
-  document.getElementById("progressTracker").style.display = "none";
-  populateVolumeDropdown();
-}
-
-function updateProgress(current, total) {
-  const tracker = document.getElementById("progressTracker");
-  tracker.textContent = `Question ${current} of ${total}`;
-}
-
-function checkPerfectScore(score, total) {
-  const banner = document.getElementById("perfectScoreBanner");
-  banner.style.display = score === total ? "block" : "none";
-}
-
-function renderQuestions() {
-  // 🕒 Start timing when questions are rendered
-  quizStartTime = new Date();
-  console.log("Timer started at:", quizStartTime);
-
-  // 🧹 Clear previous content
-  questionContainer.innerHTML = "";
-  scoreContainer.innerHTML = "";
-
-  // 🎯 Reveal progress tracker only when rendering begins
-  const progressTracker = document.getElementById("progressTracker");
-  progressTracker.style.display = "block";
-
-  // 🎯 Capture dropdown selections
-  const selected = {
-    volume: volumeSelect.value,
-    chapter: chapterSelect.value,
-    topic: topicSelect.value,
-    type: typeSelect.value
-  };
-
-  // 🔍 Filter questions based on selection
-  let filtered = questionData.filter(q =>
-    q.volume === selected.volume &&
-    q.chapter === selected.chapter &&
-    q.topic === selected.topic &&
-    (selected.type === "Both" || q.type === selected.type)
-  );
-
-filtered = shuffleArray(filtered);
-renderedQuestions = filtered;
-
-  // 🧮 Track question counts
-  let theoryCount = 1;
-  let practiceCount = 1;
-
-  // 🧱 Render each question block
-  filtered.forEach((q, index) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "question-block";
-
-    const questionLabel = document.createElement("p");
-    console.log(`Q${index + 1} correct answer: ${q.correct}`);
-    questionLabel.textContent =
-      q.type === "Theory"
-        ? `Theory Question ${theoryCount++}: ${q.question}`
-        : `Practice Question ${practiceCount++}: ${q.question}`;
-    wrapper.appendChild(questionLabel);
-
-    console.log("Testing image path:", q.image);
-
-    if (q.type === "Practice" && q.image) {
-      const img = document.createElement("img");
-      img.src = q.image;
-      img.alt = "Practice Question Image";
-      img.onerror = () => {
-        console.warn(`Missing question image: ${q.image}`);
-        img.alt = "Image not found";
-        img.style.border = "1px solid red";
-      };
-      wrapper.appendChild(img);
-      wrapper.appendChild(document.createElement("br"));
-    }
-
-    ["A", "B", "C", "D"].forEach(choice => {
-      const label = document.createElement("label");
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = `q${index}`;
-      radio.value = choice;
-      label.appendChild(radio);
-      label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
-      wrapper.appendChild(label);
-      wrapper.appendChild(document.createElement("br"));
+      block.querySelector(".answer").style.display = "block";
     });
 
-    const answerDiv = document.createElement("div");
-    answerDiv.className = "answer";
-    answerDiv.style.display = "none";
-    answerDiv.textContent = `Correct Answer: ${q.correct}`;
+    const total = blocks.length;
+    const percent = ((correct / total) * 100).toFixed(2);
 
-    if (q.type === "Practice" && q.answerImage) {
-      const answerImg = document.createElement("img");
-      answerImg.src = q.answerImage;
-      answerImg.alt = "Practice Answer Image";
-      answerImg.onerror = () => {
-        console.warn(`Missing answer image: ${q.answerImage}`);
-        answerImg.alt = "Image not found";
-        answerImg.style.border = "1px solid red";
-      };
-      answerDiv.appendChild(document.createElement("br"));
-      answerDiv.appendChild(answerImg);
+    // Guard: if start time is missing, avoid NaN and show score only
+    if (!quizStartTime) {
+      const scoreHeader = document.getElementById("scoreHeader");
+      if (scoreHeader) {
+        scoreHeader.innerHTML = `Score: ${correct}/${total} (${percent}%)`;
+      }
+      updateProgress(total, total);
+      checkPerfectScore(correct, total);
+      return;
     }
 
-    wrapper.appendChild(answerDiv);
+    // Calculate elapsed time
+    const elapsedMs = quizEndTime - quizStartTime;
+    const totalSeconds = Math.floor(elapsedMs / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
 
-    // ✅ Inject per-question feedback container
-    const feedbackDiv = document.createElement("div");
-    feedbackDiv.className = "feedback";
-    wrapper.appendChild(feedbackDiv);
+    // Average time per item
+    const avgSeconds = Math.floor(totalSeconds / total);
+    const avgMinutes = Math.floor(avgSeconds / 60);
+    const avgRemainingSeconds = avgSeconds % 60;
 
-    questionContainer.appendChild(wrapper);
-  });
+    // Display at top (above first quiz item)
+    const scoreHeader = document.getElementById("scoreHeader");
+    if (scoreHeader) {
+      scoreHeader.innerHTML =
+        `Score: ${correct}/${total} (${percent}%) in ${minutes} minutes and ${seconds} seconds ` +
+        `(${avgMinutes} minutes and ${avgRemainingSeconds} seconds per item)`;
+    }
 
-  // 🔢 Update progress tracker with actual question count
-  updateProgress(1, renderedQuestions.length);
-}
+    updateProgress(total, total);
+    checkPerfectScore(correct, total);
+  }
 
-function populateVolumeDropdown() {
-  resetDropdown(volumeSelect, "Select Volume"); // clear first
-  const volumes = [...new Set(questionData.map(q => q.volume))];
-  volumes.forEach(v => {
-    const option = document.createElement("option");
-    option.value = v;
-    option.textContent = `Volume ${v}`;
-    volumeSelect.appendChild(option);
-  });
-}
-
-function populateVolumeDropdown() {
-  resetDropdown(volumeSelect, "Select Volume"); // clear first
-  const volumes = [...new Set(questionData.map(q => q.volume))];
-  volumes.forEach(v => {
-    const option = document.createElement("option");
-    option.value = v;
-    option.textContent = `Volume ${v}`;
-    volumeSelect.appendChild(option);
-  });
-}
-
-function setupDropdownListeners() {
-  volumeSelect.addEventListener("change", () => {
+  function handleReset() {
+    resetDropdown(volumeSelect, "Select Volume");
     resetDropdown(chapterSelect, "Select Chapter");
     resetDropdown(topicSelect, "Select Topic");
     resetDropdown(typeSelect, "Select Type");
+    questionContainer.innerHTML = "";
+    scoreContainer.innerHTML = "";
+    document.getElementById("progressTracker").style.display = "none";
+    populateVolumeDropdown();
+  }
 
-    const chapters = [...new Set(questionData
-      .filter(q => q.volume === volumeSelect.value)
-      .map(q => q.chapter))];
+  function updateProgress(current, total) {
+    const tracker = document.getElementById("progressTracker");
+    tracker.textContent = `Question ${current} of ${total}`;
+  }
 
-    chapters.forEach(c => {
-      const option = document.createElement("option");
-      option.value = c;
-      option.textContent = `Chapter ${c}`;
-      chapterSelect.appendChild(option);
-    });
-  });
+  function checkPerfectScore(score, total) {
+    const banner = document.getElementById("perfectScoreBanner");
+    banner.style.display = score === total ? "block" : "none";
+  }
 
-  chapterSelect.addEventListener("change", () => {
-    resetDropdown(topicSelect, "Select Topic");
-    resetDropdown(typeSelect, "Select Type");
+  function renderQuestions() {
+    // 🕒 Start timing when questions are rendered
+    quizStartTime = new Date();
 
-    const topics = [...new Set(questionData
-      .filter(q => q.volume === volumeSelect.value && q.chapter === chapterSelect.value)
-      .map(q => q.topic))];
+    // 🧹 Clear previous content
+    questionContainer.innerHTML = "";
+    scoreContainer.innerHTML = "";
 
-    topics.forEach(t => {
-      const option = document.createElement("option");
-      option.value = t;
-      option.textContent = t;
-      topicSelect.appendChild(option);
-    });
+    // 🎯 Reveal progress tracker only when rendering begins
+    const progressTracker = document.getElementById("progressTracker");
+    progressTracker.style.display = "block";
 
-    adjustTopicDropdownWidth(topics);
-  });
+    // 🎯 Capture dropdown selections
+    const selected = {
+      volume: volumeSelect.value,
+      chapter: chapterSelect.value,
+      topic: topicSelect.value,
+      type: typeSelect.value
+    };
 
-  topicSelect.addEventListener("change", () => {
-    resetDropdown(typeSelect, "Select Type");
-
-    const filtered = questionData.filter(q =>
-      q.volume === volumeSelect.value &&
-      q.chapter === chapterSelect.value &&
-      q.topic === topicSelect.value
+    // 🔍 Filter questions based on selection (normalize type for safety)
+    let filtered = questionData.filter(q =>
+      q.volume === selected.volume &&
+      q.chapter === selected.chapter &&
+      q.topic === selected.topic &&
+      (selected.type.toLowerCase() === "both" || q.type.toLowerCase() === selected.type.toLowerCase())
     );
 
-    const hasPractice = filtered.some(q => q.type.toLowerCase() === "practice");
-    ["Theory", ...(hasPractice ? ["Practice", "Both"] : [])].forEach(t => {
-      const option = document.createElement("option");
-      option.value = t;
-      option.textContent = t;
-      typeSelect.appendChild(option);
+    filtered = shuffleArray(filtered);
+    renderedQuestions = filtered;
+
+    // 🧮 Track question counts
+    let theoryCount = 1;
+    let practiceCount = 1;
+
+    // 🧱 Render each question block
+    filtered.forEach((q, index) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "question-block";
+
+      const questionLabel = document.createElement("p");
+      questionLabel.textContent =
+        q.type.toLowerCase() === "theory"
+          ? `Theory Question ${theoryCount++}: ${q.question}`
+          : `Practice Question ${practiceCount++}: ${q.question}`;
+      wrapper.appendChild(questionLabel);
+
+      if (q.type.toLowerCase() === "practice" && q.image) {
+        const img = document.createElement("img");
+        img.src = q.image;
+        img.alt = "Practice Question Image";
+        img.onerror = () => {
+          img.alt = "Image not found";
+          img.style.border = "1px solid red";
+        };
+        wrapper.appendChild(img);
+        wrapper.appendChild(document.createElement("br"));
+      }
+
+      ["A", "B", "C", "D"].forEach(choice => {
+        const label = document.createElement("label");
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = `q${index}`;
+        radio.value = choice;
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(` ${choice}: ${q.choices[choice]}`));
+        wrapper.appendChild(label);
+        wrapper.appendChild(document.createElement("br"));
+      });
+
+      const answerDiv = document.createElement("div");
+      answerDiv.className = "answer";
+      answerDiv.style.display = "none";
+      answerDiv.textContent = `Correct Answer: ${q.correct}`;
+
+      if (q.type.toLowerCase() === "practice" && q.answerImage) {
+        const answerImg = document.createElement("img");
+        answerImg.src = q.answerImage;
+        answerImg.alt = "Practice Answer Image";
+        answerImg.onerror = () => {
+          answerImg.alt = "Image not found";
+          answerImg.style.border = "1px solid red";
+        };
+        answerDiv.appendChild(document.createElement("br"));
+        answerDiv.appendChild(answerImg);
+      }
+
+      wrapper.appendChild(answerDiv);
+
+      // ✅ Inject per-question feedback container
+      const feedbackDiv = document.createElement("div");
+      feedbackDiv.className = "feedback";
+      wrapper.appendChild(feedbackDiv);
+
+      questionContainer.appendChild(wrapper);
     });
+
+    // 🔢 Update progress tracker with actual question count
+    updateProgress(1, renderedQuestions.length);
+  }
+
+  function populateVolumeDropdown() {
+    resetDropdown(volumeSelect, "Select Volume"); // clear first
+    const volumes = [...new Set(questionData.map(q => q.volume))];
+    volumes.forEach(v => {
+      const option = document.createElement("option");
+      option.value = v;
+      option.textContent = `Volume ${v}`;
+      volumeSelect.appendChild(option);
+    });
+  }
+
+  function setupDropdownListeners() {
+    volumeSelect.addEventListener("change", () => {
+      resetDropdown(chapterSelect, "Select Chapter");
+      resetDropdown(topicSelect, "Select Topic");
+      resetDropdown(typeSelect, "Select Type");
+
+      const chapters = [...new Set(questionData
+        .filter(q => q.volume === volumeSelect.value)
+        .map(q => q.chapter))];
+
+      chapters.forEach(c => {
+        const option = document.createElement("option");
+        option.value = c;
+        option.textContent = `Chapter ${c}`;
+        chapterSelect.appendChild(option);
+      });
+    });
+
+    chapterSelect.addEventListener("change", () => {
+      resetDropdown(topicSelect, "Select Topic");
+      resetDropdown(typeSelect, "Select Type");
+
+      const topics = [...new Set(questionData
+        .filter(q => q.volume === volumeSelect.value && q.chapter === chapterSelect.value)
+        .map(q => q.topic))];
+
+      topics.forEach(t => {
+        const option = document.createElement("option");
+        option.value = t;
+        option.textContent = t;
+        topicSelect.appendChild(option);
+      });
+
+      adjustTopicDropdownWidth(topics);
+    });
+
+    topicSelect.addEventListener("change", () => {
+      resetDropdown(typeSelect, "Select Type");
+
+      const filtered = questionData.filter(q =>
+        q.volume === volumeSelect.value &&
+        q.chapter === chapterSelect.value &&
+        q.topic === topicSelect.value
+      );
+
+      const hasPractice = filtered.some(q => q.type.toLowerCase() === "practice");
+      ["Theory", ...(hasPractice ? ["Practice", "Both"] : [])].forEach(t => {
+        const option = document.createElement("option");
+        option.value = t;
+        option.textContent = t;
+        typeSelect.appendChild(option);
+      });
+    });
+
+    typeSelect.addEventListener("change", () => {
+      // Start timing when quiz type is selected
+      quizStartTime = new Date();
+      renderQuestions();
+    });
+  } // ✅ Close setupDropdownListeners properly
+
+  function resetDropdown(dropdown, placeholder) {
+    dropdown.innerHTML = "";
+    const placeholderOption = document.createElement("option");
+    placeholderOption.value = "";
+    placeholderOption.textContent = placeholder;
+    placeholderOption.disabled = true;
+    placeholderOption.selected = true;
+    dropdown.appendChild(placeholderOption);
+  }
+
+  function adjustTopicDropdownWidth(topics) {
+    const maxLength = Math.max(...topics.map(t => t.length));
+    topicSelect.style.width = `${maxLength * 10}px`;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    volumeSelect = document.getElementById("volume");
+    chapterSelect = document.getElementById("chapter");
+    topicSelect = document.getElementById("topic");
+    typeSelect = document.getElementById("type");
+    questionContainer = document.getElementById("questions");
+    scoreContainer = document.getElementById("score");
+
+    populateVolumeDropdown();
+    setupDropdownListeners();
+    document.getElementById("submitBtn").addEventListener("click", handleSubmit);
+    document.getElementById("resetBtn").addEventListener("click", handleReset);
   });
-
-  typeSelect.addEventListener("change", () => {
-    // Start timing when quiz type is selected
-    quizStartTime = new Date();
-    renderQuestions();
-  });
-} // ✅ Close setupDropdownListeners properly
-
-function resetDropdown(dropdown, placeholder) {
-  dropdown.innerHTML = "";
-  const placeholderOption = document.createElement("option");
-  placeholderOption.value = "";
-  placeholderOption.textContent = placeholder;
-  placeholderOption.disabled = true;
-  placeholderOption.selected = true;
-  dropdown.appendChild(placeholderOption);
-}
-
-function adjustTopicDropdownWidth(topics) {
-  const maxLength = Math.max(...topics.map(t => t.length));
-  topicSelect.style.width = `${maxLength * 10}px`;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  volumeSelect = document.getElementById("volume");
-  chapterSelect = document.getElementById("chapter");
-  topicSelect = document.getElementById("topic");
-  typeSelect = document.getElementById("type");
-  questionContainer = document.getElementById("questions");
-  scoreContainer = document.getElementById("score");
-
-  populateVolumeDropdown();
-  setupDropdownListeners();
-  document.getElementById("submitBtn").addEventListener("click", handleSubmit);
-  document.getElementById("resetBtn").addEventListener("click", handleReset);
-});
 </script>
 
 </head>
@@ -19401,7 +19346,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <main>
     <!-- Score header (top of quiz) -->
-    <div id="scoreHeader" style="margin-bottom: 12px; font-weight: 600;"></div>
+    <div id="scoreHeader"></div>
 
     <section id="questions">
       <!-- Question entries are rendered dynamically -->
