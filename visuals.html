@@ -7,6 +7,7 @@
     <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Layout only — colors handled globally via .tab-control */
         .dropdowns {
             display: flex; 
             justify-content: center; 
@@ -30,16 +31,6 @@
             margin: 20px auto; 
             max-width: 920px; 
             text-align: center; 
-        }
-        .links a { 
-            display: block; 
-            margin: 12px 0; 
-            text-decoration: none; 
-            color: darkblue; 
-            font-weight: bold;
-        }
-        .links a:hover { 
-            text-decoration: underline; 
         }
 
         .width-measurer {
@@ -84,7 +75,7 @@
     <div class="dropdowns">
         <div class="dropdown-group">
             <span class="dropdown-label">Volume:</span>
-            <select id="volumeSelect">
+            <select id="volumeSelect" class="tab-control">
                 <option value="vol1">Volume 1</option>
                 <option value="vol2">Volume 2</option>
                 <option value="vol3">Volume 3</option>
@@ -92,7 +83,7 @@
         </div>
         <div class="dropdown-group">
             <span class="dropdown-label">Chapter:</span>
-            <select id="chapterSelect">
+            <select id="chapterSelect" class="tab-control">
                 <option value="ch1">Chapter 1</option>
                 <option value="ch2">Chapter 2</option>
                 <option value="ch3">Chapter 3</option>
@@ -100,6 +91,12 @@
             </select>
         </div>
     </div>
+
+    <!-- Links Section -->
+    <section class="links" id="linksContainer">
+        <!-- Example link -->
+        <a href="visual1.html" class="tab-control">Visual 1</a>
+    </section>
 
     <!-- Links to YouTube presentations -->
     <div class="links">
