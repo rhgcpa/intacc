@@ -19331,6 +19331,18 @@
 </head>
 <body class="quizzes-section">
 
+  <!-- Updated nav with classes and active tab -->
+  <nav id="main-tabs">
+    <ul>
+      <li><a href="index.html" class="home-tab">Home</a></li>
+      <li><a href="glossary.html" class="glossary-tab">Glossary</a></li>
+      <li><a href="quizzes.html" class="quizzes-tab active">Quizzes</a></li>
+      <li><a href="references.html" class="references-tab">References</a></li>
+      <li><a href="tools.html" class="tools-tab">Tools</a></li>
+      <li><a href="visuals.html" class="visuals-tab">Visuals</a></li>
+    </ul>
+  </nav>
+
   <!-- Sticky controls area -->
   <div id="sticky-controls">
     <header class="sticky-header">
@@ -19366,20 +19378,15 @@
   <div id="progressTracker" class="progress-tracker" style="display: none;"></div>
 
   <!-- ✅/❌ Feedback Section -->
-  <div id="feedback" class="feedback">
-    <!-- Feedback messages will be injected here -->
-  </div>
+  <div id="feedback" class="feedback"></div>
 
   <main>
     <!-- Score header (top of quiz) -->
     <div id="scoreHeader"></div>
 
-    <section id="questions">
-      <!-- Question entries are rendered dynamically -->
-    </section>
+    <section id="questions"></section>
     <section id="score"></section>
   </main>
 
 </body>
-<!-- Trigger rebuild -->
 </html>
