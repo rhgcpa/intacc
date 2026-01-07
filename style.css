@@ -402,13 +402,13 @@ body.visuals-section .links a {
   text-align: center;
 }
 
-/* === Glossary Tab Alphabetical Navigation Consistency === */
+/* === Glossary Tab Alphabetical Navigation Consistency (Updated) === */
 body.glossary-section #alphaNav a {
-  display: inline-block;          /* keep button-like appearance */
-  background-color: #006400;      /* dark green scheme */
-  color: white;                   /* bold white text */
+  display: inline-block;
+  background-color: #006400 !important;   /* dark green fill */
+  color: #ffffff !important;              /* bold white text */
   font-weight: bold;
-  margin: 4px;                    /* spacing between letters */
+  margin: 4px;
   padding: 6px 10px;
   border-radius: 4px;
   text-decoration: none;
@@ -416,6 +416,7 @@ body.glossary-section #alphaNav a {
 }
 
 body.glossary-section #alphaNav a:hover {
-  background-color: #228B22;      /* forest green hover */
-  transform: scale(1.05);         /* slight enlargement */
+  background-color: #228B22 !important;   /* forest green hover */
+  transform: scale(1.05);
 }
+
