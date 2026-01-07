@@ -70,36 +70,31 @@
     </ul>
   </nav>
 
-  <!-- Sticky controls area -->
-  <div id="sticky-controls">
-    <!-- ✅ Wanted dropdowns -->
-    <select id="volumeDropdown" class="tab-control">
-      <option value="" disabled selected>Select Volume</option>
-      <option value="1">Volume 1</option>
-      <option value="2">Volume 2</option>
-    </select>
+<!-- Sticky controls area -->
+<div id="sticky-controls">
+  <header class="sticky-header">
+    <div class="controls quiz-controls">
+      <select id="volume">
+        <option value="" disabled selected>Select Volume</option>
+      </select>
 
-    <select id="chapterDropdown" class="tab-control">
-      <option value="" disabled selected>Select Chapter</option>
-      <!-- Add chapters -->
-    </select>
+      <select id="chapter">
+        <option value="" disabled selected>Select Chapter</option>
+      </select>
 
-    <select id="topicDropdown" class="tab-control">
-      <option value="" disabled selected>Select Topic</option>
-      <!-- Add topics -->
-    </select>
+      <select id="topic">
+        <option value="" disabled selected>Select Topic</option>
+      </select>
 
-    <select id="typeDropdown" class="tab-control">
-      <option value="" disabled selected>Select Type</option>
-      <option value="theory">Theory</option>
-      <option value="practice">Practice</option>
-      <option value="both">Both</option>
-    </select>
+      <select id="type">
+        <option value="" disabled selected>Select Type</option>
+      </select>
 
-    <!-- ✅ Wanted buttons -->
-    <button type="submit" class="tab-control">Submit</button>
-    <button type="reset" class="tab-control">Reset</button>
-  </div>
+      <button id="submitBtn">Submit</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </header>
+</div>
 
 <script>
   const questionData = [];
