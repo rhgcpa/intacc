@@ -19275,97 +19275,104 @@ renderedQuestions = filtered;
   updateProgress(1, renderedQuestions.length);
 }
 
-  function populateVolumeDropdown() {
-    const volumes = [...new Set(questionData.map(q => q.volume))];
-    volumes.forEach(v => {
-      const option = document.createElement("option");
-      option.value = v;
-      option.textContent = `Volume ${v}`;
-      volumeSelect.appendChild(option);
-    });
-  }
-
-  function setupDropdownListeners() {
-    volumeSelect.addEventListener("change", () => {
-      resetDropdown(chapterSelect, "Select Chapter");
-      resetDropdown(topicSelect, "Select Topic");
-      resetDropdown(typeSelect, "Select Type");
-      const chapters = [...new Set(questionData
-        .filter(q => q.volume === volumeSelect.value)
-        .map(q => q.chapter))];
-      chapters.forEach(c => {
-        const option = document.createElement("option");
-        option.value = c;
-        option.textContent = `Chapter ${c}`;
-        chapterSelect.appendChild(option);
-      });
-    });
-
-    chapterSelect.addEventListener("change", () => {
-      resetDropdown(topicSelect, "Select Topic");
-      resetDropdown(typeSelect, "Select Type");
-      const topics = [...new Set(questionData
-        .filter(q => q.volume === volumeSelect.value && q.chapter === chapterSelect.value)
-        .map(q => q.topic))];
-      topics.forEach(t => {
-        const option = document.createElement("option");
-        option.value = t;
-        option.textContent = t;
-        topicSelect.appendChild(option);
-      });
-      adjustTopicDropdownWidth(topics);
-    });
-
-    topicSelect.addEventListener("change", () => {
-      resetDropdown(typeSelect, "Select Type");
-      const filtered = questionData.filter(q =>
-        q.volume === volumeSelect.value &&
-        q.chapter === chapterSelect.value &&
-        q.topic === topicSelect.value
-      );
-      const hasPractice = filtered.some(q => q.type === "Practice");
-      ["Theory", ...(hasPractice ? ["Practice", "Both"] : [])].forEach(t => {
-        const option = document.createElement("option");
-        option.value = t;
-        option.textContent = t;
-        typeSelect.appendChild(option);
-      });
-    });
-
-    typeSelect.addEventListener("change", () => {
-      // Start timing when quiz type is selected
-      quizStartTime = new Date();
-
-      renderQuestions();
-    });
-  } // ✅ Close setupDropdownListeners properly
-
-  function resetDropdown(dropdown, placeholder) {
-    dropdown.innerHTML = "";
-    const placeholderOption = document.createElement("option");
-    placeholderOption.value = "";
-    placeholderOption.textContent = placeholder;
-    dropdown.appendChild(placeholderOption);
-  }
-
-  function adjustTopicDropdownWidth(topics) {
-    const maxLength = Math.max(...topics.map(t => t.length));
-    topicSelect.style.width = `${maxLength * 10}px`;
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    volumeSelect = document.getElementById("volume");
-    chapterSelect = document.getElementById("chapter");
-    topicSelect = document.getElementById("topic");
-    typeSelect = document.getElementById("type");
-    questionContainer = document.getElementById("questions");
-    scoreContainer = document.getElementById("score");
-
-    populateVolumeDropdown();
-    setupDropdownListeners();
-    document.getElementById("submitBtn").addEventListener("click", handleSubmit);
-    document.getElementById("resetBtn").addEventListener("click", handleReset);
+function populateVolumeDropdown() {
+  resetDropdown(volumeSelect, "Select Volume"); // clear first
+  const volumes = [...new Set(questionData.map(q => q.volume))];
+  volumes.forEach(v => {
+    const option = document.createElement("option");
+    option.value = v;
+    option.textContent = `Volume ${v}`;
+    volumeSelect.appendChild(option);
   });
+}
+
+function setupDropdownListeners() {
+  volumeSelect.addEventListener("change", () => {
+    resetDropdown(chapterSelect, "Select Chapter");
+    resetDropdown(topicSelect, "Select Topic");
+    resetDropdown(typeSelect, "Select Type");
+
+    const chapters = [...new Set(questionData
+      .filter(q => q.volume === volumeSelect.value)
+      .map(q => q.chapter))];
+
+    chapters.forEach(c => {
+      const option = document.createElement("option");
+      option.value = c;
+      option.textContent = `Chapter ${c}`;
+      chapterSelect.appendChild(option);
+    });
+  });
+
+  chapterSelect.addEventListener("change", () => {
+    resetDropdown(topicSelect, "Select Topic");
+    resetDropdown(typeSelect, "Select Type");
+
+    const topics = [...new Set(questionData
+      .filter(q => q.volume === volumeSelect.value && q.chapter === chapterSelect.value)
+      .map(q => q.topic))];
+
+    topics.forEach(t => {
+      const option = document.createElement("option");
+      option.value = t;
+      option.textContent = t;
+      topicSelect.appendChild(option);
+    });
+
+    adjustTopicDropdownWidth(topics);
+  });
+
+  topicSelect.addEventListener("change", () => {
+    resetDropdown(typeSelect, "Select Type");
+
+    const filtered = questionData.filter(q =>
+      q.volume === volumeSelect.value &&
+      q.chapter === chapterSelect.value &&
+      q.topic === topicSelect.value
+    );
+
+    const hasPractice = filtered.some(q => q.type === "Practice");
+    ["Theory", ...(hasPractice ? ["Practice", "Both"] : [])].forEach(t => {
+      const option = document.createElement("option");
+      option.value = t;
+      option.textContent = t;
+      typeSelect.appendChild(option);
+    });
+  });
+
+  typeSelect.addEventListener("change", () => {
+    // Start timing when quiz type is selected
+    quizStartTime = new Date();
+    renderQuestions();
+  });
+} // ✅ Close setupDropdownListeners properly
+
+function resetDropdown(dropdown, placeholder) {
+  dropdown.innerHTML = "";
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = placeholder;
+  dropdown.appendChild(placeholderOption);
+}
+
+function adjustTopicDropdownWidth(topics) {
+  const maxLength = Math.max(...topics.map(t => t.length));
+  topicSelect.style.width = `${maxLength * 10}px`;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  volumeSelect = document.getElementById("volume");
+  chapterSelect = document.getElementById("chapter");
+  topicSelect = document.getElementById("topic");
+  typeSelect = document.getElementById("type");
+  questionContainer = document.getElementById("questions");
+  scoreContainer = document.getElementById("score");
+
+  populateVolumeDropdown();
+  setupDropdownListeners();
+  document.getElementById("submitBtn").addEventListener("click", handleSubmit);
+  document.getElementById("resetBtn").addEventListener("click", handleReset);
+});
 </script>
 
 </head>
