@@ -385,3 +385,19 @@ body.visuals-section #resetButton:hover,
 body.visuals-section .quiz-controls button:hover {
   background-color: #20B2AA; /* Light sea green hover */
 }
+
+/* === Tab-specific link display overrides === */
+
+/* References tab: stack links vertically */
+body.references-section .links a {
+  display: block;        /* force each link on its own line */
+  margin: 10px 0;        /* vertical spacing */
+  text-align: center;    /* keep centered alignment */
+}
+
+/* Visuals tab: stack links vertically */
+body.visuals-section .links a {
+  display: block;
+  margin: 10px 0;
+  text-align: center;
+}
