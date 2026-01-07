@@ -401,3 +401,21 @@ body.visuals-section .links a {
   margin: 10px 0;
   text-align: center;
 }
+
+/* === Glossary Tab Alphabetical Navigation Consistency === */
+body.glossary-section #alphaNav a {
+  display: inline-block;          /* keep button-like appearance */
+  background-color: #006400;      /* dark green scheme */
+  color: white;                   /* bold white text */
+  font-weight: bold;
+  margin: 4px;                    /* spacing between letters */
+  padding: 6px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+body.glossary-section #alphaNav a:hover {
+  background-color: #228B22;      /* forest green hover */
+  transform: scale(1.05);         /* slight enlargement */
+}
