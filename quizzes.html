@@ -19281,6 +19281,17 @@ function populateVolumeDropdown() {
   });
 }
 
+function populateVolumeDropdown() {
+  resetDropdown(volumeSelect, "Select Volume"); // clear first
+  const volumes = [...new Set(questionData.map(q => q.volume))];
+  volumes.forEach(v => {
+    const option = document.createElement("option");
+    option.value = v;
+    option.textContent = `Volume ${v}`;
+    volumeSelect.appendChild(option);
+  });
+}
+
 function setupDropdownListeners() {
   volumeSelect.addEventListener("change", () => {
     resetDropdown(chapterSelect, "Select Chapter");
@@ -19326,7 +19337,7 @@ function setupDropdownListeners() {
       q.topic === topicSelect.value
     );
 
-    const hasPractice = filtered.some(q => q.type === "Practice");
+    const hasPractice = filtered.some(q => q.type.toLowerCase() === "practice");
     ["Theory", ...(hasPractice ? ["Practice", "Both"] : [])].forEach(t => {
       const option = document.createElement("option");
       option.value = t;
@@ -19347,6 +19358,8 @@ function resetDropdown(dropdown, placeholder) {
   const placeholderOption = document.createElement("option");
   placeholderOption.value = "";
   placeholderOption.textContent = placeholder;
+  placeholderOption.disabled = true;
+  placeholderOption.selected = true;
   dropdown.appendChild(placeholderOption);
 }
 
@@ -19372,26 +19385,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </head>
 <body class="quizzes-section">
-  <div id="sticky-controls">
-    <header class="sticky-header">
-      <div class="controls quiz-controls">
-        <select id="volume">
-          <option value="">Select Volume</option>
-        </select>
-        <select id="chapter">
-          <option value="">Select Chapter</option>
-        </select>
-        <select id="topic">
-          <option value="">Select Topic</option>
-        </select>
-        <select id="type">
-          <option value="">Select Type</option>
-        </select>
-        <button id="submitBtn">Submit</button>
-        <button id="resetBtn">Reset</button>
-      </div>
-    </header>
-  </div>
 
   <!-- 🎉 Perfect Score Banner -->
   <div id="perfectScoreBanner" class="celebration-banner" style="display: none;">
