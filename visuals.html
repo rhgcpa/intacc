@@ -4,63 +4,47 @@
     <meta charset="UTF-8">
     <title>Visuals - EXCELlent Intermediate Accounting</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Layout only — colors handled globally via .tab-control */
         .dropdowns {
-            display: flex; 
-            justify-content: center; 
+            display: flex;
+            justify-content: center;
             gap: 16px;
-            padding: 12px 8px; 
+            padding: 12px 8px;
             border-bottom: 1px solid #ccc;
         }
-        .dropdown-group { 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
+        .dropdown-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .dropdown-label { 
-            font-weight: 600; 
+        .dropdown-label {
+            font-weight: 600;
         }
-        select { 
-            min-width: 120px; 
-        }
-
-        .links { 
-            margin: 20px auto; 
-            max-width: 920px; 
-            text-align: center; 
-        }
-        /* Link display handled globally in style.css */
-
-        .width-measurer {
-            position: absolute; 
-            visibility: hidden; 
-            white-space: nowrap;
-            left: -9999px; 
-            top: -9999px;
-        }
-
-        /* Embedded YouTube videos styling */
-        .video-container {
+        .visuals {
             margin: 20px auto;
             max-width: 920px;
             text-align: center;
         }
-        .video-container iframe {
-            width: 100%;
-            max-width: 720px;
-            height: 405px;
-            border: none;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        .visuals a {
+            display: block;
+            margin: 8px 0;
+            color: var(--link-color, #0066cc);
+            text-decoration: none;
+        }
+        .visuals a:hover {
+            text-decoration: underline;
+        }
+        .width-measurer {
+            position: absolute;
+            visibility: hidden;
+            white-space: nowrap;
+            left: -9999px;
+            top: -9999px;
         }
     </style>
 </head>
 <body class="visuals-section">
-    <!-- Updated Navigation Tabs -->
     <nav id="main-tabs">
         <ul>
             <li><a href="index.html" class="home-tab">Home</a></li>
@@ -72,53 +56,174 @@
         </ul>
     </nav>
 
-    <!-- Dropdowns for filtering presentations -->
     <div class="dropdowns">
         <div class="dropdown-group">
             <span class="dropdown-label">Volume:</span>
-            <select id="volumeSelect" class="tab-control">
-                <option value="vol1">Volume 1</option>
-                <option value="vol2">Volume 2</option>
-                <option value="vol3">Volume 3</option>
+            <select id="volumeDropdown" class="tab-control" onchange="updateChapters()">
+                <option value="" disabled selected>Select Volume</option>
+                <option value="Volume 1">Volume 1</option>
+                <option value="Volume 2">Volume 2</option>
             </select>
         </div>
         <div class="dropdown-group">
             <span class="dropdown-label">Chapter:</span>
-            <select id="chapterSelect" class="tab-control">
-                <option value="ch1">Chapter 1</option>
-                <option value="ch2">Chapter 2</option>
-                <option value="ch3">Chapter 3</option>
-                <!-- Add more chapters as needed -->
+            <select id="chapterDropdown" class="tab-control" onchange="updateVisuals()">
+                <option value="" disabled selected>Select Chapter</option>
             </select>
         </div>
     </div>
 
-    <!-- Links Section -->
-    <section class="links" id="linksContainer">
-        <!-- Example links -->
-        <a href="visual1.html" class="tab-control">Visual 1</a>
-        <a href="visual2.html" class="tab-control">Visual 2</a>
-        <a href="visual3.html" class="tab-control">Visual 3</a>
-    </section>
+    <section class="visuals" id="visualsContainer"></section>
+    <div id="widthMeasurer" class="width-measurer"></div>
 
-    <!-- Links to YouTube presentations -->
-    <div class="links">
-        <a href="https://www.youtube.com/watch?v=VIDEO_ID_1" target="_blank">Presentation 1: Introduction to Accounting Concepts</a>
-        <a href="https://www.youtube.com/watch?v=VIDEO_ID_2" target="_blank">Presentation 2: Financial Statements Overview</a>
-        <a href="https://www.youtube.com/watch?v=VIDEO_ID_3" target="_blank">Presentation 3: Adjusting Entries Explained</a>
-    </div>
+    <script>
+        const chapters = {
+            "Volume 1": ["Chapter 1","Chapter 2","Chapter 3","Chapter 4","Chapter 5","Chapter 6","Chapter 7","Chapter 8","Chapter 9"],
+            "Volume 2": ["Chapter 1","Chapter 2","Chapter 3","Chapter 4","Chapter 5","Chapter 6"]
+        };
 
-    <!-- Embedded YouTube videos -->
-    <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="Presentation 1"></iframe>
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="Presentation 2"></iframe>
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" title="Presentation 3"></iframe>
-    </div>
+        const visuals = {
+            "Chapter 1": [
+                { text: "IAS 7 (Statement of Cash Flows)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" }
+            ],
+            "Chapter 2": [
+                { text: "IFRS 9 (Classification and Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" },
+                { text: "IFRS 9 (Impairment)", url: "https://www.deloitteifrslearning.com/media/modules/180a38e2/sco/story.html" }
+            ],
+            "Chapter 3": [
+                { text: "IAS 2 (Inventories)", url: "https://www.deloitteifrslearning.com/media/modules/e5820a82/sco/story.html" }
+            ],
+            "Chapter 4": [
+                { text: "IAS 16 (Property, Plant, and Equipment)", url: "https://www.deloitteifrslearning.com/media/modules/ac05cf19/sco/story_html5.html?lms=1" },
+                { text: "IAS 23 (Borrowing Costs)", url: "https://www.deloitteifrslearning.com/media/modules/f98621da/sco/story_html5.html?lms=1" },
+                { text: "IAS 36 (Impairment of Assets)", url: "https://www.deloitteifrslearning.com/media/modules/be2d84f9/sco/story.html" }
+            ],
+            "Chapter 5": [
+                { text: "IAS 40 (Investment Property)", url: "https://www.deloitteifrslearning.com/media/modules/14fa4688/sco/story.html" }
+            ],
+            "Chapter 6": [
+                { text: "IAS 38 (Intangible Assets)", url: "https://www.deloitteifrslearning.com/media/modules/1b01062f/sco/story.html" }
+            ],
+            "Chapter 7": [
+                { text: "IAS 41 (Agriculture)", url: "https://www.deloitteifrslearning.com/media/modules/47e6af6f/sco/story_html5.html?lms=1" }
+            ],
+            "Chapter 8": [
+                { text: "IFRS 5 (Noncurrent Assets Held for Sale)", url: "https://www.deloitteifrslearning.com/media/modules/75c153b4/sco/story.html" }
+            ],
+            "Chapter 9": [
+                { text: "General IFRS Learning Portal", url: "https://www.deloitteifrslearning.com/" }
+            ],
+            "Volume2-Chapter1": [
+                { text: "IFRS 9 (Classification and Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" },
+                { text: "IFRS 9 (Derecognition)", url: "https://www.deloitteifrslearning.com/media/modules/f2ab8d3e/sco/story.html" }
+            ],
+            "Volume2-Chapter2": [
+                { text: "IAS 10 (Events after Reporting Period)", url: "https://www.deloitteifrslearning.com/media/modules/d4a9fe18/sco/story.html" },
+                { text: "IAS 37 (Provisions, Contingent Liabilities, Contingent Assets)", url: "https://www.deloitteifrslearning.com/media/modules/02e6b644/sco/story_html5.html?lms=1" },
+                { text: "IFRS 15 (Revenue)", url: "https://www.deloitteifrslearning.com/media/modules/e356c0d1/sco/story.html" }
+            ],
+            "Volume2-Chapter3": [
+                { text: "IFRS 13 (Fair Value Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/f8571bab/sco/story.html" },
+                { text: "IFRS 16 (Leases: Basic)", url: "https://www.deloitteifrslearning.com/media/modules/6b74a4ad/sco/story_html5.html?lms=1" },
+                { text: "IFRS 16 (Leases: Advanced)", url: "https://www.deloitteifrslearning.com/media/modules/12f80fe8/sco/story.html" }
+            ],
+            "Volume2-Chapter4": [
+                { text: "IAS 19 (Employee Benefits)", url: "https://www.deloitteifrslearning.com/media/modules/573493bc/sco/story.html" }
+            ],
+            "Volume2-Chapter5": [
+                { text: "IAS 12 (Income Taxes: Part 1)", url: "https://www.deloitteifrslearning.com/media/modules/873cbd48/sco/story.html" },
+                { text: "IAS 12 (Income Taxes: Part 2)", url: "https://www.deloitteifrslearning.com/media/modules/d7cdb66f/sco/story.html" }
+            ],
+            "Volume2-Chapter6": [
+                { text: "IAS 8 (Basis of Preparation)", url: "https://www.deloitteifrslearning.com/media/modules/baaa0f8f/sco/story.html" },
+                { text: "IAS 32 (Financial Instruments: Presentation)", url: "https://www.deloitteifrslearning.com/media/modules/5c6bf628/sco/story_html5.html?lms=1" },
+                { text: "IFRS 2 (Share-based Payment)", url: "https://www.deloitteifrslearning.com/media/modules/eaefbb77/sco/story_html5.html?lms=1" }
+            ]
+        };
 
-    <footer>
-        <p style="text-align:center; margin:20px; font-size:0.9em; color:#7f8c8d;">
-            &copy; 2026 Robert H. Gascon | Built with GitHub Pages
-        </p>
-    </footer>
+        const volumeDropdown = document.getElementById('volumeDropdown');
+        const chapterDropdown = document.getElementById('chapterDropdown');
+        const visualsContainer = document.getElementById('visualsContainer');
+        const widthMeasurer = document.getElementById('widthMeasurer');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setSelectWidth(volumeDropdown);
+            setSelectWidth(chapterDropdown);
+        });
+
+        function updateChapters() {
+            const volume = volumeDropdown.value;
+            const items = chapters[volume] || [];
+
+            chapterDropdown.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = 'Select Chapter';
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            chapterDropdown.appendChild(placeholder);
+
+            items.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item;
+                opt.textContent = item;
+                chapterDropdown.appendChild(opt);
+            });
+
+            setSelectWidth(volumeDropdown);
+            setSelectWidth(chapterDropdown);
+            visualsContainer.innerHTML = ''; // clear visuals until chapter chosen
+        }
+
+        function updateVisuals() {
+            const volume = volumeDropdown.value;
+            const chapter = chapterDropdown.value;
+
+            // For Volume 1, keys are just "Chapter X"
+            // For Volume 2, keys are "Volume2-ChapterX"
+            let key = chapter;
+            if (volume === "Volume 2") {
+                key = "Volume2-" + chapter;
+            }
+
+            const items = visuals[key] || [];
+            visualsContainer.innerHTML = '';
+
+            if (!chapter || items.length === 0) {
+                return;
+            }
+
+            items.forEach(({ text, url }) => {
+                const a = document.createElement('a');
+                a.href = url;
+                a.textContent = text;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                visualsContainer.appendChild(a);
+            });
+        }
+
+        function setSelectWidth(selectEl) {
+            if (!selectEl) return;
+            const options = Array.from(selectEl.options);
+            const texts = options.map(o => o.textContent || o.innerText || '');
+            const longest = texts.reduce((a, b) => (b.length > a.length ? b : a), '');
+
+            const style = window.getComputedStyle(selectEl);
+            widthMeasurer.style.fontFamily = style.fontFamily;
+            widthMeasurer.style.fontSize = style.fontSize;
+            widthMeasurer.style.fontWeight = style.fontWeight;
+            widthMeasurer.style.letterSpacing = style.letterSpacing;
+            widthMeasurer.style.padding = style.padding;
+            widthMeasurer.textContent = longest || selectEl.value || '';
+
+            const measured = widthMeasurer.offsetWidth;
+            const arrowBuffer = 28;
+            const minPaddingBuffer = 12;
+            const finalWidth = Math.max(80, measured + arrowBuffer + minPaddingBuffer);
+
+            selectEl.style.width = finalWidth + 'px';
+        }
+    </script>
 </body>
 </html>
