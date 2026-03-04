@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <title>Visuals - EXCELlent Intermediate Accounting</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Dropdowns layout */
         .dropdowns {
             display: flex;
             justify-content: center;
@@ -21,6 +23,8 @@
         .dropdown-label {
             font-weight: 600;
         }
+        
+        /* Centered visuals layout */
         .visuals {
             margin: 20px auto;
             max-width: 920px;
@@ -35,6 +39,7 @@
         .visuals a:hover {
             text-decoration: underline;
         }
+
         .width-measurer {
             position: absolute;
             visibility: hidden;
@@ -45,6 +50,7 @@
     </style>
 </head>
 <body class="visuals-section">
+    <!-- Navigation Tabs -->
     <nav id="main-tabs">
         <ul>
             <li><a href="index.html" class="home-tab">Home</a></li>
@@ -56,6 +62,7 @@
         </ul>
     </nav>
 
+    <!-- Dropdowns -->
     <div class="dropdowns">
         <div class="dropdown-group">
             <span class="dropdown-label">Volume:</span>
@@ -63,6 +70,7 @@
                 <option value="" disabled selected>Select Volume</option>
                 <option value="Volume 1">Volume 1</option>
                 <option value="Volume 2">Volume 2</option>
+                <!-- Volume 3 will be added later -->
             </select>
         </div>
         <div class="dropdown-group">
@@ -73,7 +81,11 @@
         </div>
     </div>
 
-    <section class="visuals" id="visualsContainer"></section>
+    <!-- Visuals Section -->
+    <section class="visuals" id="visualsContainer">
+        <!-- Links will be populated here -->
+    </section>
+
     <div id="widthMeasurer" class="width-measurer"></div>
 
     <script>
@@ -83,62 +95,66 @@
         };
 
         const visuals = {
-            "Chapter 1": [
-                { text: "IAS 7 (Statement of Cash Flows)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" }
-            ],
-            "Chapter 2": [
-                { text: "IFRS 9 (Classification and Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" },
-                { text: "IFRS 9 (Impairment)", url: "https://www.deloitteifrslearning.com/media/modules/180a38e2/sco/story.html" }
-            ],
-            "Chapter 3": [
-                { text: "IAS 2 (Inventories)", url: "https://www.deloitteifrslearning.com/media/modules/e5820a82/sco/story.html" }
-            ],
-            "Chapter 4": [
-                { text: "IAS 16 (Property, Plant, and Equipment)", url: "https://www.deloitteifrslearning.com/media/modules/ac05cf19/sco/story_html5.html?lms=1" },
-                { text: "IAS 23 (Borrowing Costs)", url: "https://www.deloitteifrslearning.com/media/modules/f98621da/sco/story_html5.html?lms=1" },
-                { text: "IAS 36 (Impairment of Assets)", url: "https://www.deloitteifrslearning.com/media/modules/be2d84f9/sco/story.html" }
-            ],
-            "Chapter 5": [
-                { text: "IAS 40 (Investment Property)", url: "https://www.deloitteifrslearning.com/media/modules/14fa4688/sco/story.html" }
-            ],
-            "Chapter 6": [
-                { text: "IAS 38 (Intangible Assets)", url: "https://www.deloitteifrslearning.com/media/modules/1b01062f/sco/story.html" }
-            ],
-            "Chapter 7": [
-                { text: "IAS 41 (Agriculture)", url: "https://www.deloitteifrslearning.com/media/modules/47e6af6f/sco/story_html5.html?lms=1" }
-            ],
-            "Chapter 8": [
-                { text: "IFRS 5 (Noncurrent Assets Held for Sale)", url: "https://www.deloitteifrslearning.com/media/modules/75c153b4/sco/story.html" }
-            ],
-            "Chapter 9": [
-                { text: "General IFRS Learning Portal", url: "https://www.deloitteifrslearning.com/" }
-            ],
-            "Volume2-Chapter1": [
-                { text: "IFRS 9 (Classification and Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" },
-                { text: "IFRS 9 (Derecognition)", url: "https://www.deloitteifrslearning.com/media/modules/f2ab8d3e/sco/story.html" }
-            ],
-            "Volume2-Chapter2": [
-                { text: "IAS 10 (Events after Reporting Period)", url: "https://www.deloitteifrslearning.com/media/modules/d4a9fe18/sco/story.html" },
-                { text: "IAS 37 (Provisions, Contingent Liabilities, Contingent Assets)", url: "https://www.deloitteifrslearning.com/media/modules/02e6b644/sco/story_html5.html?lms=1" },
-                { text: "IFRS 15 (Revenue)", url: "https://www.deloitteifrslearning.com/media/modules/e356c0d1/sco/story.html" }
-            ],
-            "Volume2-Chapter3": [
-                { text: "IFRS 13 (Fair Value Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/f8571bab/sco/story.html" },
-                { text: "IFRS 16 (Leases: Basic)", url: "https://www.deloitteifrslearning.com/media/modules/6b74a4ad/sco/story_html5.html?lms=1" },
-                { text: "IFRS 16 (Leases: Advanced)", url: "https://www.deloitteifrslearning.com/media/modules/12f80fe8/sco/story.html" }
-            ],
-            "Volume2-Chapter4": [
-                { text: "IAS 19 (Employee Benefits)", url: "https://www.deloitteifrslearning.com/media/modules/573493bc/sco/story.html" }
-            ],
-            "Volume2-Chapter5": [
-                { text: "IAS 12 (Income Taxes: Part 1)", url: "https://www.deloitteifrslearning.com/media/modules/873cbd48/sco/story.html" },
-                { text: "IAS 12 (Income Taxes: Part 2)", url: "https://www.deloitteifrslearning.com/media/modules/d7cdb66f/sco/story.html" }
-            ],
-            "Volume2-Chapter6": [
-                { text: "IAS 8 (Basis of Preparation)", url: "https://www.deloitteifrslearning.com/media/modules/baaa0f8f/sco/story.html" },
-                { text: "IAS 32 (Financial Instruments: Presentation)", url: "https://www.deloitteifrslearning.com/media/modules/5c6bf628/sco/story_html5.html?lms=1" },
-                { text: "IFRS 2 (Share-based Payment)", url: "https://www.deloitteifrslearning.com/media/modules/eaefbb77/sco/story_html5.html?lms=1" }
-            ]
+            "Volume 1": {
+                "Chapter 1": [
+                    { text: "IAS 7 (Statement of Cash Flows)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" }
+                ],
+                "Chapter 2": [
+                    { text: "IFRS 9 (Classification and Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" },
+                    { text: "IFRS 9 (Impairment)", url: "https://www.deloitteifrslearning.com/media/modules/180a38e2/sco/story.html" }
+                ],
+                "Chapter 3": [
+                    { text: "IAS 2 (Inventories)", url: "https://www.deloitteifrslearning.com/media/modules/e5820a82/sco/story.html" }
+                ],
+                "Chapter 4": [
+                    { text: "IAS 16 (Property, Plant, and Equipment)", url: "https://www.deloitteifrslearning.com/media/modules/ac05cf19/sco/story_html5.html?lms=1" },
+                    { text: "IAS 23 (Borrowing Costs)", url: "https://www.deloitteifrslearning.com/media/modules/f98621da/sco/story_html5.html?lms=1" },
+                    { text: "IAS 36 (Impairment of Assets)", url: "https://www.deloitteifrslearning.com/media/modules/be2d84f9/sco/story.html" }
+                ],
+                "Chapter 5": [
+                    { text: "IAS 40 (Investment Property)", url: "https://www.deloitteifrslearning.com/media/modules/14fa4688/sco/story.html" }
+                ],
+                "Chapter 6": [
+                    { text: "IAS 38 (Intangible Assets)", url: "https://www.deloitteifrslearning.com/media/modules/1b01062f/sco/story.html" }
+                ],
+                "Chapter 7": [
+                    { text: "IAS 41 (Agriculture)", url: "https://www.deloitteifrslearning.com/media/modules/47e6af6f/sco/story_html5.html?lms=1" }
+                ],
+                "Chapter 8": [
+                    { text: "IFRS 5 (Noncurrent Assets Held for Sale)", url: "https://www.deloitteifrslearning.com/media/modules/75c153b4/sco/story.html" }
+                ],
+                "Chapter 9": [
+                    { text: "General IFRS Learning Portal", url: "https://www.deloitteifrslearning.com/" }
+                ]
+            },
+            "Volume 2": {
+                "Chapter 1": [
+                    { text: "IFRS 9 (Classification and Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/a6eb6030/sco/story.html" },
+                    { text: "IFRS 9 (Derecognition)", url: "https://www.deloitteifrslearning.com/media/modules/f2ab8d3e/sco/story.html" }
+                ],
+                "Chapter 2": [
+                    { text: "IAS 10 (Events after Reporting Period)", url: "https://www.deloitteifrslearning.com/media/modules/d4a9fe18/sco/story.html" },
+                    { text: "IAS 37 (Provisions, Contingent Liabilities, Contingent Assets)", url: "https://www.deloitteifrslearning.com/media/modules/02e6b644/sco/story_html5.html?lms=1" },
+                    { text: "IFRS 15 (Revenue)", url: "https://www.deloitteifrslearning.com/media/modules/e356c0d1/sco/story.html" }
+                ],
+                "Chapter 3": [
+                    { text: "IFRS 13 (Fair Value Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/f8571bab/sco/story.html" },
+                    { text: "IFRS 16 (Leases: Basic)", url: "https://www.deloitteifrslearning.com/media/modules/6b74a4ad/sco/story_html5.html?lms=1" },
+                    { text: "IFRS 16 (Leases: Advanced)", url: "https://www.deloitteifrslearning.com/media/modules/12f80fe8/sco/story.html" }
+                ],
+                "Chapter 4": [
+                    { text: "IAS 19 (Employee Benefits)", url: "https://www.deloitteifrslearning.com/media/modules/573493bc/sco/story.html" }
+                ],
+                "Chapter 5": [
+                    { text: "IAS 12 (Income Taxes: Part 1)", url: "https://www.deloitteifrslearning.com/media/modules/873cbd48/sco/story.html" },
+                    { text: "IAS 12 (Income Taxes: Part 2)", url: "https://www.deloitteifrslearning.com/media/modules/d7cdb66f/sco/story.html" }
+                ],
+                "Chapter 6": [
+                    { text: "IAS 8 (Basis of Preparation)", url: "https://www.deloitteifrslearning.com/media/modules/baaa0f8f/sco/story.html" },
+                    { text: "IAS 32 (Financial Instruments: Presentation)", url: "https://www.deloitteifrslearning.com/media/modules/5c6bf628/sco/story_html5.html?lms=1" },
+                    { text: "IFRS 2 (Share-based Payment)", url: "https://www.deloitteifrslearning.com/media/modules/eaefbb77/sco/story_html5.html?lms=1" }
+                ]
+            }
         };
 
         const volumeDropdown = document.getElementById('volumeDropdown');
@@ -178,20 +194,10 @@
         function updateVisuals() {
             const volume = volumeDropdown.value;
             const chapter = chapterDropdown.value;
+            const items = visuals[volume]?.[chapter] || [];
 
-            // For Volume 1, keys are just "Chapter X"
-            // For Volume 2, keys are "Volume2-ChapterX"
-            let key = chapter;
-            if (volume === "Volume 2") {
-                key = "Volume2-" + chapter;
-            }
-
-            const items = visuals[key] || [];
             visualsContainer.innerHTML = '';
-
-            if (!chapter || items.length === 0) {
-                return;
-            }
+            if (!chapter || items.length === 0) return;
 
             items.forEach(({ text, url }) => {
                 const a = document.createElement('a');
