@@ -61,8 +61,8 @@
             <span class="dropdown-label">Category:</span>
             <select id="categoryDropdown" class="tab-control" onchange="updateSubcategories()">
                 <option value="" disabled selected>Select Category</option>
-                <option value="Textbook">Textbook</option>
-                <option value="Other">Other</option>
+                <option value="Textbooks">Textbooks</option>
+                <option value="Firms">Firms</option>
             </select>
         </div>
         <div class="dropdown-group">
@@ -82,8 +82,9 @@
 
     <script>
         const subcategories = {
-            "Textbook": ["Volume 1", "Volume 2"],
-            "Other": ["BDO", "Deloitte", "EY", "GT", "IFRS", "KPMG", "Moore", "PwC"]
+            "Textbooks": ["Volume 1", "Volume 2"],
+            "Firms": ["BDO", "Deloitte", "EY", "GT", "IFRS", "KPMG", "Moore", "PwC"],
+            "Institutes": ["Ghana", "India", "Philippines", "Sri Lanka"]
         };
 
         const links = {
