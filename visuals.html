@@ -187,29 +187,29 @@
             setSelectWidth(chapterDropdown);
         });
 
-        function updateChapters() {
-            const volume = volumeDropdown.value;
-            const items = chapters[volume] || [];
+function updateChapters() {
+    const volume = volumeDropdown.value;
+    const items = chapters[volume] || [];
 
-            chapterDropdown.innerHTML = '';
-            const placeholder = document.createElement('option');
-            placeholder.value = '';
-            placeholder.textContent = 'Select Chapter';
-            placeholder.disabled = true;
-            placeholder.selected = true;
-            chapterDropdown.appendChild(placeholder);
+    chapterDropdown.innerHTML = '';
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Select Chapter';
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    chapterDropdown.appendChild(placeholder);
 
-            items.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item;
-                opt.textContent = item;
-                chapterDropdown.appendChild(opt);
-            });
+    items.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item;
+        opt.textContent = item;
+        chapterDropdown.appendChild(opt);
+    });
 
-            setSelectWidth(volumeDropdown);
-            setSelectWidth(chapterDropdown);
-            visualsContainer.innerHTML = ''; // clear visuals until chapter chosen
-        }
+    setSelectWidth(volumeDropdown);
+    setSelectWidth(chapterDropdown);
+    visualsContainer.innerHTML = ''; // clear visuals until chapter chosen
+}
 
 function updateVisuals() {
     const volume = volumeDropdown.value;
@@ -229,27 +229,27 @@ function updateVisuals() {
     });
 }
 
-        function setSelectWidth(selectEl) {
-            if (!selectEl) return;
-            const options = Array.from(selectEl.options);
-            const texts = options.map(o => o.textContent || o.innerText || '');
-            const longest = texts.reduce((a, b) => (b.length > a.length ? b : a), '');
+function setSelectWidth(selectEl) {
+    if (!selectEl) return;
+    const options = Array.from(selectEl.options);
+    const texts = options.map(o => o.textContent || o.innerText || '');
+    const longest = texts.reduce((a, b) => (b.length > a.length ? b : a), '');
 
-            const style = window.getComputedStyle(selectEl);
-            widthMeasurer.style.fontFamily = style.fontFamily;
-            widthMeasurer.style.fontSize = style.fontSize;
-            widthMeasurer.style.fontWeight = style.fontWeight;
-            widthMeasurer.style.letterSpacing = style.letterSpacing;
-            widthMeasurer.style.padding = style.padding;
-            widthMeasurer.textContent = longest || selectEl.value || '';
+    const style = window.getComputedStyle(selectEl);
+    widthMeasurer.style.fontFamily = style.fontFamily;
+    widthMeasurer.style.fontSize = style.fontSize;
+    widthMeasurer.style.fontWeight = style.fontWeight;
+    widthMeasurer.style.letterSpacing = style.letterSpacing;
+    widthMeasurer.style.padding = style.padding;
+    widthMeasurer.textContent = longest || selectEl.value || '';
 
-            const measured = widthMeasurer.offsetWidth;
-            const arrowBuffer = 28;
-            const minPaddingBuffer = 12;
-            const finalWidth = Math.max(80, measured + arrowBuffer + minPaddingBuffer);
+    const measured = widthMeasurer.offsetWidth;
+    const arrowBuffer = 28;
+    const minPaddingBuffer = 12;
+    const finalWidth = Math.max(80, measured + arrowBuffer + minPaddingBuffer);
 
-            selectEl.style.width = finalWidth + 'px';
-        }
+    selectEl.style.width = finalWidth + 'px';
+}
     </script>
 </body>
 </html>
