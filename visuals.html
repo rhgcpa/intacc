@@ -129,12 +129,12 @@
             },
             "Volume 2": {
                 "Chapter 1": [
-                    { text: "Classification of Financial Liabilities", url: "https://youtu.be/0zkviDi3lp0" },
-                    { text: "Derecognition of Financial Liabilities", url: "https://youtu.be/-UhBqBU3Ifk" },
+                    { text: "Classification of Financial Liabilities", url: "https://www.youtube.com/embed/0zkviDi3lp0?si=Ki1PiMSk3uaq4VTA" },
+                    { text: "Derecognition of Financial Liabilities", url: "https://www.youtube.com/embed/-UhBqBU3Ifk?si=BFUkfDcR-jRJDTQN" },
                     { text: "IFRS 9 (Financial Instruments: Classification and Measurement)", url: "https://www.deloitteifrslearning.com/media/modules/c82534b6/sco/story.html" },
                     { text: "IFRS 9 (Financial Instruments: Derecognition)", url: "https://www.deloitteifrslearning.com/media/modules/f2ab8d3e/sco/story.html" },
-                    { text: "Initial Measurement of Financial Liabilities", url: "https://youtu.be/7cs3PR3aIJ8" },
-                    { text: "Subsequent Measurement of Financial Liabilities", url: "https://youtu.be/L4znHjtVZ_k" }
+                    { text: "Initial Measurement of Financial Liabilities", url: "https://www.youtube.com/embed/7cs3PR3aIJ8?si=8jHJg-hZHJV9zJQq" },
+                    { text: "Subsequent Measurement of Financial Liabilities", url: "https://www.youtube.com/embed/L4znHjtVZ_k?si=GVvDRUzaz3TjSAZh" }
                 ],
                 "Chapter 2": [
                     { text: "Accounting for Provisions", url: "https://drive.google.com/file/d/1XIsarAIdD0exGUvZUm3XaOlHfKfV-2L8/view?usp=sharing" },
@@ -211,23 +211,43 @@
             visualsContainer.innerHTML = ''; // clear visuals until chapter chosen
         }
 
-        function updateVisuals() {
-            const volume = volumeDropdown.value;
-            const chapter = chapterDropdown.value;
-            const items = visuals[volume]?.[chapter] || [];
+function updateVisuals() {
+    const volume = volumeDropdown.value;
+    const chapter = chapterDropdown.value;
+    const items = visuals[volume]?.[chapter] || [];
 
-            visualsContainer.innerHTML = '';
-            if (!chapter || items.length === 0) return;
+    visualsContainer.innerHTML = '';
+    if (!chapter || items.length === 0) return;
 
-            items.forEach(({ text, url }) => {
-                const a = document.createElement('a');
-                a.href = url;
-                a.textContent = text;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                visualsContainer.appendChild(a);
-            });
+    items.forEach(({ text, url }) => {
+        // If the URL looks like a YouTube embed link, render an iframe
+        if (url.includes("youtube.com/embed")) {
+            const iframe = document.createElement('iframe');
+            iframe.width = "560";
+            iframe.height = "315";
+            iframe.src = url;
+            iframe.title = text;
+            iframe.frameBorder = "0";
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+            iframe.referrerPolicy = "strict-origin-when-cross-origin";
+            iframe.allowFullscreen = true;
+            visualsContainer.appendChild(iframe);
+
+            // Add a caption below the video
+            const caption = document.createElement('p');
+            caption.textContent = text;
+            visualsContainer.appendChild(caption);
+        } else {
+            // Fallback: render as a hyperlink (e.g., Google Drive links)
+            const a = document.createElement('a');
+            a.href = url;
+            a.textContent = text;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            visualsContainer.appendChild(a);
         }
+    });
+}
 
         function setSelectWidth(selectEl) {
             if (!selectEl) return;
